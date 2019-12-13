@@ -4,6 +4,23 @@ import sqlite3
 DATABASE = "database/fund.db"
 
 
+def select():
+    connector = sqlite3.connect(DATABASE)
+    cursor = connector.cursor()
+
+    cursor.execute("""
+        select stockCode, crescimentoCincoAnos, stockPrice, valorIntriseco, score, desconto, "timestamp" from fundamentus 
+        where crescimentoCincoAnos > 2
+        and desconto > 1
+        ORDER by score DESC, liquidezDoisMeses DESC, desconto DESC limit 20;
+        """)
+    rows = cursor.fetchall()
+
+    cursor.close()
+    connector.close()
+    return rows
+
+
 def insert(data):
     try:
         create_table()
