@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 import datetime
+from uuid import uuid4
 
 import graham
 import fundamentus
 import db
 
 
+
 if __name__ == '__main__':
+    coleta_id = str(uuid4())
+
     from waitingbar import WaitingBar
     
     THE_BAR = WaitingBar('[*] Downloading...')
@@ -77,6 +81,7 @@ if __name__ == '__main__':
         dy = float(stock["DY"].replace('.', '').replace(',', '.').replace('%', ''))
 
         newStock = {}
+        newStock["coletaUUID"] = coleta_id
         newStock["stockCode"] = stock["stockCode"]
         newStock["patrimonioLiquido"] = patrLiq
         newStock["liquidezCorrente"] = liqCorr

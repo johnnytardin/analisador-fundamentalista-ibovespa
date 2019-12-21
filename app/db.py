@@ -9,10 +9,13 @@ def select():
     cursor = connector.cursor()
 
     cursor.execute("""
-        select stockCode, crescimentoCincoAnos, stockPrice, valorIntriseco, score, desconto, "timestamp" from fundamentus 
-        where crescimentoCincoAnos > 2
-        and desconto > 1
-        ORDER by score DESC, liquidezDoisMeses DESC, desconto DESC limit 20;
+        SELECT stockCode, setor, crescimentoCincoAnos, stockPrice, valorIntriseco, score, desconto, "timestamp" 
+        FROM fundamentus 
+        WHERE coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY id DESC LIMIT 1) 
+        AND crescimentoCincoAnos > 2
+        AND ROE > 10
+        AND desconto > 2
+        ORDER by score DESC, precoSobreLucro ASC, liquidezDoisMeses DESC, desconto DESC limit 20;
         """)
     rows = cursor.fetchall()
 
@@ -77,7 +80,8 @@ def insert(data):
              divLiquida,
              valorIntriseco,
              score,
-             desconto)
+             desconto, 
+             coletaUUID)
         VALUES
             (
             :stockCode,
@@ -124,7 +128,9 @@ def insert(data):
             :divLiquida,
             :valorIntriseco,
             :score,
-            :desconto)""", data)
+            :desconto,
+            :coletaUUID
+            )""", data)
     connector.commit()
 
     cursor.close()
@@ -181,6 +187,7 @@ def create_table():
              divLiquida NUMERIC,
              valorIntriseco NUMERIC,
              score NUMERIC,
-             desconto NUMERIC);''')
+             desconto NUMERIC,
+             coletaUUID TEXT);''')
     cursor.close()
     connector.close()
