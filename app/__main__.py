@@ -154,40 +154,61 @@ if __name__ == '__main__':
         # intriseco
         newStock["valorIntriseco"] = graham.valor_intriseco(newStock["lucroPorAcao"], newStock["ValorPatrimonialPorAcao"])
 
+        # desconto
+        newStock["desconto"] = newStock["valorIntriseco"] - newStock["stockPrice"] if newStock["valorIntriseco"] > 0 else 0
+
+        # percentual de desconto
+        try:
+            p_desc = ((newStock["stockPrice"] / newStock["valorIntriseco"]) - 1) * 100
+        except ZeroDivisionError:
+            p_desc = 0
+        newStock["percentualDesconto"] = p_desc
+
         # score
         nota = 0
+        score_steps = 0
+
+        score_steps += 1
         if patrLiq > 2000000000:
             nota += 1
 
+        score_steps += 1
         if liqCorr > 1.5:
             nota += 1
 
+        score_steps += 1
         if roe > 20:
             nota += 1
 
+        score_steps += 1
         if divPat < 0.5 and divPat > 0:
             nota += 1
 
+        score_steps += 1
         if cresc > 5:
             nota += 1
 
+        score_steps += 1
         if pvp < 2 and pvp > 0:
             nota += 1
 
+        score_steps += 1
         if pl < 15 and pl > 0:
             nota += 1
 
+        score_steps += 1
         if dy > 2.5:
             nota += 1
 
+        score_steps += 1
         if newStock["valorMercado"] < newStock["valorFirma"]:
             nota += 1
 
-        # caso entre mais alguma nota acima, modificar o dividendo abaixo para ter nota máxima de 10
-        newStock["score"] = float(nota) / 9.0 * 10.0
+        score_steps += 1
+        if p_desc < -10:
+            nota += 1
 
-        # desconto
-        newStock["desconto"] = newStock["valorIntriseco"] - newStock["stockPrice"] if newStock["valorIntriseco"] > 0 else 0
+        newStock["score"] = float(nota) / score_steps * 10.0
 
         final_stocks.append(newStock)
 
