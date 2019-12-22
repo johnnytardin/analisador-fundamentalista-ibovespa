@@ -151,6 +151,11 @@ if __name__ == '__main__':
         else:
             newStock["divLiquida"] = None
 
+        try:
+            newStock["AtivoSobreDivida"] = newStock["ativo"] / newStock["divBruta"]
+        except (ZeroDivisionError, TypeError):
+            newStock["AtivoSobreDivida"] = None
+
         # intriseco
         newStock["valorIntriseco"] = graham.valor_intriseco(newStock["lucroPorAcao"], newStock["ValorPatrimonialPorAcao"])
 
@@ -193,11 +198,15 @@ if __name__ == '__main__':
             nota += 1
 
         score_steps += 1
-        if pl < 15 and pl > 0:
+        if pl < 9 and pl > 0:
             nota += 1
 
         score_steps += 1
         if dy > 2.5:
+            nota += 1
+
+        score_steps += 1
+        if divPat <= 1.1:
             nota += 1
 
         score_steps += 1
@@ -207,6 +216,12 @@ if __name__ == '__main__':
         score_steps += 1
         if p_desc < -10:
             nota += 1
+
+        # empresas com divida baixa
+        if newStock["AtivoSobreDivida"]:
+            score_steps += 1
+            if newStock["AtivoSobreDivida"] >= 1.5:
+                nota += 1
 
         newStock["score"] = float(nota) / score_steps * 10.0
 

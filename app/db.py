@@ -15,6 +15,9 @@ def select():
         AND crescimentoCincoAnos > 2
         AND ROE > 10
         AND desconto > 2
+        AND divSobrePatrimonio <= 1.1
+        AND precoSobreLucro <= 9 AND precoSobreLucro >= 0
+        AND AtivoSobreDivida >= 1.5
         ORDER by score DESC, percentualDesconto ASC, precoSobreLucro ASC, dividendos DESC, liquidezDoisMeses DESC
         LIMIT 20;
         """)
@@ -83,6 +86,7 @@ def insert(data):
              score,
              desconto, 
              percentualDesconto,
+             AtivoSobreDivida,
              coletaUUID)
         VALUES
             (
@@ -132,6 +136,7 @@ def insert(data):
             :score,
             :desconto,
             :percentualDesconto,
+            :AtivoSobreDivida,
             :coletaUUID
             )""", data)
     connector.commit()
@@ -192,6 +197,7 @@ def create_table():
              score NUMERIC,
              desconto NUMERIC,
              percentualDesconto NUMERIC,
+             AtivoSobreDivida NUMERIC,
              coletaUUID TEXT);''')
     cursor.close()
     connector.close()
