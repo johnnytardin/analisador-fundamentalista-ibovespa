@@ -187,6 +187,11 @@ if __name__ == '__main__':
 
         score_steps += 1
         if divPat < 0.5 and divPat > 0:
+            '''
+            Resultados inferiores a uma unidade indicam que a empresa deve menos
+            do que ela vale. Se o indicativo apontar vários múltiplos, significa que a
+            empresa opera seriamente endividada e merece ser evitada.
+            '''
             nota += 1
 
         score_steps += 1
