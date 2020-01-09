@@ -17,7 +17,7 @@ def select():
         AND ROE > 10
         AND desconto > 2
         AND divSobrePatrimonio < 0.8
-        AND precoSobreLucro <= 9 AND precoSobreLucro >= 0
+        AND precoSobreLucro <= 15 AND precoSobreLucro >= 0
         AND AtivoSobreDivida >= 1.5
         AND dividendos > 4.5
         ORDER by score DESC, percentualDesconto ASC, precoSobreLucro ASC, dividendos DESC, liquidezDoisMeses DESC
