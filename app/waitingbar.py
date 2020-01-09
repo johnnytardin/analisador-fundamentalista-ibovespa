@@ -8,7 +8,7 @@ from itertools import cycle
 
 
 class WaitingBar(object):
-    '''
+    """
     This class prints a fancy waiting bar with Greek chars and spins.
     It uses a thread to keep printing the bar while the main program runs
 
@@ -18,15 +18,32 @@ class WaitingBar(object):
     # Do something slow here
     (...)
     THE_BAR.stop()
-    
-    copyright phoemur - 2016
-    '''
 
-    def __init__(self, message='[*] Wait until loading is complete...'):
-        self.MESSAGE = ' ' + str(message)
-        self.CYCLES = ['-', '-', '\\', '\\', '|', '|', '/', '/', '-', '-', '\\', '\\', '|', '|', '/', '/']
-        self.intab = u'abcdefghijklmnopqrstuvwxyzáàãâéèẽêíìîĩóòôõúùũûçABCDEFGHIJKLMNOPQRSTUVWXYZÁÀÃÂÉÈẼÊÍÌÎĨÓÒÔÕÚÙŨÛÇ'
-        self.outab = u'αβ¢ΔεϝγηιφκλμνΩπσϼΣτυϞωχψζααααεεεειιιιΩΩΩΩυυυυ¢αβ¢ΔεϝγηιφκλμνΩπσϼΣτυϞωχψζααααεεεειιιιΩΩΩΩυυυυ¢'
+    copyright phoemur - 2016
+    """
+
+    def __init__(self, message="[*] Wait until loading is complete..."):
+        self.MESSAGE = " " + str(message)
+        self.CYCLES = [
+            "-",
+            "-",
+            "\\",
+            "\\",
+            "|",
+            "|",
+            "/",
+            "/",
+            "-",
+            "-",
+            "\\",
+            "\\",
+            "|",
+            "|",
+            "/",
+            "/",
+        ]
+        self.intab = u"abcdefghijklmnopqrstuvwxyzáàãâéèẽêíìîĩóòôõúùũûçABCDEFGHIJKLMNOPQRSTUVWXYZÁÀÃÂÉÈẼÊÍÌÎĨÓÒÔÕÚÙŨÛÇ"
+        self.outab = u"αβ¢ΔεϝγηιφκλμνΩπσϼΣτυϞωχψζααααεεεειιιιΩΩΩΩυυυυ¢αβ¢ΔεϝγηιφκλμνΩπσϼΣτυϞωχψζααααεεεειιιιΩΩΩΩυυυυ¢"
         self.TABLE = {x: y for x, y in zip(self.intab, self.outab)}
 
         self.event = threading.Event()
@@ -44,31 +61,31 @@ class WaitingBar(object):
                 buff.append(c)
 
                 try:
-                    if sys.stdout.encoding.upper() == 'UTF-8':
+                    if sys.stdout.encoding.upper() == "UTF-8":
                         buff[index] = self.TABLE[buff[index]]
                     else:
                         buff[index] = buff[index].swapcase()
                 except KeyError:
                     pass
 
-                sys.stdout.write(''.join(buff))
+                sys.stdout.write("".join(buff))
                 time.sleep(0.05)
-                sys.stdout.write('\r')
+                sys.stdout.write("\r")
                 sys.stdout.flush()
 
     def stop(self):
         self.event.set()
         self.waiting_bar.join()
-        sys.stdout.write(self.MESSAGE + ' \n')
+        sys.stdout.write(self.MESSAGE + " \n")
 
 
-if __name__ == '__main__':
-    '''
+if __name__ == "__main__":
+    """
     A simple example to demonstrate the class in action
-    '''
+    """
 
     # Start the bar
-    THE_BAR = WaitingBar('[*] Calculating useless stuff...')
+    THE_BAR = WaitingBar("[*] Calculating useless stuff...")
 
     # Do something slow
     import math

@@ -8,7 +8,8 @@ def select():
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT stockCode, setor, crescimentoCincoAnos, stockPrice, valorIntriseco, score, percentualDesconto, desconto, dividendos, "timestamp" 
         FROM fundamentus 
         WHERE coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY id DESC LIMIT 1) 
@@ -21,7 +22,8 @@ def select():
         AND dividendos > 4.5
         ORDER by score DESC, percentualDesconto ASC, precoSobreLucro ASC, dividendos DESC, liquidezDoisMeses DESC
         LIMIT 20;
-        """)
+        """
+    )
     rows = cursor.fetchall()
 
     cursor.close()
@@ -38,7 +40,8 @@ def insert(data):
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
 
-    cursor.executemany("""
+    cursor.executemany(
+        """
         INSERT INTO 
             fundamentus
             (stockCode,
@@ -139,7 +142,9 @@ def insert(data):
             :percentualDesconto,
             :AtivoSobreDivida,
             :coletaUUID
-            )""", data)
+            )""",
+        data,
+    )
     connector.commit()
 
     cursor.close()
@@ -150,7 +155,8 @@ def create_table():
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
 
-    cursor.execute('''CREATE TABLE fundamentus
+    cursor.execute(
+        """CREATE TABLE fundamentus
             (id INTEGER PRIMARY KEY AUTOINCREMENT,
              stockCode TEXT,
              patrimonioLiquido NUMERIC,
@@ -199,6 +205,7 @@ def create_table():
              desconto NUMERIC,
              percentualDesconto NUMERIC,
              AtivoSobreDivida NUMERIC,
-             coletaUUID TEXT);''')
+             coletaUUID TEXT);"""
+    )
     cursor.close()
     connector.close()
