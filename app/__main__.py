@@ -141,6 +141,11 @@ if __name__ == "__main__":
             if "-" not in specific_data["Max 52 sem"]
             else 0
         )
+        newStock["min52sem"] = (
+            float(specific_data["Min 52 sem"].replace(".", "").replace(",", "."))
+            if "-" not in specific_data["Min 52 sem"]
+            else 0
+        )
         newStock["volMed2M"] = (
             float(specific_data["Vol $ méd (2m)"].replace(".", "").replace(",", "."))
             if "-" not in specific_data["Vol $ méd (2m)"]
@@ -314,6 +319,21 @@ if __name__ == "__main__":
         except ZeroDivisionError:
             p_desc = 0
         newStock["percentualDesconto"] = p_desc
+
+        # distancia para a cotação mínima (server para tentar pegar um bom time)
+        try:
+            diff_min_max = newStock["max52sem"] - newStock["min52sem"]
+        except ZeroDivisionError:
+            diff_min_max = 0
+
+        diff_atual = newStock["stockPrice"] - newStock["min52sem"]
+
+        try:
+            distancia = (diff_atual / diff_min_max) * 100
+        except ZeroDivisionError:
+            distancia = 0
+
+        newStock["PercDistanciaMin52sem"] = distancia
 
         # score
         nota = 0
