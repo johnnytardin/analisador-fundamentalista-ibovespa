@@ -67,18 +67,55 @@ if __name__ == "__main__":
     # Calculate the score of the stock
     final_stocks = []
     for stock in stocks:
-        patrLiq = float(stock["Pat.Liq"].replace(".", "").replace(",", "."))
-        liqCorr = float(stock["Liq.Corr."].replace(".", "").replace(",", "."))
-        roe = float(stock["ROE"].replace(".", "").replace(",", ".").replace("%", ""))
+        patrLiq = float(
+            stock["Pat.Liq"].replace(".", "").replace(",", ".")
+            if "-" not in stock["Pat.Liq"]
+            else 0
+        )
+        liqCorr = float(
+            stock["Liq.Corr."].replace(".", "").replace(",", ".")
+            if "-" not in stock["Liq.Corr."]
+            else 0
+        )
+        roe = float(
+            stock["ROE"].replace(".", "").replace(",", ".").replace("%", "")
+            if "-" not in stock["ROE"]
+            else 0
+        )
+        roic = float(
+            stock["ROIC"].replace(".", "").replace(",", ".").replace("%", "")
+            if "-" not in stock["ROIC"]
+            else 0
+        )
         divPat = float(
             stock["Div.Brut/Pat."].replace(".", "").replace(",", ".").replace("%", "")
+            if "-" not in stock["Div.Brut/Pat."]
+            else 0
         )
+
         cresc = float(
             stock["Cresc.5a"].replace(".", "").replace(",", ".").replace("%", "")
+            if "-" not in stock["Cresc.5a"]
+            else 0
         )
-        pvp = float(stock["P/VP"].replace(".", "").replace(",", ".").replace("%", ""))
-        pl = float(stock["P/L"].replace(".", "").replace(",", ".").replace("%", ""))
-        dy = float(stock["DY"].replace(".", "").replace(",", ".").replace("%", ""))
+
+        pvp = float(
+            stock["P/VP"].replace(".", "").replace(",", ".").replace("%", "")
+            if "-" not in stock["P/VP"]
+            else 0
+        )
+
+        pl = float(
+            stock["P/L"].replace(".", "").replace(",", ".").replace("%", "")
+            if "-" not in stock["P/L"]
+            else 0
+        )
+
+        dy = float(
+            stock["DY"].replace(".", "").replace(",", ".").replace("%", "")
+            if "-" not in stock["DY"]
+            else 0
+        )
 
         newStock = {}
         newStock["coletaUUID"] = coleta_id
@@ -93,37 +130,63 @@ if __name__ == "__main__":
         newStock["dividendos"] = dy
         newStock["stockPrice"] = float(
             stock["cotacao"].replace(".", "").replace(",", ".")
+            if "-" not in stock["cotacao"]
+            else 0
         )
-        newStock["PSR"] = float(stock["PSR"].replace(".", "").replace(",", "."))
+        newStock["PSR"] = float(
+            stock["PSR"].replace(".", "").replace(",", ".")
+            if "-" not in stock["PSR"]
+            else 0
+        )
         newStock["precoSobreAtivo"] = float(
             stock["P/Ativo"].replace(".", "").replace(",", ".")
+            if "-" not in stock["P/Ativo"]
+            else 0
         )
         newStock["precoSobreCapitalGiro"] = float(
             stock["P/Cap.Giro"].replace(".", "").replace(",", ".")
+            if "-" not in stock["P/Cap.Giro"]
+            else 0
         )
         newStock["precoSobreEBIT"] = float(
             stock["P/EBIT"].replace(".", "").replace(",", ".")
+            if "-" not in stock["P/EBIT"]
+            else 0
         )
         newStock["precoSobreAtivoCirculante"] = float(
             stock["P/Ativ.Circ.Liq."].replace(".", "").replace(",", ".")
+            if "-" not in stock["P/Ativ.Circ.Liq."]
+            else 0
         )
         newStock["EVSobreEBIT"] = float(
             stock["EV/EBIT"].replace(".", "").replace(",", ".")
+            if "-" not in stock["EV/EBIT"]
+            else 0
         )
         newStock["EVSobreEBITDA"] = float(
             stock["EV/EBITDA"].replace(".", "").replace(",", ".")
+            if "-" not in stock["EV/EBITDA"]
+            else 0
         )
         newStock["margemEBIT"] = float(
             stock["Mrg.Ebit."].replace(".", "").replace(",", ".").replace("%", "")
+            if "-" not in stock["Mrg.Ebit."]
+            else 0
         )
         newStock["margemLiquida"] = float(
             stock["Mrg.Liq."].replace(".", "").replace(",", ".").replace("%", "")
+            if "-" not in stock["Mrg.Liq."]
+            else 0
         )
         newStock["ROIC"] = float(
             stock["ROIC"].replace(".", "").replace(",", ".").replace("%", "")
+            if "-" not in stock["ROIC"]
+            else 0
         )
         newStock["liquidezDoisMeses"] = float(
             stock["Liq.2m."].replace(".", "").replace(",", ".").replace("%", "")
+            if "-" not in stock["Liq.2m."]
+            else 0
         )
         newStock["timestamp"] = datetime.datetime.now()
 
@@ -354,7 +417,13 @@ if __name__ == "__main__":
             nota += 0.5
 
         score_steps += 1
-        if divPat < 0.5 and divPat > 0:
+        if roic > 20:
+            nota += 1
+        elif roic >= 10:
+            nota += 0.5
+
+        score_steps += 1
+        if divPat < 0.5 and divPat >= 0:
             """
             Resultados inferiores a uma unidade indicam que a empresa deve menos
             do que ela vale. Se o indicativo apontar vários múltiplos, significa que a
@@ -371,7 +440,7 @@ if __name__ == "__main__":
             nota += 1
 
         score_steps += 1
-        if pl < 9 and pl > 0:
+        if pl <= 20 and pl > 0:
             nota += 1
 
         score_steps += 1
@@ -383,19 +452,11 @@ if __name__ == "__main__":
             nota += 1
 
         score_steps += 1
-        if newStock["valorMercado"] < newStock["valorFirma"]:
-            nota += 1
-
-        score_steps += 1
         if newStock["margemLiquida"] >= 10:
             nota += 1
 
         score_steps += 1
         if p_desc < -10:
-            nota += 1
-
-        score_steps += 1
-        if newStock["EBITsobreAtivo"] < 20:
             nota += 1
 
         # empresas com divida baixa

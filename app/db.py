@@ -155,6 +155,56 @@ def insert(data):
     connector.close()
 
 
+def select_ev_ebit():
+    connector = sqlite3.connect(DATABASE)
+    cursor = connector.cursor()
+
+    cursor.execute(
+        """
+        select 
+        stockCode
+        from fundamentus 
+        where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
+        and volMed2M > 200000
+        and EVSobreEBIT > 0
+        and ROIC > 0
+        and crescimentoCincoAnos > 2
+        and precoSobreLucro > 0
+        order by EVSobreEBIT desc 
+        """
+    )
+    rows = cursor.fetchall()
+
+    cursor.close()
+    connector.close()
+    return rows
+
+
+def select_roic():
+    connector = sqlite3.connect(DATABASE)
+    cursor = connector.cursor()
+
+    cursor.execute(
+        """
+        select 
+        stockCode
+        from fundamentus 
+        where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
+        and volMed2M > 200000
+        and EVSobreEBIT > 0
+        and ROIC > 0
+        and crescimentoCincoAnos > 2
+        and precoSobreLucro > 0
+        order by ROIC asc 
+        """
+    )
+    rows = cursor.fetchall()
+
+    cursor.close()
+    connector.close()
+    return rows
+
+
 def create_table():
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
