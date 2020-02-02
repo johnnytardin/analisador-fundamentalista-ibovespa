@@ -350,6 +350,8 @@ if __name__ == "__main__":
         score_steps += 1
         if roe > 20:
             nota += 1
+        elif roe >= 10:
+            nota += 0.5
 
         score_steps += 1
         if divPat < 0.5 and divPat > 0:
@@ -377,7 +379,7 @@ if __name__ == "__main__":
             nota += 1
 
         score_steps += 1
-        if divPat <= 1.1:
+        if divPat <= 0.5:
             nota += 1
 
         score_steps += 1
@@ -385,7 +387,15 @@ if __name__ == "__main__":
             nota += 1
 
         score_steps += 1
+        if newStock["margemLiquida"] >= 10:
+            nota += 1
+
+        score_steps += 1
         if p_desc < -10:
+            nota += 1
+
+        score_steps += 1
+        if newStock["EBITsobreAtivo"] < 20:
             nota += 1
 
         # empresas com divida baixa

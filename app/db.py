@@ -15,8 +15,8 @@ def select():
         WHERE coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY id DESC LIMIT 1) 
         AND crescimentoCincoAnos > 2
         AND ROE > 10
-        AND desconto > 2
-        AND divSobrePatrimonio < 0.8
+        AND desconto > 0
+        AND divSobrePatrimonio < 0.5
         AND precoSobreLucro <= 15 AND precoSobreLucro >= 0
         AND AtivoSobreDivida >= 1.5
         AND dividendos > 4.5
