@@ -362,7 +362,7 @@ if __name__ == "__main__":
         try:
             newStock["AtivoSobreDivida"] = newStock["ativo"] / newStock["divBruta"]
         except (ZeroDivisionError, TypeError):
-            newStock["AtivoSobreDivida"] = None
+            newStock["AtivoSobreDivida"] = 0
 
         # intriseco
         newStock["valorIntriseco"] = graham.valor_intriseco(
@@ -452,8 +452,10 @@ if __name__ == "__main__":
             nota += 1
 
         score_steps += 1
-        if newStock["margemLiquida"] >= 10:
+        if newStock["margemLiquida"] >= 20:
             nota += 1
+        elif newStock["margemLiquida"] >= 10:
+            nota += 0.5
 
         score_steps += 1
         if p_desc < -10:
@@ -462,7 +464,8 @@ if __name__ == "__main__":
         # empresas com divida baixa
         if newStock["AtivoSobreDivida"]:
             score_steps += 1
-            if newStock["AtivoSobreDivida"] >= 1.5:
+            if newStock["AtivoSobreDivida"] >= 1.5 or newStock["AtivoSobreDivida"] == 0:
+                # a segunda opção é para caso a empresa não tenha dívida
                 nota += 1
 
         newStock["score"] = float(nota) / score_steps * 10.0
