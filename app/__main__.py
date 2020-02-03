@@ -67,55 +67,33 @@ if __name__ == "__main__":
     # Calculate the score of the stock
     final_stocks = []
     for stock in stocks:
-        patrLiq = float(
-            stock["Pat.Liq"].replace(".", "").replace(",", ".")
-            if "-" not in stock["Pat.Liq"]
-            else 0
-        )
-        liqCorr = float(
-            stock["Liq.Corr."].replace(".", "").replace(",", ".")
-            if "-" not in stock["Liq.Corr."]
-            else 0
-        )
+        patrLiq = float(stock["Pat.Liq"].replace(".", "").replace(",", "."))
+        liqCorr = float(stock["Liq.Corr."].replace(".", "").replace(",", "."))
         roe = float(
             stock["ROE"].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" not in stock["ROE"]
+            if "-" != stock["ROE"]
             else 0
         )
         roic = float(
             stock["ROIC"].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" not in stock["ROIC"]
+            if "-" != stock["ROIC"]
             else 0
         )
         divPat = float(
             stock["Div.Brut/Pat."].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" not in stock["Div.Brut/Pat."]
+            if "-" != stock["Div.Brut/Pat."]
             else 0
         )
 
         cresc = float(
             stock["Cresc.5a"].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" not in stock["Cresc.5a"]
-            else 0
         )
 
-        pvp = float(
-            stock["P/VP"].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" not in stock["P/VP"]
-            else 0
-        )
+        pvp = float(stock["P/VP"].replace(".", "").replace(",", ".").replace("%", ""))
 
-        pl = float(
-            stock["P/L"].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" not in stock["P/L"]
-            else 0
-        )
+        pl = float(stock["P/L"].replace(".", "").replace(",", ".").replace("%", ""))
 
-        dy = float(
-            stock["DY"].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" not in stock["DY"]
-            else 0
-        )
+        dy = float(stock["DY"].replace(".", "").replace(",", ".").replace("%", ""))
 
         newStock = {}
         newStock["coletaUUID"] = coleta_id
@@ -130,62 +108,62 @@ if __name__ == "__main__":
         newStock["dividendos"] = dy
         newStock["stockPrice"] = float(
             stock["cotacao"].replace(".", "").replace(",", ".")
-            if "-" not in stock["cotacao"]
+            if "-" != stock["cotacao"]
             else 0
         )
         newStock["PSR"] = float(
             stock["PSR"].replace(".", "").replace(",", ".")
-            if "-" not in stock["PSR"]
+            if "-" != stock["PSR"]
             else 0
         )
         newStock["precoSobreAtivo"] = float(
             stock["P/Ativo"].replace(".", "").replace(",", ".")
-            if "-" not in stock["P/Ativo"]
+            if "-" != stock["P/Ativo"]
             else 0
         )
         newStock["precoSobreCapitalGiro"] = float(
             stock["P/Cap.Giro"].replace(".", "").replace(",", ".")
-            if "-" not in stock["P/Cap.Giro"]
+            if "-" != stock["P/Cap.Giro"]
             else 0
         )
         newStock["precoSobreEBIT"] = float(
             stock["P/EBIT"].replace(".", "").replace(",", ".")
-            if "-" not in stock["P/EBIT"]
+            if "-" != stock["P/EBIT"]
             else 0
         )
         newStock["precoSobreAtivoCirculante"] = float(
             stock["P/Ativ.Circ.Liq."].replace(".", "").replace(",", ".")
-            if "-" not in stock["P/Ativ.Circ.Liq."]
+            if "-" != stock["P/Ativ.Circ.Liq."]
             else 0
         )
         newStock["EVSobreEBIT"] = float(
             stock["EV/EBIT"].replace(".", "").replace(",", ".")
-            if "-" not in stock["EV/EBIT"]
+            if "-" != stock["EV/EBIT"]
             else 0
         )
         newStock["EVSobreEBITDA"] = float(
             stock["EV/EBITDA"].replace(".", "").replace(",", ".")
-            if "-" not in stock["EV/EBITDA"]
+            if "-" != stock["EV/EBITDA"]
             else 0
         )
         newStock["margemEBIT"] = float(
             stock["Mrg.Ebit."].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" not in stock["Mrg.Ebit."]
+            if "-" != stock["Mrg.Ebit."]
             else 0
         )
         newStock["margemLiquida"] = float(
             stock["Mrg.Liq."].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" not in stock["Mrg.Liq."]
+            if "-" != stock["Mrg.Liq."]
             else 0
         )
         newStock["ROIC"] = float(
             stock["ROIC"].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" not in stock["ROIC"]
+            if "-" != stock["ROIC"]
             else 0
         )
         newStock["liquidezDoisMeses"] = float(
             stock["Liq.2m."].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" not in stock["Liq.2m."]
+            if "-" != stock["Liq.2m."]
             else 0
         )
         newStock["timestamp"] = datetime.datetime.now()
@@ -201,7 +179,7 @@ if __name__ == "__main__":
         newStock["subsetor"] = specific_data["Subsetor"]
         newStock["max52sem"] = (
             float(specific_data["Max 52 sem"].replace(".", "").replace(",", "."))
-            if "-" not in specific_data["Max 52 sem"]
+            if "-" != specific_data["Max 52 sem"]
             else 0
         )
         newStock["min52sem"] = (
@@ -258,7 +236,7 @@ if __name__ == "__main__":
                 .replace("%", "")
                 .replace("\n", "")
             )
-            if "-" not in specific_data["EBIT / Ativo"]
+            if "-" != specific_data["EBIT / Ativo"]
             else 0
         )
         newStock["giroAtivos"] = (
@@ -280,7 +258,7 @@ if __name__ == "__main__":
                 .replace("%", "")
                 .replace("\n", "")
             )
-            if "-" not in specific_data["Ativo"]
+            if "-" != specific_data["Ativo"]
             else 0
         )
 
@@ -293,7 +271,7 @@ if __name__ == "__main__":
                     .replace("%", "")
                     .replace("\n", "")
                 )
-                if "-" not in specific_data["Lucro Líquido"]
+                if "-" != specific_data["Lucro Líquido"]
                 else 0
             )
         else:
@@ -308,7 +286,7 @@ if __name__ == "__main__":
                     .replace("%", "")
                     .replace("\n", "")
                 )
-                if "-" not in specific_data["Receita Líquida"]
+                if "-" != specific_data["Receita Líquida"]
                 else 0
             )
         else:
@@ -323,7 +301,7 @@ if __name__ == "__main__":
                     .replace("%", "")
                     .replace("\n", "")
                 )
-                if "-" not in specific_data["Disponibilidades"]
+                if "-" != specific_data["Disponibilidades"]
                 else 0
             )
         else:
@@ -338,7 +316,7 @@ if __name__ == "__main__":
                     .replace("%", "")
                     .replace("\n", "")
                 )
-                if "-" not in specific_data["Dív. Bruta"]
+                if "-" != specific_data["Dív. Bruta"]
                 else 0
             )
         else:
@@ -353,7 +331,7 @@ if __name__ == "__main__":
                     .replace("%", "")
                     .replace("\n", "")
                 )
-                if "-" not in specific_data["Dív. Líquida"]
+                if "-" != specific_data["Dív. Líquida"]
                 else 0
             )
         else:
