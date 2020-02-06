@@ -63,6 +63,8 @@ def main():
                     round(d[0][10], 2) if d[0][10] else d[0][10],
                     round(d[0][11], 2) if d[0][11] else d[0][11],
                     round(d[0][12], 2) if d[0][12] else d[0][12],
+                    round(d[0][13], 2) if d[0][13] else d[0][13],
+                    round(d[0][14], 2) if d[0][14] else d[0][14],
                 ]
             )
             count += 1
@@ -90,6 +92,8 @@ def main():
                     "DY %",
                     "Cres.(5a) %",
                     "Div Br/ Patrim",
+                    "Margem Liq. %",
+                    "LPA"
                 ],
                 tablefmt="orgtbl",
             )

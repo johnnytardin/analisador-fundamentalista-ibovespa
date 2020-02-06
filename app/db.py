@@ -173,6 +173,9 @@ def select_ev_ebit():
         and ROE >= 0
         --and crescimentoCincoAnos > 2
         and precoSobreLucro > 0
+        and precoSobreLucro < 25
+        and precoSobreVP > 0
+        and precoSobreVP < 25
         order by EVSobreEBIT desc 
         """
     )
@@ -201,6 +204,9 @@ def select_roic():
         and ROE >= 0
         --and crescimentoCincoAnos > 0
         and precoSobreLucro > 0
+        and precoSobreLucro < 25
+        and precoSobreVP > 0
+        and precoSobreVP < 25
         order by ROIC asc 
         """
     )
@@ -225,6 +231,10 @@ def select_pl():
         and ROE >= 0
         and EVSobreEBIT is null
         and precoSobreLucro > 0
+        and precoSobreLucro > 0
+        and precoSobreLucro < 25
+        and precoSobreVP > 0
+        and precoSobreVP < 25
         --and crescimentoCincoAnos > 0
         order by precoSobreLucro desc 
         """
@@ -250,6 +260,10 @@ def select_roe():
         and ROE >= 0
         and ROIC is null
         and precoSobreLucro > 0
+        and precoSobreLucro > 0
+        and precoSobreLucro < 25
+        and precoSobreVP > 0
+        and precoSobreVP < 25
         --and crescimentoCincoAnos > 0
         order by ROE asc
         """
@@ -280,7 +294,9 @@ def select_details(stockcode):
             PercentualDesconto, 
             dividendos,
             crescimentoCincoAnos,
-            divSobrePatrimonio
+            divSobrePatrimonio,
+            margemLiquida,
+            lucroPorAcao
         from fundamentus 
         where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
         and stockCode = ?
