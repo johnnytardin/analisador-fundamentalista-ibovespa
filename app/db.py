@@ -18,7 +18,7 @@ def select():
         AND desconto > 0
         AND divSobrePatrimonio < 0.5
         AND precoSobreLucro <= 15 AND precoSobreLucro >= 0
-        AND AtivoSobreDivida >= 1.5
+        AND DividaSobreAtivo <= 0.5
         AND dividendos > 4.5
         ORDER by score DESC, percentualDesconto ASC, precoSobreLucro ASC, dividendos DESC, liquidezDoisMeses DESC
         LIMIT 20;
@@ -92,7 +92,7 @@ def insert(data):
              score,
              desconto, 
              percentualDesconto,
-             AtivoSobreDivida,
+             DividaSobreAtivo,
              coletaUUID)
         VALUES
             (
@@ -144,7 +144,7 @@ def insert(data):
             :score,
             :desconto,
             :percentualDesconto,
-            :AtivoSobreDivida,
+            :DividaSobreAtivo,
             :coletaUUID
             )""",
         data,
@@ -166,11 +166,11 @@ def select_ev_ebit():
         from fundamentus 
         where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
         and volMed2M > 200000
-        and (AtivoSobreDivida >= 1.5 or AtivoSobreDivida = 0)
-        and divSobrePatrimonio <= 0.5
-        and EVSobreEBIT > 0
-        and ROIC > 0
-        and crescimentoCincoAnos > 2
+        and DividaSobreAtivo <= 0.5
+        and divSobrePatrimonio <= 1.5
+        and EVSobreEBIT >= 0
+        and ROIC >= 0
+        --and crescimentoCincoAnos > 2
         and precoSobreLucro > 0
         order by EVSobreEBIT desc 
         """
@@ -193,14 +193,97 @@ def select_roic():
         from fundamentus 
         where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
         and volMed2M > 200000
-        and (AtivoSobreDivida >= 1.5 or AtivoSobreDivida = 0)
-        and divSobrePatrimonio <= 0.5
-        and EVSobreEBIT > 0
-        and ROIC > 0
-        and crescimentoCincoAnos > 2
+        and DividaSobreAtivo <= 0.5
+        and divSobrePatrimonio <= 1.5
+        and EVSobreEBIT >= 0
+        and ROIC >= 0
+        --and crescimentoCincoAnos > 0
         and precoSobreLucro > 0
         order by ROIC asc 
         """
+    )
+    rows = cursor.fetchall()
+
+    cursor.close()
+    connector.close()
+    return rows
+
+
+def select_pl():
+    connector = sqlite3.connect(DATABASE)
+    cursor = connector.cursor()
+
+    cursor.execute(
+        """
+        select 
+        stockCode
+        from fundamentus 
+        where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
+        and volMed2M > 200000
+        and ROE >= 0
+        and EVSobreEBIT is null
+        and precoSobreLucro > 0
+        --and crescimentoCincoAnos > 0
+        order by precoSobreLucro desc 
+        """
+    )
+    rows = cursor.fetchall()
+
+    cursor.close()
+    connector.close()
+    return rows
+
+
+def select_roe():
+    connector = sqlite3.connect(DATABASE)
+    cursor = connector.cursor()
+
+    cursor.execute(
+        """
+        select 
+        stockCode
+        from fundamentus 
+        where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
+        and volMed2M > 200000
+        and ROE >= 0
+        and ROIC is null
+        and precoSobreLucro > 0
+        --and crescimentoCincoAnos > 0
+        order by ROE asc
+        """
+    )
+    rows = cursor.fetchall()
+
+    cursor.close()
+    connector.close()
+    return rows
+
+
+def select_details(stockcode):
+    connector = sqlite3.connect(DATABASE)
+    cursor = connector.cursor()
+
+    cursor.execute(
+        """
+        select 
+            subsetor,
+            precoSobreVP,
+            EVSobreEBIT, 
+            ROIC, 
+            precoSobreLucro, 
+            ROE, 
+            PercDistanciaMin52sem, 
+            stockPrice, 
+            valorIntriseco, 
+            PercentualDesconto, 
+            dividendos,
+            crescimentoCincoAnos,
+            divSobrePatrimonio
+        from fundamentus 
+        where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
+        and stockCode = ?
+        """,
+        (stockcode,),
     )
     rows = cursor.fetchall()
 
@@ -264,7 +347,7 @@ def create_table():
              score NUMERIC,
              desconto NUMERIC,
              percentualDesconto NUMERIC,
-             AtivoSobreDivida NUMERIC,
+             DividaSobreAtivo NUMERIC,
              coletaUUID TEXT);"""
     )
     cursor.close()

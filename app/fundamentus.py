@@ -103,7 +103,6 @@ def get_data(*args, **kwargs):
                 "Cresc.5a": stocks[i].getchildren()[20].text,
             }
         }
-
     return lista
 
 

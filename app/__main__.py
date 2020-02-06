@@ -2,15 +2,26 @@
 import datetime
 from uuid import uuid4
 
+from tabulate import tabulate
+
 import graham
 import fundamentus
 import db
+from waitingbar import WaitingBar
+
+
+def normaliza_valor(data):
+    try:
+        n = float(
+            data.replace("\n", "").replace("%", "").replace(".", "").replace(",", ".")
+        )
+    except ValueError:
+        return None
+    return n
 
 
 if __name__ == "__main__":
     coleta_id = str(uuid4())
-
-    from waitingbar import WaitingBar
 
     THE_BAR = WaitingBar("[*] Downloading...")
 
@@ -67,37 +78,30 @@ if __name__ == "__main__":
     # Calculate the score of the stock
     final_stocks = []
     for stock in stocks:
-        patrLiq = float(stock["Pat.Liq"].replace(".", "").replace(",", "."))
-        liqCorr = float(stock["Liq.Corr."].replace(".", "").replace(",", "."))
-        roe = float(
-            stock["ROE"].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" != stock["ROE"]
-            else 0
-        )
-        roic = float(
-            stock["ROIC"].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" != stock["ROIC"]
-            else 0
-        )
-        divPat = float(
-            stock["Div.Brut/Pat."].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" != stock["Div.Brut/Pat."]
-            else 0
-        )
-
-        cresc = float(
-            stock["Cresc.5a"].replace(".", "").replace(",", ".").replace("%", "")
-        )
-
-        pvp = float(stock["P/VP"].replace(".", "").replace(",", ".").replace("%", ""))
-
-        pl = float(stock["P/L"].replace(".", "").replace(",", ".").replace("%", ""))
-
-        dy = float(stock["DY"].replace(".", "").replace(",", ".").replace("%", ""))
-
         newStock = {}
         newStock["coletaUUID"] = coleta_id
+        newStock["timestamp"] = datetime.datetime.now()
+        newStock["liquidezDoisMeses"] = normaliza_valor(stock["Liq.2m."])
+
         newStock["stockCode"] = stock["stockCode"]
+
+        # Get more information
+        print("Getting more information from stock ", newStock["stockCode"])
+        specific_data = fundamentus.get_specific_data(newStock["stockCode"])
+
+        # Add everything to the object
+        patrLiq = normaliza_valor(specific_data["Patrim. Líq"])
+        liqCorr = normaliza_valor(specific_data["Liquidez Corr"])
+        roe = normaliza_valor(specific_data["ROE"])
+        roic = normaliza_valor(specific_data["ROIC"])
+        cresc = normaliza_valor(specific_data["Cres. Rec (5a)"])
+        pvp = normaliza_valor(specific_data["P/VP"])
+        pl = normaliza_valor(specific_data["P/L"])
+        dy = normaliza_valor(specific_data["Div. Yield"])
+
+        divPat = normaliza_valor(specific_data["Div Br/ Patrim"])
+        divPat = divPat if divPat else 0
+
         newStock["patrimonioLiquido"] = patrLiq
         newStock["liquidezCorrente"] = liqCorr
         newStock["ROE"] = roe
@@ -106,241 +110,75 @@ if __name__ == "__main__":
         newStock["precoSobreVP"] = pvp
         newStock["precoSobreLucro"] = pl
         newStock["dividendos"] = dy
-        newStock["stockPrice"] = float(
-            stock["cotacao"].replace(".", "").replace(",", ".")
-            if "-" != stock["cotacao"]
-            else 0
+        newStock["stockPrice"] = normaliza_valor(specific_data["Cotação"])
+        newStock["PSR"] = normaliza_valor(specific_data["PSR"])
+        newStock["precoSobreAtivo"] = normaliza_valor(specific_data["P/Ativos"])
+        newStock["precoSobreCapitalGiro"] = normaliza_valor(
+            specific_data["P/Cap. Giro"]
         )
-        newStock["PSR"] = float(
-            stock["PSR"].replace(".", "").replace(",", ".")
-            if "-" != stock["PSR"]
-            else 0
+        newStock["precoSobreEBIT"] = normaliza_valor(specific_data["P/EBIT"])
+        newStock["precoSobreAtivoCirculante"] = normaliza_valor(
+            specific_data["P/Ativ Circ Liq"]
         )
-        newStock["precoSobreAtivo"] = float(
-            stock["P/Ativo"].replace(".", "").replace(",", ".")
-            if "-" != stock["P/Ativo"]
-            else 0
-        )
-        newStock["precoSobreCapitalGiro"] = float(
-            stock["P/Cap.Giro"].replace(".", "").replace(",", ".")
-            if "-" != stock["P/Cap.Giro"]
-            else 0
-        )
-        newStock["precoSobreEBIT"] = float(
-            stock["P/EBIT"].replace(".", "").replace(",", ".")
-            if "-" != stock["P/EBIT"]
-            else 0
-        )
-        newStock["precoSobreAtivoCirculante"] = float(
-            stock["P/Ativ.Circ.Liq."].replace(".", "").replace(",", ".")
-            if "-" != stock["P/Ativ.Circ.Liq."]
-            else 0
-        )
-        newStock["EVSobreEBIT"] = float(
-            stock["EV/EBIT"].replace(".", "").replace(",", ".")
-            if "-" != stock["EV/EBIT"]
-            else 0
-        )
-        newStock["EVSobreEBITDA"] = float(
-            stock["EV/EBITDA"].replace(".", "").replace(",", ".")
-            if "-" != stock["EV/EBITDA"]
-            else 0
-        )
-        newStock["margemEBIT"] = float(
-            stock["Mrg.Ebit."].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" != stock["Mrg.Ebit."]
-            else 0
-        )
-        newStock["margemLiquida"] = float(
-            stock["Mrg.Liq."].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" != stock["Mrg.Liq."]
-            else 0
-        )
-        newStock["ROIC"] = float(
-            stock["ROIC"].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" != stock["ROIC"]
-            else 0
-        )
-        newStock["liquidezDoisMeses"] = float(
-            stock["Liq.2m."].replace(".", "").replace(",", ".").replace("%", "")
-            if "-" != stock["Liq.2m."]
-            else 0
-        )
-        newStock["timestamp"] = datetime.datetime.now()
+        newStock["EVSobreEBIT"] = normaliza_valor(specific_data["EV / EBIT"])
 
-        # Get more information
-        print("Getting more information from stock ", newStock["stockCode"])
-        specific_data = fundamentus.get_specific_data(newStock["stockCode"])
+        newStock["EVSobreEBITDA"] = normaliza_valor(specific_data["EV / EBITDA"])
+        newStock["margemEBIT"] = normaliza_valor(specific_data["Marg. EBIT"])
+        newStock["margemLiquida"] = normaliza_valor(specific_data["Marg. Líquida"])
+        newStock["ROIC"] = normaliza_valor(specific_data["ROIC"])
 
-        # Add everything to the object
         newStock["tipo"] = specific_data["Tipo"]
         newStock["name"] = specific_data["Empresa"]
         newStock["setor"] = specific_data["Setor"]
         newStock["subsetor"] = specific_data["Subsetor"]
-        newStock["max52sem"] = (
-            float(specific_data["Max 52 sem"].replace(".", "").replace(",", "."))
-            if "-" != specific_data["Max 52 sem"]
-            else 0
-        )
-        newStock["min52sem"] = (
-            float(specific_data["Min 52 sem"].replace(".", "").replace(",", "."))
-            if "-" not in specific_data["Min 52 sem"]
-            else 0
-        )
-        newStock["volMed2M"] = (
-            float(specific_data["Vol $ méd (2m)"].replace(".", "").replace(",", "."))
-            if "-" not in specific_data["Vol $ méd (2m)"]
-            else 0
-        )
-        newStock["valorMercado"] = (
-            float(specific_data["Valor de mercado"].replace(".", "").replace(",", "."))
-            if "-" not in specific_data["Valor de mercado"]
-            else 0
-        )
-        newStock["valorFirma"] = (
-            float(specific_data["Valor da firma"].replace(".", "").replace(",", "."))
-            if "-" not in specific_data["Valor da firma"]
-            else 0
-        )
-        newStock["nAcoes"] = (
-            float(specific_data["Nro. Ações"].replace(".", "").replace(",", "."))
-            if "-" not in specific_data["Nro. Ações"]
-            else 0
-        )
-        newStock["lucroPorAcao"] = (
-            float(specific_data["LPA"].replace(".", "").replace(",", "."))
-            if "-" not in specific_data["LPA"]
-            else 0
-        )
-        newStock["ValorPatrimonialPorAcao"] = (
-            float(specific_data["VPA"].replace(".", "").replace(",", "."))
-            if "-" not in specific_data["VPA"]
-            else 0
-        )
-        newStock["margemBruta"] = (
-            float(
-                specific_data["Marg. Bruta"]
-                .replace(".", "")
-                .replace(",", ".")
-                .replace("%", "")
-                .replace("\n", "")
-            )
-            if "-" not in specific_data["Marg. Bruta"]
-            else 0
-        )
-        newStock["EBITsobreAtivo"] = (
-            float(
-                specific_data["EBIT / Ativo"]
-                .replace(".", "")
-                .replace(",", ".")
-                .replace("%", "")
-                .replace("\n", "")
-            )
-            if "-" != specific_data["EBIT / Ativo"]
-            else 0
-        )
-        newStock["giroAtivos"] = (
-            float(
-                specific_data["Giro Ativos"]
-                .replace(".", "")
-                .replace(",", ".")
-                .replace("%", "")
-                .replace("\n", "")
-            )
-            if "-" not in specific_data["Giro Ativos"]
-            else 0
-        )
-        newStock["ativo"] = (
-            float(
-                specific_data["Ativo"]
-                .replace(".", "")
-                .replace(",", ".")
-                .replace("%", "")
-                .replace("\n", "")
-            )
-            if "-" != specific_data["Ativo"]
-            else 0
-        )
+        newStock["max52sem"] = normaliza_valor(specific_data["Max 52 sem"])
+        newStock["min52sem"] = normaliza_valor(specific_data["Min 52 sem"])
+        newStock["volMed2M"] = normaliza_valor(specific_data["Vol $ méd (2m)"])
+        newStock["valorMercado"] = normaliza_valor(specific_data["Valor de mercado"])
+        newStock["valorFirma"] = normaliza_valor(specific_data["Valor da firma"])
+        newStock["nAcoes"] = normaliza_valor(specific_data["Nro. Ações"])
+        newStock["lucroPorAcao"] = normaliza_valor(specific_data["LPA"])
+        newStock["ValorPatrimonialPorAcao"] = normaliza_valor(specific_data["VPA"])
+        newStock["margemBruta"] = normaliza_valor(specific_data["Marg. Bruta"])
+        newStock["EBITsobreAtivo"] = normaliza_valor(specific_data["EBIT / Ativo"])
+        newStock["giroAtivos"] = normaliza_valor(specific_data["Giro Ativos"])
+        newStock["ativo"] = normaliza_valor(specific_data["Ativo"])
 
         if "Lucro Líquido" in specific_data:
-            newStock["lucroLiquido"] = (
-                float(
-                    specific_data["Lucro Líquido"]
-                    .replace(".", "")
-                    .replace(",", ".")
-                    .replace("%", "")
-                    .replace("\n", "")
-                )
-                if "-" != specific_data["Lucro Líquido"]
-                else 0
-            )
+            newStock["lucroLiquido"] = normaliza_valor(specific_data["Lucro Líquido"])
         else:
             newStock["lucroLiquido"] = None
 
         if "Receita Líquida" in specific_data:
-            newStock["receitaLiquida"] = (
-                float(
-                    specific_data["Receita Líquida"]
-                    .replace(".", "")
-                    .replace(",", ".")
-                    .replace("%", "")
-                    .replace("\n", "")
-                )
-                if "-" != specific_data["Receita Líquida"]
-                else 0
+            newStock["receitaLiquida"] = normaliza_valor(
+                specific_data["Receita Líquida"]
             )
         else:
             newStock["receitaLiquida"] = None
 
         if "Disponibilidades" in specific_data:
-            newStock["disponibilidades"] = (
-                float(
-                    specific_data["Disponibilidades"]
-                    .replace(".", "")
-                    .replace(",", ".")
-                    .replace("%", "")
-                    .replace("\n", "")
-                )
-                if "-" != specific_data["Disponibilidades"]
-                else 0
+            newStock["disponibilidades"] = normaliza_valor(
+                specific_data["Disponibilidades"]
             )
         else:
             newStock["disponibilidades"] = None
 
         if "Dív. Bruta" in specific_data:
-            newStock["divBruta"] = (
-                float(
-                    specific_data["Dív. Bruta"]
-                    .replace(".", "")
-                    .replace(",", ".")
-                    .replace("%", "")
-                    .replace("\n", "")
-                )
-                if "-" != specific_data["Dív. Bruta"]
-                else 0
-            )
+            newStock["divBruta"] = normaliza_valor(specific_data["Dív. Bruta"])
         else:
             newStock["divBruta"] = None
 
         if "Dív. Líquida" in specific_data:
-            newStock["divLiquida"] = (
-                float(
-                    specific_data["Dív. Líquida"]
-                    .replace(".", "")
-                    .replace(",", ".")
-                    .replace("%", "")
-                    .replace("\n", "")
-                )
-                if "-" != specific_data["Dív. Líquida"]
-                else 0
-            )
+            newStock["divLiquida"] = normaliza_valor(specific_data["Dív. Líquida"])
         else:
             newStock["divLiquida"] = None
 
         try:
-            newStock["AtivoSobreDivida"] = newStock["ativo"] / newStock["divBruta"]
-        except (ZeroDivisionError, TypeError):
-            newStock["AtivoSobreDivida"] = 0
+            newStock["DividaSobreAtivo"] = newStock["divBruta"] / newStock["ativo"]
+        except ZeroDivisionError:
+            newStock["DividaSobreAtivo"] = 0
+        except TypeError:
+            newStock["DividaSobreAtivo"] = None
 
         # intriseco
         newStock["valorIntriseco"] = graham.valor_intriseco(
@@ -366,14 +204,12 @@ if __name__ == "__main__":
             diff_min_max = newStock["max52sem"] - newStock["min52sem"]
         except ZeroDivisionError:
             diff_min_max = 0
-
         diff_atual = newStock["stockPrice"] - newStock["min52sem"]
 
         try:
             distancia = (diff_atual / diff_min_max) * 100
         except ZeroDivisionError:
             distancia = 0
-
         newStock["PercDistanciaMin52sem"] = distancia
 
         # score
@@ -384,34 +220,39 @@ if __name__ == "__main__":
         if patrLiq > 2000000000:
             nota += 1
 
-        score_steps += 1
-        if liqCorr > 1.5:
-            nota += 1
+        if liqCorr:
+            score_steps += 1
+            if liqCorr > 1.5:
+                nota += 1
 
-        score_steps += 1
-        if roe > 20:
-            nota += 1
-        elif roe >= 10:
-            nota += 0.5
+        if roe:
+            score_steps += 1
+            if roe > 20:
+                nota += 1
+            elif roe >= 10:
+                nota += 0.5
 
-        score_steps += 1
-        if roic > 20:
-            nota += 1
-        elif roic >= 10:
-            nota += 0.5
+        if roic:
+            score_steps += 1
+            if roic > 20:
+                nota += 1
+            elif roic >= 10:
+                nota += 0.5
 
-        score_steps += 1
-        if divPat < 0.5 and divPat >= 0:
-            """
-            Resultados inferiores a uma unidade indicam que a empresa deve menos
-            do que ela vale. Se o indicativo apontar vários múltiplos, significa que a
-            empresa opera seriamente endividada e merece ser evitada.
-            """
-            nota += 1
+        if divPat:
+            score_steps += 1
+            if divPat < 0.5 and divPat >= 0:
+                """
+                Resultados inferiores a uma unidade indicam que a empresa deve menos
+                do que ela vale. Se o indicativo apontar vários múltiplos, significa que a
+                empresa opera seriamente endividada e merece ser evitada.
+                """
+                nota += 1
 
-        score_steps += 1
-        if cresc > 5:
-            nota += 1
+        if cresc:
+            score_steps += 1
+            if cresc > 5:
+                nota += 1
 
         score_steps += 1
         if pvp < 2 and pvp > 0:
@@ -425,24 +266,21 @@ if __name__ == "__main__":
         if dy > 2.5:
             nota += 1
 
-        score_steps += 1
-        if divPat <= 0.5:
-            nota += 1
-
-        score_steps += 1
-        if newStock["margemLiquida"] >= 20:
-            nota += 1
-        elif newStock["margemLiquida"] >= 10:
-            nota += 0.5
+        if newStock["margemLiquida"]:
+            score_steps += 1
+            if newStock["margemLiquida"] >= 20:
+                nota += 1
+            elif newStock["margemLiquida"] >= 10:
+                nota += 0.5
 
         score_steps += 1
         if p_desc < -10:
             nota += 1
 
         # empresas com divida baixa
-        if newStock["AtivoSobreDivida"]:
+        if newStock["DividaSobreAtivo"]:
             score_steps += 1
-            if newStock["AtivoSobreDivida"] >= 1.5 or newStock["AtivoSobreDivida"] == 0:
+            if newStock["DividaSobreAtivo"] >= 1.5 or newStock["DividaSobreAtivo"] == 0:
                 # a segunda opção é para caso a empresa não tenha dívida
                 nota += 1
 
