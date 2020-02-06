@@ -166,10 +166,11 @@ def select_ev_ebit():
         from fundamentus 
         where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
         and volMed2M > 200000
-        and DividaSobreAtivo <= 0.5
-        and divSobrePatrimonio <= 1.5
+        and DividaSobreAtivo <= 0.75
+        and divSobrePatrimonio <= 0.75
         and EVSobreEBIT >= 0
         and ROIC >= 0
+        and ROE >= 0
         --and crescimentoCincoAnos > 2
         and precoSobreLucro > 0
         order by EVSobreEBIT desc 
@@ -193,10 +194,11 @@ def select_roic():
         from fundamentus 
         where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
         and volMed2M > 200000
-        and DividaSobreAtivo <= 0.5
-        and divSobrePatrimonio <= 1.5
+        and DividaSobreAtivo <= 0.75
+        and divSobrePatrimonio <= 0.75
         and EVSobreEBIT >= 0
         and ROIC >= 0
+        and ROE >= 0
         --and crescimentoCincoAnos > 0
         and precoSobreLucro > 0
         order by ROIC asc 
