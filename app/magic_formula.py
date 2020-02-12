@@ -3,6 +3,7 @@ import reports.db as reportsdb
 
 from numpy import percentile
 from tabulate import tabulate
+import math
 
 
 def get_result(tipo="todos"):
@@ -40,33 +41,86 @@ def get_result(tipo="todos"):
     return ordered
 
 
+def zero_if_neg(n):
+    if n < 0:
+        return 0
+    return n
+
+
+def safe_div(n, d):
+    try:
+        r = n / d
+    except ZeroDivisionError:
+        return 0
+    return r
+
+
 def lucro_liquido(cnpj):
-    rows = reportsdb.lucro_liquido(cnpj)
+    rows = reportsdb.consulta_dre(cnpj, "lucro")
 
     l = {}
     for row in rows:
-        tipo, ano, lucro = row
+        tipo, ano, lucro, escala = row
         if tipo == "PENÚLTIMO":
             a = int(ano)
             ano = a - 1
-        l[int(ano)] = lucro
-    return l
+
+        if escala == "MILHAR":
+            lucro *= 1000
+
+        l[int(ano)] = float(lucro)
+
+    values = [x for x in l.values()]
+    media = safe_div(sum(values), len(values))
+
+    return l, media
+
+
+def dividendos(cnpj):
+    rows = reportsdb.consulta_dre(cnpj, "dividendos")
+
+    _, ano, vlr, escala = rows[-1]
+    if escala == "MILHAR":
+        vlr *= 1000
+
+    return {int(ano): float(vlr)}
+
+
+def juros_capital_proprio(cnpj):
+    rows = reportsdb.consulta_dre(cnpj, "juros_capital_proprio")
+
+    _, ano, vlr, escala = rows[-1]
+    if escala == "MILHAR":
+        vlr *= 1000
+
+    return {int(ano): float(vlr)}
 
 
 def get_dre_details(cnpj):
     dre = {}
-    dre["lucro"] = lucro_liquido(cnpj)
+    dre["lucro"], dre["media_lucro"] = lucro_liquido(cnpj)
+    for ano, value in dividendos(cnpj).items():
+        dre["dividendos"] = (ano, value)
+
+    for ano, value in juros_capital_proprio(cnpj).items():
+        dre["juros_capital"] = (ano, value)
+
+    dre["proventos"] = (
+        dre["dividendos"][0],
+        dre["dividendos"][1] + dre["juros_capital"][1],
+    )
+    dre["payout"] = int(
+        safe_div(dre["proventos"][1], dre["lucro"][dre["proventos"][0]]) * 100
+    )
 
     return dre
 
 
-def check_dre(code):
+def check_dre(cnpj, code):
     try:
-        cnpj, _ = db.stock_code_cnpj(code)
-
         dt = get_dre_details(cnpj)
 
-        status = 0
+        status = 0  # indica true para continuar
         if percentile([x for x in dt["lucro"].values()], 20) < 0:
             # se a empresa vem tendo prejuizo nos ultimos anos
             status = 1
@@ -81,19 +135,45 @@ def check_dre(code):
     return (status, dt)
 
 
+def millify(n):
+    millnames = ["", " Mil", " Mi", " Bi", " Tri"]
+
+    n = float(n)
+    millidx = max(
+        0,
+        min(
+            len(millnames) - 1, int(math.floor(0 if n == 0 else math.log10(abs(n)) / 3))
+        ),
+    )
+    result = n / 10 ** (3 * millidx), millnames[millidx]
+
+    return "{:.1f}{}".format(result[0], result[1])
+
+
 def main():
     for t in ["financeiro", "todos"]:
         magic_result = get_result(t)
 
-        l, count = [], 0
+        l, count, cnpjs_analisados = [], 0, []
         for code, score in magic_result.items():
-            status, details = check_dre(code)
+            cnpj, _ = db.stock_code_cnpj(code)
+            status, details = check_dre(cnpj, code)
             if status in [0, -1]:
                 d = db.select_details(code)
 
                 if status == -1:
                     # coloca um asterisco por algum erro no cálculo
                     code = f"{code}*"
+
+                if "media_lucro" in details:
+                    lucro = millify(details["media_lucro"])
+                else:
+                    lucro = "-"
+
+                if "payout" in details:
+                    payout = details["payout"]
+                else:
+                    payout = "-"
 
                 l.append(
                     [
@@ -115,11 +195,15 @@ def main():
                         round(d[0][12], 2) if d[0][12] else d[0][12],
                         round(d[0][13], 2) if d[0][13] else d[0][13],
                         round(d[0][14], 2) if d[0][14] else d[0][14],
+                        lucro,
+                        payout,
                     ]
                 )
                 count += 1
+                if cnpj not in cnpjs_analisados:
+                    cnpjs_analisados.append(cnpj)
 
-                if count == 30:
+                if len(cnpjs_analisados) == 30:
                     break
 
         print(
@@ -132,18 +216,20 @@ def main():
                     "Setor",
                     "P/VP",
                     "EV/EBIT",
-                    "ROIC %",
+                    "ROIC%",
                     "PL",
-                    "ROE %",
-                    "Dist.Min. %",
+                    "ROE%",
+                    "D.Min.%",
                     "Preço",
-                    "Vlr.Intriseco",
-                    "Desconto %",
-                    "DY %",
-                    "Cres.(5a) %",
-                    "Div Br/ Patrim",
-                    "Margem Liq. %",
+                    "Vlr.Intr.",
+                    "Desc.%",
+                    "DY%",
+                    "Cr.(5a)%",
+                    "D.Br/Patr",
+                    "M.Liq.%",
                     "LPA",
+                    "Avg. Luc.",
+                    "Payout%",
                 ],
                 tablefmt="orgtbl",
             )
