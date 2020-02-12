@@ -370,3 +370,29 @@ def create_table():
     )
     cursor.close()
     connector.close()
+
+
+def stock_code_cnpj(code):
+    connector = sqlite3.connect(DATABASE)
+    cursor = connector.cursor()
+
+    cursor.execute(
+        """
+        select cnpj, nome from cnpj_code where stock_code = ?
+        """,
+        (code,),
+    )
+    row = cursor.fetchone()
+
+    if not row:
+        cursor.execute(
+            """
+            select cnpj, nome from cnpj_code where stock_code like ?
+            """,
+            (f"%{code}%",),
+        )
+        row = cursor.fetchone()
+
+    cursor.close()
+    connector.close()
+    return row
