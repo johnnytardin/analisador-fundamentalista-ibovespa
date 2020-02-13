@@ -75,9 +75,6 @@ def lucro_liquido(code=None, cnpj=None):
             print(f"WARNING - CADASTRO - Falha coletando para {code}. CNPJ: {cnpj}")
             return ({}, -1, -1)
 
-    # if code == 'PNVL3':
-    #    import ipdb; ipdb.set_trace()
-
     rows = reportsdb.consulta_dre(cnpj, "lucro")
 
     l = {}
@@ -100,7 +97,7 @@ def lucro_liquido(code=None, cnpj=None):
 
     try:
         status = 0
-        if percentile([x for x in l.values()], 20) < 0 or media < 0:
+        if percentile([x for x in l.values()], 40) < 0 or media < 0:
             status = 1
     except IndexError:
         if DEBUG:
@@ -201,6 +198,12 @@ def millify(n):
     return "{:.1f}{}".format(result[0], result[1])
 
 
+def format_number(n, repl="-"):
+    if n:
+        return round(n, 2)
+    return repl
+
+
 def main():
     print(chr(27) + "[2J")
 
@@ -227,28 +230,46 @@ def main():
                 lucro = "*"
                 payout = "*"
 
+            setor = d[0][0][0:20] if d[0][0] else "-"
+            pvp = format_number(d[0][1], 0)
+            ev_ebit = format_number(d[0][2])
+            roic = format_number(d[0][3])
+            pl = format_number(d[0][4])
+            roe = format_number(d[0][5])
+            dist_min = format_number(d[0][6])
+            preco = format_number(d[0][7])
+            intriseco = format_number(d[0][8])
+            desc = format_number(d[0][9])
+            dy = format_number(d[0][10], 0)
+            cresc = format_number(d[0][11], 0)
+            div_pat = format_number(d[0][12], 0)
+            margem = margem = format_number(d[0][13], 0)
+            lpa = format_number(d[0][14], 0)
+            div_ativo = format_number(d[0][15], 0)
+
             l.append(
                 [
                     count,
                     score,
                     code,
-                    d[0][0][0:20] if d[0][0] else "-",
-                    round(d[0][1], 2) if d[0][1] else "-",
-                    round(d[0][2], 2) if d[0][2] else "-",
-                    round(d[0][3], 2) if d[0][3] else "-",
-                    round(d[0][4], 2) if d[0][4] else "-",
-                    round(d[0][5], 2) if d[0][5] else "-",
-                    round(d[0][6], 2) if d[0][6] else "-",
-                    round(d[0][7], 2) if d[0][7] else "-",
-                    round(d[0][8], 2) if d[0][8] else d[0][8],
-                    round(d[0][9], 2) if d[0][9] else d[0][9],
-                    round(d[0][10], 2) if d[0][10] else d[0][10],
-                    round(d[0][11], 2) if d[0][11] else d[0][11],
-                    round(d[0][12], 2) if d[0][12] else d[0][12],
-                    round(d[0][13], 2) if d[0][13] else d[0][13],
-                    round(d[0][14], 2) if d[0][14] else d[0][14],
+                    setor,
+                    ev_ebit,
+                    roic,
+                    pl,
+                    roe,
+                    pvp,
+                    margem,
+                    lpa,
+                    dy,
+                    cresc,
+                    div_pat,
+                    div_ativo,
                     lucro,
                     payout,
+                    preco,
+                    intriseco,
+                    desc,
+                    dist_min,
                 ]
             )
             if cnpj not in cnpjs_analisados:
@@ -263,26 +284,27 @@ def main():
             tabulate(
                 l,
                 headers=[
-                    "Order",
+                    "Ord.",
                     "Score",
                     "CODE",
                     "Setor",
-                    "P/VP",
                     "EV/EBIT",
                     "ROIC%",
                     "PL",
                     "ROE%",
-                    "D.Min.%",
-                    "Preço",
-                    "Vlr.Intr.",
-                    "Desc.%",
-                    "DY%",
-                    "Cr.(5a)%",
-                    "D.Br/Patr",
+                    "P/VP",
                     "M.Liq.%",
                     "LPA",
+                    "DY%",
+                    "Cr(5a)%",
+                    "D.Br/Pt",
+                    "Div/At.",
                     "Avg. Luc.",
                     "Payout%",
+                    "Preço",
+                    "Intr.",
+                    "Desc.%",
+                    "D.Min.%",
                 ],
                 tablefmt="orgtbl",
             )
