@@ -116,8 +116,9 @@ def get_dre_details(cnpj):
     return dre
 
 
-def check_dre(cnpj, code):
+def check_dre(code):
     try:
+        cnpj, _ = db.stock_code_cnpj(code)
         dt = get_dre_details(cnpj)
 
         status = 0  # indica true para continuar
@@ -127,12 +128,12 @@ def check_dre(cnpj, code):
 
     except TypeError:
         print(f"WARNING - CADASTRO - Falha coletando o CNPJ para {code}")
-        return (-1, {})
+        return ("", -1, {})
     except IndexError:
         print(f"WARNING - CÁLCULO - Falha calculando o lucro para {code}")
-        return (-1, {})
+        return ("", -1, {})
 
-    return (status, dt)
+    return (cnpj, status, dt)
 
 
 def millify(n):
@@ -151,13 +152,14 @@ def millify(n):
 
 
 def main():
+    print(chr(27) + "[2J")
+
     for t in ["financeiro", "todos"]:
         magic_result = get_result(t)
 
         l, count, cnpjs_analisados = [], 0, []
         for code, score in magic_result.items():
-            cnpj, _ = db.stock_code_cnpj(code)
-            status, details = check_dre(cnpj, code)
+            cnpj, status, details = check_dre(code)
             if status in [0, -1]:
                 d = db.select_details(code)
 
@@ -199,9 +201,10 @@ def main():
                         payout,
                     ]
                 )
-                count += 1
                 if cnpj not in cnpjs_analisados:
                     cnpjs_analisados.append(cnpj)
+
+                count += 1
 
                 if len(cnpjs_analisados) == 30:
                     break

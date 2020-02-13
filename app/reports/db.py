@@ -1,7 +1,7 @@
 import sqlite3
 
 
-DATABASE = "rapina/.data/rapina.db"
+DATABASE = "../rapina/.data/rapina.db"
 
 def codigo_conta(tipo):
     t = {"lucro": 12, "dividendos": 18, "juros_capital_proprio": 17}
