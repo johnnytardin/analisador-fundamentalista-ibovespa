@@ -175,7 +175,7 @@ def select_ev_ebit():
         and precoSobreLucro > 0
         --and precoSobreLucro < 25
         and precoSobreVP > 0
-        and precoSobreVP < 25
+        --and precoSobreVP < 25
         order by EVSobreEBIT desc 
         """
     )
@@ -206,7 +206,7 @@ def select_roic():
         and precoSobreLucro > 0
         --and precoSobreLucro < 25
         and precoSobreVP > 0
-        and precoSobreVP < 25
+        --and precoSobreVP < 25
         order by ROIC asc 
         """
     )

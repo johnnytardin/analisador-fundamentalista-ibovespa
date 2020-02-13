@@ -108,9 +108,9 @@ dmypy.json
 .pyre/
 
 # End of https://www.gitignore.io/api/python
-app/rapina/.data/cache/
-app/rapina/.data/*.csv
-app/rapina/.data/*.zip
-app/rapina/reports/
-app/rapina/.data/rapina.db
-app/rapina/setores.yml
+rapina/.data/cache/
+rapina/.data/*.csv
+rapina/.data/*.zip
+rapina/reports/
+rapina/.data/rapina.db
+rapina/setores.yml
