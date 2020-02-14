@@ -67,6 +67,55 @@ def safe_div(n, d):
     return r
 
 
+def lucro_ultimos_resultados(data):
+    """
+    Verifica se os últimos resultados foram positivos
+    """
+    # os 2 ultimos anos a partir do ultimo
+    data_p = sorted(data.items(), key=lambda item: item[0], reverse=True)[:2]
+
+    count = 0
+    for v in data_p:
+        vlr = v[1]
+
+        if vlr < 0:
+            count += 1
+
+    # os ultimos 3 anos a partir do primeiro
+    lucros_desc, ctrl, status = 0, 0, True
+    if count == 0:
+        data_l = sorted(data.items(), key=lambda item: item[0], reverse=False)[-3:]
+
+        ultimo_lucro, ctrl = None, 0
+        for v in data_l:
+            vlr = v[1]
+            ctrl += 1
+
+            # verifica se o lucro vem caindo
+            if ultimo_lucro:
+                # ex: se 2018 for menor que 2017 (gordura de 10%)
+                if vlr < (ultimo_lucro * 0.85):
+                    lucros_desc += 1
+                    ultimo_lucro = vlr
+            else:
+                ultimo_lucro = vlr
+
+        p80 = percentile([x for x in data.values()], 80)
+        diff_geral = safe_div(data_l[-1][1] - p80, data_l[-1][1])
+        if diff_geral <= -0.30:
+            status = False
+
+    if count > 0 or not status or lucros_desc == (ctrl - 1):
+        return 1
+    return 0
+
+
+def lucro_resultado_geral(data, media):
+    if percentile([x for x in data.values()], 30) < 0 or media < 0:
+        return 1
+    return 0
+
+
 def lucro_liquido(code=None, cnpj=None):
     if not cnpj:
         try:
@@ -92,18 +141,15 @@ def lucro_liquido(code=None, cnpj=None):
     if l:
         values = [x for x in l.values()]
         media = safe_div(sum(values), len(values))
-    else:
-        media = None
 
-    try:
-        status = 0
-        if percentile([x for x in l.values()], 40) < 0 or media < 0:
-            status = 1
-    except IndexError:
+        status = lucro_ultimos_resultados(l)
+        if status == 0:
+            # somente valida o geral se os ultimos forem positivos
+            status = lucro_resultado_geral(l, media)
+    else:
         if DEBUG:
-            print(
-                f"WARNING - CÁLCULO - Falha calculando o lucro para {code}. CNPJ: {cnpj}"
-            )
+            print(f"WARNING - Não existem dados para {code}. CNPJ: {cnpj}")
+        media = None
         status = -1
 
     return l, media, status
