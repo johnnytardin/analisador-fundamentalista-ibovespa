@@ -27,7 +27,7 @@ def get_result(tipo="todos"):
     count = 0
     for row in value:
         code = row[0]
-        _, _, status = lucro_liquido(code)
+        _, _, status, _ = lucro_liquido(code)
         if status in [0, -1] and code not in sem_lucro:
             v[code] = count
             count += 1
@@ -82,7 +82,7 @@ def lucro_ultimos_resultados(data):
             count += 1
 
     # os ultimos 3 anos a partir do primeiro
-    lucros_desc, ctrl, status = 0, 0, True
+    lucros_desc, ctrl, status, diff_geral = 0, 0, True, 0
     if count == 0:
         data_l = sorted(data.items(), key=lambda item: item[0], reverse=False)[-3:]
 
@@ -100,14 +100,16 @@ def lucro_ultimos_resultados(data):
             else:
                 ultimo_lucro = vlr
 
-        p80 = percentile([x for x in data.values()], 80)
+        # remove o ultimo ano
+        d1 = sorted(data.items(), key=lambda item: item[0], reverse=True)[1:]
+        p80 = percentile([x[1] for x in d1], 80)
         diff_geral = safe_div(data_l[-1][1] - p80, data_l[-1][1])
         if diff_geral <= -0.30:
             status = False
 
     if count > 0 or not status or lucros_desc == (ctrl - 1):
-        return 1
-    return 0
+        return 1, diff_geral
+    return 0, diff_geral
 
 
 def lucro_resultado_geral(data, media):
@@ -142,7 +144,7 @@ def lucro_liquido(code=None, cnpj=None):
         values = [x for x in l.values()]
         media = safe_div(sum(values), len(values))
 
-        status = lucro_ultimos_resultados(l)
+        status, taxa_cres_lc = lucro_ultimos_resultados(l)
         if status == 0:
             # somente valida o geral se os ultimos forem positivos
             status = lucro_resultado_geral(l, media)
@@ -151,8 +153,9 @@ def lucro_liquido(code=None, cnpj=None):
             print(f"WARNING - Não existem dados para {code}. CNPJ: {cnpj}")
         media = None
         status = -1
+        taxa_cres_lc = 0
 
-    return l, media, status
+    return l, media, status, taxa_cres_lc * 100
 
 
 def dividendos(cnpj):
@@ -183,7 +186,7 @@ def juros_capital_proprio(cnpj):
 
 def get_dre_details(cnpj):
     dre = {}
-    dre["lucro"], dre["media_lucro"], _ = lucro_liquido(cnpj=cnpj)
+    dre["lucro"], dre["media_lucro"], _, dre["taxa_cres_lc"] = lucro_liquido(cnpj=cnpj)
     for ano, value in dividendos(cnpj).items():
         dre["dividendos"] = (ano, value)
 
@@ -272,6 +275,11 @@ def main():
                     payout = details["payout"]
                 else:
                     payout = "*"
+
+                if details["taxa_cres_lc"]:
+                    taxa_cres_lc = format_number(details["taxa_cres_lc"])
+                else:
+                    taxa_cres_lc = "*"
             else:
                 lucro = "*"
                 payout = "*"
@@ -285,11 +293,10 @@ def main():
             dist_min = format_number(d[0][6])
             preco = format_number(d[0][7])
             intriseco = format_number(d[0][8])
-            desc = format_number(d[0][9])
             dy = format_number(d[0][10], 0)
-            cresc = format_number(d[0][11], 0)
+            cresc = format_number(d[0][11], "-")
             div_pat = format_number(d[0][12], 0)
-            margem = margem = format_number(d[0][13], 0)
+            margem = margem = format_number(d[0][13], "-")
             lpa = format_number(d[0][14], 0)
             div_ativo = format_number(d[0][15], 0)
 
@@ -307,14 +314,14 @@ def main():
                     margem,
                     lpa,
                     dy,
+                    lucro,
+                    taxa_cres_lc,
                     cresc,
                     div_pat,
                     div_ativo,
-                    lucro,
                     payout,
                     preco,
                     intriseco,
-                    desc,
                     dist_min,
                 ]
             )
@@ -331,26 +338,26 @@ def main():
                 l,
                 headers=[
                     "Ord.",
-                    "Score",
+                    "Scr",
                     "CODE",
-                    "Setor",
+                    "St",
                     "EV/EBIT",
                     "ROIC%",
                     "PL",
                     "ROE%",
                     "P/VP",
-                    "M.Liq.%",
+                    "M.Lq.%",
                     "LPA",
                     "DY%",
-                    "Cr(5a)%",
-                    "D.Br/Pt",
-                    "Div/At.",
                     "Avg. Luc.",
-                    "Payout%",
-                    "Preço",
+                    "Cr.Luc.%",
+                    "Cr(5a)%",
+                    "Div/Pt",
+                    "Div/At.",
+                    "Payo%",
+                    "Prç",
                     "Intr.",
-                    "Desc.%",
-                    "D.Min.%",
+                    "Dist.%",
                 ],
                 tablefmt="orgtbl",
             )
