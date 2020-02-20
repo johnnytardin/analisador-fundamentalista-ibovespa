@@ -301,6 +301,27 @@ def select_details(stockcode):
     return rows
 
 
+def pl_setor(stockcode):
+    connector = sqlite3.connect(DATABASE)
+    cursor = connector.cursor()
+
+    cursor.execute(
+        """
+        select 
+            PrecoSobreLucro
+        from fundamentus 
+        where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
+        and setor = (select setor from fundamentus where stockCode = ? LIMIT 1)
+        """,
+        (stockcode,),
+    )
+    rows = cursor.fetchall()
+
+    cursor.close()
+    connector.close()
+    return rows
+
+
 def create_table():
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()

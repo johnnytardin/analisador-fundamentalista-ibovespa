@@ -232,6 +232,17 @@ def check_dre(code):
     return (cnpj, dt)
 
 
+def pl_setor(code):
+    avg = db.pl_setor(code)
+    vl = []
+    for row in avg:
+        vl.append(row[0])
+
+    if vl:
+        return percentile(vl, 50)
+    return None
+
+
 def millify(n):
     millnames = ["", " Mil", " Mi", " Bi", " Tri"]
 
@@ -259,17 +270,18 @@ def main():
     for t in ["financeiro", "todos"]:
         magic_result = get_result(t)
 
-        l, count, cnpjs_analisados = [], 0, []
+        l, count, cnpjs_analisados, setores_an = [], 0, [], {}
         for code, score in magic_result.items():
             cnpj, details = check_dre(code)
             d = db.select_details(code)
 
+            new_code = None
             if details:
                 if details["media_lucro"]:
                     lucro = millify(details["media_lucro"])
                 else:
                     lucro = "*"
-                    code = f"{code}*"
+                    new_code = f"{code}*"
 
                 if details["payout"]:
                     payout = details["payout"]
@@ -284,7 +296,7 @@ def main():
                 lucro = "*"
                 payout = "*"
 
-            setor = d[0][0][0:20] if d[0][0] else "-"
+            setor = d[0][0][0:12] if d[0][0] else "-"
             pvp = format_number(d[0][1], 0)
             ev_ebit = format_number(d[0][2])
             roic = format_number(d[0][3])
@@ -300,15 +312,22 @@ def main():
             lpa = format_number(d[0][14], 0)
             div_ativo = format_number(d[0][15], 0)
 
+            if setor in setores_an:
+                avg_pl = setores_an[setor]
+            else:
+                avg_pl = format_number(pl_setor(code), "-")
+                setores_an[setor] = avg_pl
+
             l.append(
                 [
                     count,
                     score,
-                    code,
+                    new_code if new_code else code,
                     setor,
                     ev_ebit,
                     roic,
                     pl,
+                    avg_pl,
                     roe,
                     pvp,
                     margem,
@@ -344,6 +363,7 @@ def main():
                     "EV/EBIT",
                     "ROIC%",
                     "PL",
+                    "PL/S",
                     "ROE%",
                     "P/VP",
                     "M.Lq.%",
@@ -354,8 +374,8 @@ def main():
                     "Cr(5a)%",
                     "Div/Pt",
                     "Div/At.",
-                    "Payo%",
-                    "Prç",
+                    "Py%",
+                    "Pr",
                     "Intr.",
                     "Dist.%",
                 ],
