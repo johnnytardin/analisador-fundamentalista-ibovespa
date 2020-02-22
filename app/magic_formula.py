@@ -124,7 +124,7 @@ def lucro_liquido(code=None, cnpj=None):
             cnpj, _ = db.stock_code_cnpj(code)
         except TypeError:
             print(f"WARNING - CADASTRO - Falha coletando para {code}. CNPJ: {cnpj}")
-            return ({}, -1, -1)
+            return ({}, -1, -1, -1)
 
     rows = reportsdb.consulta_dre(cnpj, "lucro")
 
@@ -302,7 +302,7 @@ def main():
             roic = format_number(d[0][3])
             pl = format_number(d[0][4])
             roe = format_number(d[0][5])
-            dist_min = format_number(d[0][6])
+            dist_min = format_number(d[0][6], 0)
             preco = format_number(d[0][7])
             intriseco = format_number(d[0][8])
             dy = format_number(d[0][10], 0)
@@ -373,7 +373,7 @@ def main():
                     "Cr.Luc.%",
                     "Cr(5a)%",
                     "Div/Pt",
-                    "Div/At.",
+                    "Div/EBIT.",
                     "Py%",
                     "Pr",
                     "Intr.",

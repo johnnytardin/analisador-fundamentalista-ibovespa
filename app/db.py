@@ -12,15 +12,15 @@ def select():
         """
         SELECT stockCode, setor, crescimentoCincoAnos, stockPrice, valorIntriseco, score, percentualDesconto, desconto, dividendos, "timestamp" 
         FROM fundamentus 
-        WHERE coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY id DESC LIMIT 1) 
+        WHERE coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1) 
         AND crescimentoCincoAnos > 2
         AND ROE > 10
         AND desconto > 0
         AND divSobrePatrimonio < 0.5
         AND precoSobreLucro <= 15 AND precoSobreLucro >= 0
-        AND DividaSobreAtivo <= 0.5
+        AND divSobreEbit <= 0.5
         AND dividendos > 4.5
-        ORDER by score DESC, percentualDesconto ASC, precoSobreLucro ASC, dividendos DESC, liquidezDoisMeses DESC
+        ORDER by score DESC, percentualDesconto ASC, precoSobreLucro ASC, dividendos DESC, liquidezMediaDiaria DESC
         LIMIT 20;
         """
     )
@@ -44,108 +44,100 @@ def insert(data):
         """
         INSERT INTO 
             fundamentus
-            (stockCode,
-             patrimonioLiquido,
-             liquidezCorrente,
-             ROE,
-             divSobrePatrimonio,
-             crescimentoCincoAnos,
-             precoSobreVP,
-             precoSobreLucro,
-             dividendos,
-             stockPrice,
-             PSR,
-             precoSobreAtivo,
-             precoSobreCapitalGiro,
-             precoSobreEBIT,
-             precoSobreAtivoCirculante,
-             EVSobreEBIT,
-             EVSobreEBITDA,
-             margemEBIT,
-             margemLiquida,
-             ROIC,
-             liquidezDoisMeses,
-             timestamp,
-             tipo,
-             name,
-             setor,
-             subsetor,
-             max52sem,
-             min52sem,
-             PercDistanciaMin52sem,
-             volMed2M,
-             valorMercado,
-             valorFirma,
-             nAcoes,
-             lucroPorAcao,
-             ValorPatrimonialPorAcao,
-             margemBruta,
-             EBITsobreAtivo,
-             giroAtivos,
-             ativo,
-             lucroLiquido,
-             receitaLiquida,
-             disponibilidades,
-             divBruta,
-             divLiquida,
-             valorIntriseco,
-             score,
-             desconto, 
-             percentualDesconto,
-             DividaSobreAtivo,
-             coletaUUID)
+            (
+                stockCode,
+                patrimonioLiquido,
+                liquidezCorrente,
+                ROE,
+                divSobrePatrimonio,
+                divSobreEbitda,
+                divSobreEbit,
+                PatrimonioSobreAtivos,
+                CagrReceitasCincoAnos,
+                CagrLucrosCincoAnos,
+                crescimentoCincoAnos,
+                precoSobreVP,
+                precoSobreLucro,
+                dividendos,
+                stockPrice,
+                PSR,
+                precoSobreAtivo,
+                precoSobreCapitalGiro,
+                precoSobreEBIT,
+                precoSobreEBITDA,
+                precoSobreAtivoCirculante,
+                EVSobreEBIT,
+                EVSobreEBITDA,
+                margemEBIT,
+                margemEBITDA,
+                margemLiquida,
+                ROIC,
+                ROA,
+                liquidezMediaDiaria,
+                "timestamp",
+                setor,
+                subsetor,
+                segmento,
+                max52sem,
+                min52sem,
+                PercDistanciaMin52sem,
+                lucroPorAcao,
+                ValorPatrimonialPorAcao,
+                margemBruta,
+                giroAtivos,
+                lucroLiquido,
+                valorIntriseco,
+                score,
+                percentualDesconto,
+                coletaUUID
+            )
         VALUES
             (
-            :stockCode,
-            :patrimonioLiquido,
-            :liquidezCorrente,
-            :ROE,
-            :divSobrePatrimonio,
-            :crescimentoCincoAnos,
-            :precoSobreVP,
-            :precoSobreLucro,
-            :dividendos,
-            :stockPrice,
-            :PSR,
-            :precoSobreAtivo,
-            :precoSobreCapitalGiro,
-            :precoSobreEBIT,
-            :precoSobreAtivoCirculante,
-            :EVSobreEBIT,
-            :EVSobreEBITDA,
-            :margemEBIT,
-            :margemLiquida,
-            :ROIC,
-            :liquidezDoisMeses,
-            :timestamp,
-            :tipo,
-            :name,
-            :setor,
-            :subsetor,
-            :max52sem,
-            :min52sem,
-            :PercDistanciaMin52sem,
-            :volMed2M,
-            :valorMercado,
-            :valorFirma,
-            :nAcoes,
-            :lucroPorAcao,
-            :ValorPatrimonialPorAcao,
-            :margemBruta,
-            :EBITsobreAtivo,
-            :giroAtivos,
-            :ativo,
-            :lucroLiquido,
-            :receitaLiquida,
-            :disponibilidades,
-            :divBruta,
-            :divLiquida,
-            :valorIntriseco,
-            :score,
-            :desconto,
-            :percentualDesconto,
-            :DividaSobreAtivo,
-            :coletaUUID
+                :stockCode,
+                :patrimonioLiquido,
+                :liquidezCorrente,
+                :ROE,
+                :divSobrePatrimonio,
+                :divSobreEbitda,
+                :divSobreEbit,
+                :PatrimonioSobreAtivos,
+                :CagrReceitasCincoAnos,
+                :CagrLucrosCincoAnos,
+                :crescimentoCincoAnos,
+                :precoSobreVP,
+                :precoSobreLucro,
+                :dividendos,
+                :stockPrice,
+                :PSR,
+                :precoSobreAtivo,
+                :precoSobreCapitalGiro,
+                :precoSobreEBIT,
+                :precoSobreEBITDA,
+                :precoSobreAtivoCirculante,
+                :EVSobreEBIT,
+                :EVSobreEBITDA,
+                :margemEBIT,
+                :margemEBITDA,
+                :margemLiquida,
+                :ROIC,
+                :ROA,
+                :liquidezMediaDiaria,
+                :timestamp,
+                :setor,
+                :subsetor,
+                :segmento,
+                :max52sem,
+                :min52sem,
+                :PercDistanciaMin52sem,
+                :lucroPorAcao,
+                :ValorPatrimonialPorAcao,
+                :margemBruta,
+                :giroAtivos,
+                :lucroLiquido,
+                :valorIntriseco,
+                :score,
+                :percentualDesconto,
+                :coletaUUID
             )""",
         data,
     )
@@ -164,14 +156,13 @@ def select_ev_ebit():
         select 
         stockCode
         from fundamentus 
-        where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
-        and volMed2M > 200000
-        and (DividaSobreAtivo <= 1 or divSobrePatrimonio <= 1)
+        where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
+        and liquidezMediaDiaria > 200000
+        and segmento != 'Bancos'
+        and (divSobreEbit <= 2 or divSobrePatrimonio <= 2)
         and EVSobreEBIT >= 0
-        and ROIC >= 0
-        and ROE >= 0
+        --and ROIC >= 0
         and precoSobreLucro > 0
-        and precoSobreVP > 0
         order by EVSobreEBIT desc 
         """
     )
@@ -191,14 +182,13 @@ def select_roic():
         select 
         stockCode
         from fundamentus 
-        where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
-        and volMed2M > 200000
-        and (DividaSobreAtivo <= 1 or divSobrePatrimonio <= 1)
+        where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
+        and liquidezMediaDiaria > 200000
+        and segmento != 'Bancos'
+        and (divSobreEbit <= 2 or divSobrePatrimonio <= 2)
         and EVSobreEBIT >= 0
-        and ROIC >= 0
-        and ROE >= 0
+        --and ROIC >= 0
         and precoSobreLucro > 0
-        and precoSobreVP > 0
         order by ROIC asc 
         """
     )
@@ -218,15 +208,11 @@ def select_pl():
         select 
         stockCode
         from fundamentus 
-        where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
-        and volMed2M > 200000
-        and ROE >= 0
-        and EVSobreEBIT is null
+        where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
+        and liquidezMediaDiaria > 200000
+        and segmento = 'Bancos'
         and precoSobreLucro > 0
-        --and precoSobreLucro < 25
-        and precoSobreVP > 0
-        --and precoSobreVP < 25
-        --and crescimentoCincoAnos > 0
+        and ROE > 0
         order by precoSobreLucro desc 
         """
     )
@@ -246,15 +232,11 @@ def select_roe():
         select 
         stockCode
         from fundamentus 
-        where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
-        and volMed2M > 200000
-        and ROE >= 0
-        and ROIC is null
+        where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
+        and liquidezMediaDiaria > 200000
+        and segmento = 'Bancos'
         and precoSobreLucro > 0
-        --and precoSobreLucro < 25
-        and precoSobreVP > 0
-        --and precoSobreVP < 25
-        --and crescimentoCincoAnos > 0
+        and ROE > 0
         order by ROE asc
         """
     )
@@ -287,9 +269,9 @@ def select_details(stockcode):
             divSobrePatrimonio,
             margemLiquida,
             lucroPorAcao,
-            DividaSobreAtivo
+            divSobreEbit
         from fundamentus 
-        where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
+        where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
         and stockCode = ?
         """,
         (stockcode,),
@@ -310,8 +292,9 @@ def pl_setor(stockcode):
         select 
             PrecoSobreLucro
         from fundamentus 
-        where coletaUUID = (select coletaUUID from fundamentus ORDER BY id DESC LIMIT 1)
+        where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
         and setor = (select setor from fundamentus where stockCode = ? LIMIT 1)
+        and precoSobreLucro > 0
         """,
         (stockcode,),
     )
@@ -334,6 +317,11 @@ def create_table():
              liquidezCorrente NUMERIC,
              ROE NUMERIC,
              divSobrePatrimonio NUMERIC,
+             divSobreEbitda NUMERIC,
+             divSobreEbit NUMERIC,
+             PatrimonioSobreAtivos NUMERIC,
+             CagrReceitasCincoAnos NUMERIC,
+             CagrLucrosCincoAnos NUMERIC,
              crescimentoCincoAnos NUMERIC,
              precoSobreVP NUMERIC,
              precoSobreLucro NUMERIC,
@@ -343,41 +331,31 @@ def create_table():
              precoSobreAtivo NUMERIC,
              precoSobreCapitalGiro NUMERIC,
              precoSobreEBIT NUMERIC,
+             precoSobreEBITDA NUMERIC,
              precoSobreAtivoCirculante NUMERIC,
              EVSobreEBIT NUMERIC,
              EVSobreEBITDA NUMERIC,
              margemEBIT NUMERIC,
+             margemEBITDA NUMERIC,
              margemLiquida NUMERIC,
              ROIC NUMERIC,
-             liquidezDoisMeses NUMERIC,
+             ROA NUMERIC,
+             liquidezMediaDiaria NUMERIC,
              timestamp DATETIME,
-             tipo TEXT,
-             name TEXT,
              setor TEXT,
              subsetor TEXT,
+             segmento TEXT,
              max52sem NUMERIC,
              min52sem NUMERIC,
              PercDistanciaMin52sem NUMERIC,
-             volMed2M NUMERIC,
-             valorMercado NUMERIC,
-             valorFirma NUMERIC,
-             nAcoes NUMERIC,
              lucroPorAcao NUMERIC,
              ValorPatrimonialPorAcao NUMERIC,
              margemBruta NUMERIC,
-             EBITsobreAtivo NUMERIC,
              giroAtivos NUMERIC,
-             ativo NUMERIC,
              lucroLiquido NUMERIC,
-             receitaLiquida NUMERIC,
-             disponibilidades NUMERIC,
-             divBruta NUMERIC,
-             divLiquida NUMERIC,
              valorIntriseco NUMERIC,
              score NUMERIC,
-             desconto NUMERIC,
              percentualDesconto NUMERIC,
-             DividaSobreAtivo NUMERIC,
              coletaUUID TEXT);"""
     )
     cursor.close()

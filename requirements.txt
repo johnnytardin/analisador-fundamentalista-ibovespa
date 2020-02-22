@@ -1,4 +1,0 @@
-lxml==3.5.0
-pylava
-black
-autopep8
