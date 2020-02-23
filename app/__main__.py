@@ -61,25 +61,16 @@ def details(stock, coleta_id):
     print("Getting more information from stock ", newStock["stockCode"])
     status_data = status.get_specific_data(newStock["stockCode"])
 
-    # Add everything to the object
+    dre = status_data["dre"]
+
     liqCorr = normaliza_valor(status_data["LIQUIDEZ CORRENTE"])
     roe = normaliza_valor(status_data["ROE"])
     roic = normaliza_valor(status_data["ROIC"])
-    # TODO: verificar esses sem valor. no site está "-"?
     pvp = normaliza_valor(status_data["P/VP"])
-    if not pvp:
-        pvp = -1
     pl = normaliza_valor(status_data["P/L"])
-    if not pl:
-        pl = -1
     dy = normaliza_valor(status_data["DIVIDEND YIELD"], 0)
     patrLiq = normaliza_valor(status_data["PATRIMÔNIO LÍQUIDO"])
-
-    # TODO: analisar a tabela calculando a receita
-    cresc = None
     divPat = normaliza_valor(status_data["DÍVIDA LÍQUIDA / PATRIMÔNIO"])
-    divPat = divPat if divPat else 0
-
     newStock["precoSobreVP"] = pvp
     newStock["precoSobreLucro"] = pl
     newStock["precoSobreEBITDA"] = normaliza_valor(status_data["P/EBITDA"])
@@ -117,15 +108,9 @@ def details(stock, coleta_id):
     newStock["liquidezMediaDiaria"] = normaliza_valor(
         status_data["LIQUIDEZ MÉDIA DIÁRIA"]
     )
-
     newStock["patrimonioLiquido"] = patrLiq
-
-    # TODO: STATUS NAO TEM ESSE DADO CALCULADO
-    newStock["crescimentoCincoAnos"] = cresc
-
     newStock["dividendos"] = dy
     newStock["stockPrice"] = normaliza_valor(status_data["VALOR ATUAL"])
-
     newStock["setor"] = status_data["SETOR DE ATUAÇÂO"]
     newStock["subsetor"] = status_data["SUBSETOR DE ATUAÇÂO"]
     newStock["segmento"] = status_data["SEGMENTO DE ATUAÇÂO"]
@@ -194,18 +179,25 @@ def details(stock, coleta_id):
             """
             nota += 1
 
-    if cresc:
+    if newStock["CagrLucrosCincoAnos"]:
         score_steps += 1
-        if cresc > 5:
+        if newStock["CagrLucrosCincoAnos"] > 1:
             nota += 1
 
-    score_steps += 1
-    if pvp < 2 and pvp > 0:
-        nota += 1
+    if newStock["CagrReceitasCincoAnos"]:
+        score_steps += 1
+        if newStock["CagrReceitasCincoAnos"] > 1:
+            nota += 1
 
-    score_steps += 1
-    if pl <= 20 and pl > 0:
-        nota += 1
+    if pvp:
+        score_steps += 1
+        if pvp < 2 and pvp > 0:
+            nota += 1
+
+    if pl:
+        score_steps += 1
+        if pl <= 20 and pl > 0:
+            nota += 1
 
     score_steps += 1
     if dy > 2.5:
@@ -224,12 +216,14 @@ def details(stock, coleta_id):
 
     newStock["score"] = float(nota) / score_steps * 10.0
 
-    return newStock
+    return newStock, dre
 
 
-def save_on_db(data):
-    # insere db
-    db.insert(data)
+def save_on_db(tipo, data):
+    if tipo == "fundamentus":
+        db.insert(data)
+    elif tipo == "dre":
+        db.insert_dre(data)
 
 
 def main():
@@ -241,8 +235,9 @@ def main():
 
     final_stocks = []
     for stock in stocks:
+        d = []
         try:
-            d = details(stock, coleta_id)
+            d, dre = details(stock, coleta_id)
             final_stocks.append(d)
         except Exception as err:
             print(
@@ -250,9 +245,13 @@ def main():
                     stock["stockCode"], err
                 )
             )
-
-    save_on_db(final_stocks)
-
+        else:
+            save_on_db("fundamentus", [d])
+            try:
+                save_on_db("dre", dre)
+            except Exception as err:
+                print(err)
+                pass
 
 if __name__ == "__main__":
     main()

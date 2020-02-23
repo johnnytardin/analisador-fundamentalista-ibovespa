@@ -27,7 +27,8 @@ def get_result(tipo="todos"):
     count = 0
     for row in value:
         code = row[0]
-        _, _, status, _ = lucro_liquido(code)
+        print(code)
+        _, _, status, _ = valida_empresa(code)
         if status in [0, -1] and code not in sem_lucro:
             v[code] = count
             count += 1
@@ -67,13 +68,14 @@ def safe_div(n, d):
     return r
 
 
-def lucro_ultimos_resultados(data):
+def valida_ultimos_resultados(lucros, ultimos_12m):
     """
     Verifica se os últimos resultados foram positivos
     """
-    # os 2 ultimos anos a partir do ultimo
-    data_p = sorted(data.items(), key=lambda item: item[0], reverse=True)[:2]
+    # os 2 ultimos anos descartando o ultimo
+    data_p = sorted(lucros.items(), key=lambda item: item[0], reverse=True)[:2]
 
+    # verificar os ultimos anos se tem prejuizo
     count = 0
     for v in data_p:
         vlr = v[1]
@@ -82,9 +84,10 @@ def lucro_ultimos_resultados(data):
             count += 1
 
     # os ultimos 3 anos a partir do primeiro
+    # verifica se os lucros vem caindo
     lucros_desc, ctrl, status, diff_geral = 0, 0, True, 0
     if count == 0:
-        data_l = sorted(data.items(), key=lambda item: item[0], reverse=False)[-3:]
+        data_l = sorted(lucros.items(), key=lambda item: item[0], reverse=False)[-3:]
 
         ultimo_lucro, ctrl = None, 0
         for v in data_l:
@@ -93,143 +96,74 @@ def lucro_ultimos_resultados(data):
 
             # verifica se o lucro vem caindo
             if ultimo_lucro:
-                # ex: se 2018 for menor que 2017 (gordura de 10%)
+                # ex: se 2018 for menor que 2017 (gordura de 15%)
                 if vlr < (ultimo_lucro * 0.85):
                     lucros_desc += 1
                     ultimo_lucro = vlr
             else:
                 ultimo_lucro = vlr
 
-        # remove o ultimo ano
-        d1 = sorted(data.items(), key=lambda item: item[0], reverse=True)[1:]
-        p80 = percentile([x[1] for x in d1], 80)
-        diff_geral = safe_div(data_l[-1][1] - p80, data_l[-1][1])
+        # veririca se o ultimo lucro é muito abaixo do do normal
+        d1 = sorted(lucros.items(), key=lambda item: item[0], reverse=True)[1:]
+        p = percentile([x[1] for x in d1], 70)
+        diff_geral = safe_div(ultimos_12m - p, data_l[-1][1])
         if diff_geral <= -0.30:
+            print("menor geral")
             status = False
 
+    # valida a saida
+    #TODO: verificar se um somente é válido
     if count > 0 or not status or lucros_desc == (ctrl - 1):
-        return 1, diff_geral
-    return 0, diff_geral
-
-
-def lucro_resultado_geral(data, media):
-    if percentile([x for x in data.values()], 30) < 0 or media < 0:
         return 1
     return 0
 
 
-def lucro_liquido(code=None, cnpj=None):
-    if not cnpj:
-        try:
-            cnpj, _ = db.stock_code_cnpj(code)
-        except TypeError:
-            print(f"WARNING - CADASTRO - Falha coletando para {code}. CNPJ: {cnpj}")
-            return ({}, -1, -1, -1)
-
-    rows = reportsdb.consulta_dre(cnpj, "lucro")
-
-    l = {}
-    for row in rows:
-        tipo, ano, lucro, escala = row
-        if tipo == "PENÚLTIMO":
-            a = int(ano)
-            ano = a - 1
-
-        if escala == "MILHAR":
-            lucro *= 1000
-
-        l[int(ano)] = float(lucro)
-
-    if l:
-        values = [x for x in l.values()]
-        media = safe_div(sum(values), len(values))
-
-        status, taxa_cres_lc = lucro_ultimos_resultados(l)
-        if status == 0:
-            # somente valida o geral se os ultimos forem positivos
-            status = lucro_resultado_geral(l, media)
-    else:
-        if DEBUG:
-            print(f"WARNING - Não existem dados para {code}. CNPJ: {cnpj}")
-        media = None
-        status = -1
-        taxa_cres_lc = 0
-
-    return l, media, status, taxa_cres_lc * 100
+def lucro_resultado_geral(data, media):
+    # se p50 for menor que zero ou media menor que zero
+    if percentile([x for x in data.values()], 50) < 0 or media < 0:
+        return 1
+    return 0
 
 
-def dividendos(cnpj):
-    rows = reportsdb.consulta_dre(cnpj, "dividendos")
+def valida_empresa(code):
+    lucros = reportsdb.consulta_detalhes_periodo(code, "lucro")
 
-    if rows:
-        _, ano, vlr, escala = rows[-1]
-        if escala == "MILHAR":
-            vlr *= 1000
-    else:
-        return {}
+    lc = {}
+    ultimos_12m = None
+    for row in lucros:
+        tipo = row[0]
+        lucro = row[1]
+        if tipo == "Últ. 12M":
+            ultimos_12m = row[1]
+        else:
+            lc[int(tipo)] = float(lucro)
 
-    return {int(ano): float(vlr)}
+    values = [x for x in lc.values()]
+    media = safe_div(sum(values), len(values))
+
+    status = valida_ultimos_resultados(lc, ultimos_12m)
+    if status == 1:
+        print(f"Descartado {code} pelos últimos resultados")
+
+    if status == 0:
+        # somente valida o geral se os ultimos forem positivos
+        status = lucro_resultado_geral(lc, media)
+        if status == 1:
+            print(f"Descartado {code} pelos lucros históricos negativos")
+
+    return lc, media, status, ultimos_12m
 
 
-def juros_capital_proprio(cnpj):
-    rows = reportsdb.consulta_dre(cnpj, "juros_capital_proprio")
-
-    if rows:
-        _, ano, vlr, escala = rows[-1]
-        if escala == "MILHAR":
-            vlr *= 1000
-    else:
-        return {}
-
-    return {int(ano): float(vlr)}
-
-
-def get_dre_details(cnpj):
+def get_dre_details(code):
     dre = {}
-    dre["lucro"], dre["media_lucro"], _, dre["taxa_cres_lc"] = lucro_liquido(cnpj=cnpj)
-    for ano, value in dividendos(cnpj).items():
-        dre["dividendos"] = (ano, value)
-
-    for ano, value in juros_capital_proprio(cnpj).items():
-        dre["juros_capital"] = (ano, value)
-
-    if dre["lucro"]:
-        dre["proventos"] = (
-            dre["dividendos"][0],
-            dre["dividendos"][1] + dre["juros_capital"][1],
-        )
-
-        dre["payout"] = int(
-            safe_div(dre["proventos"][1], dre["lucro"][dre["proventos"][0]]) * 100
-        )
-    else:
-        dre["payout"] = None
-        dre["proventos"] = None
+    dre["lucro"], dre["media_lucro"], _, dre["lucro_12m"] = valida_empresa(code=code)
 
     return dre
 
 
-def check_cnpj(cnpj):
-    try:
-        int(cnpj.replace(".", "").replace("/", "").replace("-", ""))
-    except ValueError:
-        print(f"CNPJ {cnpj} inválido")
-        raise
-
-
 def check_dre(code):
-    try:
-        cnpj, _ = db.stock_code_cnpj(code)
-        check_cnpj(cnpj)
-
-        dt = get_dre_details(cnpj)
-    except TypeError:
-        print(f"WARNING - CADASTRO - Falha coletando o CNPJ para {code}")
-        return ("", {})
-    except ValueError:
-        return ("", {})
-
-    return (cnpj, dt)
+    dt = get_dre_details(code)
+    return dt
 
 
 def pl_setor(code):
@@ -270,31 +204,12 @@ def main():
     for t in ["financeiro", "todos"]:
         magic_result = get_result(t)
 
-        l, count, cnpjs_analisados, setores_an = [], 0, [], {}
+        l, count, setores_an, empresas = [], 0, {}, set()
         for code, score in magic_result.items():
-            cnpj, details = check_dre(code)
+            details = check_dre(code)
             d = db.select_details(code)
 
-            new_code = None
-            if details:
-                if details["media_lucro"]:
-                    lucro = millify(details["media_lucro"])
-                else:
-                    lucro = "*"
-                    new_code = f"{code}*"
-
-                if details["payout"]:
-                    payout = details["payout"]
-                else:
-                    payout = "*"
-
-                if details["taxa_cres_lc"]:
-                    taxa_cres_lc = format_number(details["taxa_cres_lc"])
-                else:
-                    taxa_cres_lc = "*"
-            else:
-                lucro = "*"
-                payout = "*"
+            lucro = millify(details["media_lucro"])
 
             setor = d[0][0][0:12] if d[0][0] else "-"
             pvp = format_number(d[0][1], 0)
@@ -306,11 +221,12 @@ def main():
             preco = format_number(d[0][7])
             intriseco = format_number(d[0][8])
             dy = format_number(d[0][10], 0)
-            cresc = format_number(d[0][11], "-")
-            div_pat = format_number(d[0][12], 0)
-            margem = margem = format_number(d[0][13], "-")
-            lpa = format_number(d[0][14], 0)
-            div_ativo = format_number(d[0][15], 0)
+            div_pat = format_number(d[0][11], 0)
+            margem = margem = format_number(d[0][12], "-")
+            lpa = format_number(d[0][13], 0)
+            div_ativo = format_number(d[0][14], 0)
+            cagr_lucro = format_number(d[0][15], "-")
+            cagr_receita = format_number(d[0][16], "-")
 
             if setor in setores_an:
                 avg_pl = setores_an[setor]
@@ -322,7 +238,7 @@ def main():
                 [
                     count,
                     score,
-                    new_code if new_code else code,
+                    code,
                     setor,
                     ev_ebit,
                     roic,
@@ -334,23 +250,20 @@ def main():
                     lpa,
                     dy,
                     lucro,
-                    taxa_cres_lc,
-                    cresc,
+                    cagr_receita,
+                    cagr_lucro,
                     div_pat,
                     div_ativo,
-                    payout,
                     preco,
                     intriseco,
                     dist_min,
                 ]
             )
-            if cnpj not in cnpjs_analisados:
-                cnpjs_analisados.append(cnpj)
-
             count += 1
 
-            if len(cnpjs_analisados) == 30:
+            if len(empresas) == 30:
                 break
+            empresas.add(code[:4])
 
         print(
             tabulate(
@@ -370,11 +283,10 @@ def main():
                     "LPA",
                     "DY%",
                     "Avg. Luc.",
-                    "Cr.Luc.%",
-                    "Cr(5a)%",
+                    "CAGR Rec.%",
+                    "CAGR Lc.%",
                     "Div/Pt",
                     "Div/EBIT.",
-                    "Py%",
                     "Pr",
                     "Intr.",
                     "Dist.%",
@@ -382,7 +294,6 @@ def main():
                 tablefmt="orgtbl",
             )
         )
-        print("* Indicam algum erro para calcular.")
 
 
 if __name__ == "__main__":

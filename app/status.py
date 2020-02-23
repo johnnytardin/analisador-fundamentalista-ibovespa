@@ -152,23 +152,25 @@ def fundamentus(driver):
 
 
 def normalize_money(value):
-    vlr = (
-        value.replace(" ", "")
-        .replace("M", "")
-        .replace("K", "")
-        .replace("B", "")
-        .replace(".", "")
-        .replace(",", ".")
-    )
-    if value.endswith("M"):
-        return float(vlr) * 1000000000
-    elif value.endswith("M"):
-        return float(vlr) * 1000000
-    elif value.endswith("K"):
-        return float(vlr) * 1000
-    elif vlr == "-":
-        return None
-    return float(vlr)
+    try:
+        return float(value)
+    except ValueError:
+        vlr = (
+            value.replace(" ", "")
+            .replace("M", "")
+            .replace("K", "")
+            .replace("B", "")
+            .replace(".", "")
+            .replace(",", ".")
+        )
+        if value.endswith("B"):
+            return float(vlr) * 1000000000
+        elif value.endswith("M"):
+            return float(vlr) * 1000000
+        elif value.endswith("K"):
+            return float(vlr) * 1000
+        elif vlr == "-":
+            return None
 
 
 def lucro(driver):
@@ -188,6 +190,38 @@ def lucro(driver):
     DADOS["LUCRO POR ANO"] = lucro_ano
 
 
+def anos_anteriores():
+    """
+    para controlar os valores do dict para dados de dre
+    string pois o dic vindo do pandas esta nesse formato
+    """
+    from datetime import datetime
+
+    anos = [str(datetime.now().year)]
+
+    for r in range(1, 11):
+        anos.append(str(int(anos[0]) - r))
+
+    return anos
+
+
+def dre(driver, stock):
+    df = pd.read_html(driver.page_source, decimal=',', thousands='.')
+    dre_dt = df[1].to_dict()                                                                                                                                                                                                                   
+
+    anos_considerar = anos_anteriores()
+
+    d = []
+    for indice, tipo in dre_dt["#"].items():
+        for periodo, valor in dre_dt.items():
+            if periodo in anos_considerar or periodo.startswith("Últ. 12M") == 1:
+                if periodo.startswith("Últ. 12M"):
+                    periodo = "Últ. 12M"
+                d.append({"stock": stock, "tipo": tipo, "periodo": periodo, "valor": normalize_money(valor[indice])})
+
+    DADOS["dre"] = d
+
+
 def get_specific_data(stock):
     try:
         url = "https://statusinvest.com.br/acoes/{}".format(stock.lower())
@@ -198,6 +232,7 @@ def get_specific_data(stock):
         )
         driver.get(url)
 
+        dre(driver, stock)
         fundamentus(driver)
         lucro(driver)
     except Exception as err:

@@ -55,7 +55,6 @@ def insert(data):
                 PatrimonioSobreAtivos,
                 CagrReceitasCincoAnos,
                 CagrLucrosCincoAnos,
-                crescimentoCincoAnos,
                 precoSobreVP,
                 precoSobreLucro,
                 dividendos,
@@ -103,7 +102,6 @@ def insert(data):
                 :PatrimonioSobreAtivos,
                 :CagrReceitasCincoAnos,
                 :CagrLucrosCincoAnos,
-                :crescimentoCincoAnos,
                 :precoSobreVP,
                 :precoSobreLucro,
                 :dividendos,
@@ -147,6 +145,33 @@ def insert(data):
     connector.close()
 
 
+def insert_dre(data):
+    connector = sqlite3.connect(DATABASE)
+    cursor = connector.cursor()
+
+    cursor.executemany(
+        """
+        INSERT INTO detalhamento_historico
+            (
+             stock, 
+             tipo, 
+             periodo, 
+             valor
+             )
+        VALUES(
+             :stock, 
+             :tipo, 
+             :periodo, 
+             :valor
+        )""",
+        data,
+    )
+    connector.commit()
+
+    cursor.close()
+    connector.close()
+
+
 def select_ev_ebit():
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
@@ -161,7 +186,7 @@ def select_ev_ebit():
         and segmento != 'Bancos'
         and (divSobreEbit <= 2 or divSobrePatrimonio <= 2)
         and EVSobreEBIT >= 0
-        --and ROIC >= 0
+        and (CagrLucrosCincoAnos > 0 or CagrLucrosCincoAnos is null)
         and precoSobreLucro > 0
         order by EVSobreEBIT desc 
         """
@@ -187,7 +212,7 @@ def select_roic():
         and segmento != 'Bancos'
         and (divSobreEbit <= 2 or divSobrePatrimonio <= 2)
         and EVSobreEBIT >= 0
-        --and ROIC >= 0
+        and (CagrLucrosCincoAnos > 0 or CagrLucrosCincoAnos is null)
         and precoSobreLucro > 0
         order by ROIC asc 
         """
@@ -254,7 +279,7 @@ def select_details(stockcode):
     cursor.execute(
         """
         select 
-            subsetor,
+            segmento,
             precoSobreVP,
             EVSobreEBIT, 
             ROIC, 
@@ -265,11 +290,12 @@ def select_details(stockcode):
             valorIntriseco, 
             PercentualDesconto, 
             dividendos,
-            crescimentoCincoAnos,
             divSobrePatrimonio,
             margemLiquida,
             lucroPorAcao,
-            divSobreEbit
+            divSobreEbit,
+            CagrLucrosCincoAnos,
+            CagrReceitasCincoAnos
         from fundamentus 
         where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
         and stockCode = ?
@@ -358,6 +384,18 @@ def create_table():
              percentualDesconto NUMERIC,
              coletaUUID TEXT);"""
     )
+
+    cursor.execute(
+        """CREATE TABLE detalhamento_historico (
+           id INTEGER PRIMARY KEY AUTOINCREMENT,
+           stock TEXT,
+           tipo TEXT,
+           periodo TEXT,
+           valor INTEGER,
+           UNIQUE(stock, tipo, periodo)
+        );"""
+    )
+
     cursor.close()
     connector.close()
 
