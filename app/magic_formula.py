@@ -1,13 +1,14 @@
 from datetime import datetime
+import logging
 
 import db
-import reports.db as reportsdb
+from log import config_log
 
-from numpy import percentile
+from numpy import percentile, median
 from tabulate import tabulate
 import math
 
-DEBUG = False
+logger = config_log("/tmp/analisador")
 
 
 def get_result(tipo="todos"):
@@ -27,9 +28,9 @@ def get_result(tipo="todos"):
     count = 0
     for row in value:
         code = row[0]
-        print(code)
-        _, _, status, _ = valida_empresa(code)
-        if status in [0, -1] and code not in sem_lucro:
+        logger.info(f"Analisando {code}")
+        status = valida_empresa(code)
+        if status and code not in sem_lucro:
             v[code] = count
             count += 1
         else:
@@ -68,12 +69,14 @@ def safe_div(n, d):
     return r
 
 
-def valida_ultimos_resultados(lucros, ultimos_12m):
+def valida_ultimos_lucros(lucros, ultimos_12m):
     """
     Verifica se os últimos resultados foram positivos
     """
     # os 2 ultimos anos descartando o ultimo
     data_p = sorted(lucros.items(), key=lambda item: item[0], reverse=True)[:2]
+
+    status = True
 
     # verificar os ultimos anos se tem prejuizo
     count = 0
@@ -83,9 +86,13 @@ def valida_ultimos_resultados(lucros, ultimos_12m):
         if vlr < 0:
             count += 1
 
+    if count > 0:
+        logger.info(f"{count} anos com prejuízo")
+        status = False
+
     # os ultimos 3 anos a partir do primeiro
     # verifica se os lucros vem caindo
-    lucros_desc, ctrl, status, diff_geral = 0, 0, True, 0
+    lucros_desc, ctrl = 0, 0
     if count == 0:
         data_l = sorted(lucros.items(), key=lambda item: item[0], reverse=False)[-3:]
 
@@ -103,30 +110,50 @@ def valida_ultimos_resultados(lucros, ultimos_12m):
             else:
                 ultimo_lucro = vlr
 
-        # veririca se o ultimo lucro é muito abaixo do do normal
-        d1 = sorted(lucros.items(), key=lambda item: item[0], reverse=True)[1:]
-        p = percentile([x[1] for x in d1], 70)
-        diff_geral = safe_div(ultimos_12m - p, data_l[-1][1])
-        if diff_geral <= -0.30:
-            print("menor geral")
+        # se tem muitos lucros descrescentes
+        if lucros_desc == (ctrl - 1):
             status = False
+            logger.info(f"{lucros_desc} lucros decrescendo")
 
-    # valida a saida
-    #TODO: verificar se um somente é válido
-    if count > 0 or not status or lucros_desc == (ctrl - 1):
-        return 1
-    return 0
+        # veririca se o lucro dos ultimos 12m é abaixo do p70 dos ultimos 2 anos fechados
+        ptl = percentile(data_l[-2:], 62)
+        if ultimos_12m < ptl:
+            status = False
+            logger.info(f"Descartando pois lucros de 12m com {ultimos_12m} e p70 {ptl}")
+
+    return status
 
 
 def lucro_resultado_geral(data, media):
     # se p50 for menor que zero ou media menor que zero
-    if percentile([x for x in data.values()], 50) < 0 or media < 0:
-        return 1
-    return 0
+    p50 = percentile([x for x in data.values()], 50)
+    if p50 < 0:
+        logger.info(f"Lucro p50 abaixo de zero {p50}")
+        return False
+    elif media < 0:
+        logger.info(f"Média lucros geral abaixo de zero {media}")
+        return False
+    return True
 
 
 def valida_empresa(code):
-    lucros = reportsdb.consulta_detalhes_periodo(code, "lucro")
+    lc, media, ultimos_12m = get_lucro_details(code)
+
+    status = valida_ultimos_lucros(lc, ultimos_12m)
+    if not status:
+        logger.info(f"Descartando {code} pelos últimos lucros")
+
+    if status:
+        # somente valida o geral se os ultimos forem positivos
+        status = lucro_resultado_geral(lc, media)
+        if not status:
+            logger.info(f"Descartado {code} pelos lucros históricos negativos")
+
+    return status
+
+
+def get_lucro_details(code):
+    lucros = db.consulta_detalhes_periodo(code, "lucro")
 
     lc = {}
     ultimos_12m = None
@@ -141,29 +168,17 @@ def valida_empresa(code):
     values = [x for x in lc.values()]
     media = safe_div(sum(values), len(values))
 
-    status = valida_ultimos_resultados(lc, ultimos_12m)
-    if status == 1:
-        print(f"Descartado {code} pelos últimos resultados")
-
-    if status == 0:
-        # somente valida o geral se os ultimos forem positivos
-        status = lucro_resultado_geral(lc, media)
-        if status == 1:
-            print(f"Descartado {code} pelos lucros históricos negativos")
-
-    return lc, media, status, ultimos_12m
-
-
-def get_dre_details(code):
-    dre = {}
-    dre["lucro"], dre["media_lucro"], _, dre["lucro_12m"] = valida_empresa(code=code)
-
-    return dre
+    return lc, media, ultimos_12m
 
 
 def check_dre(code):
-    dt = get_dre_details(code)
-    return dt
+    """
+    Aqui podem ser inseridos outros dados como receita, lucros, etc
+    """
+    dre = {}
+    dre["lucro"], dre["media_lucro"], dre["lucro_12m"] = get_lucro_details(code=code)
+
+    return dre
 
 
 def pl_setor(code):
@@ -200,6 +215,7 @@ def format_number(n, repl="-"):
 
 def main():
     print(chr(27) + "[2J")
+    logger.info("Iniciando a análise")
 
     for t in ["financeiro", "todos"]:
         magic_result = get_result(t)
@@ -227,6 +243,7 @@ def main():
             div_ativo = format_number(d[0][14], 0)
             cagr_lucro = format_number(d[0][15], "-")
             cagr_receita = format_number(d[0][16], "-")
+            valor_12m = format_number(d[0][17], "-")
 
             if setor in setores_an:
                 avg_pl = setores_an[setor]
@@ -257,6 +274,7 @@ def main():
                     preco,
                     intriseco,
                     dist_min,
+                    valor_12m,
                 ]
             )
             count += 1
@@ -290,6 +308,7 @@ def main():
                     "Pr",
                     "Intr.",
                     "Dist.%",
+                    "Vlz/12M%",
                 ],
                 tablefmt="orgtbl",
             )
@@ -297,4 +316,10 @@ def main():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        filename="/tmp/app.log",
+        filemode="w",
+        format="%(name)s - %(levelname)s - %(message)s",
+    )
+
     main()

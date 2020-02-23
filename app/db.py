@@ -88,6 +88,8 @@ def insert(data):
                 valorIntriseco,
                 score,
                 percentualDesconto,
+                Valorizacao12M,
+                ValorizacaoMesAtual,
                 coletaUUID
             )
         VALUES
@@ -135,6 +137,8 @@ def insert(data):
                 :valorIntriseco,
                 :score,
                 :percentualDesconto,
+                :Valorizacao12M,
+                :ValorizacaoMesAtual,
                 :coletaUUID
             )""",
         data,
@@ -149,24 +153,37 @@ def insert_dre(data):
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
 
-    cursor.executemany(
-        """
-        INSERT INTO detalhamento_historico
-            (
-             stock, 
-             tipo, 
-             periodo, 
-             valor
-             )
-        VALUES(
-             :stock, 
-             :tipo, 
-             :periodo, 
-             :valor
-        )""",
-        data,
-    )
-    connector.commit()
+    try:
+        cursor.executemany(
+            """
+            INSERT INTO detalhamento_historico
+                (
+                stock, 
+                tipo, 
+                periodo, 
+                valor
+                )
+            VALUES(
+                :stock, 
+                :tipo, 
+                :periodo, 
+                :valor
+            )""",
+            data,
+        )
+    except sqlite3.IntegrityError:
+        cursor.executemany(
+            """
+            UPDATE detalhamento_historico
+            SET valor = :valor
+            WHERE stock = :stock and tipo = :tipo and periodo = :periodo
+            """,
+            data,
+        )
+    except Exception as err:
+        print(f"Falha inserindo dados históricos no banco de dados. Causa: {err}")
+    finally:
+        connector.commit()
 
     cursor.close()
     connector.close()
@@ -186,7 +203,7 @@ def select_ev_ebit():
         and segmento != 'Bancos'
         and (divSobreEbit <= 2 or divSobrePatrimonio <= 2)
         and EVSobreEBIT >= 0
-        and (CagrLucrosCincoAnos > 0 or CagrLucrosCincoAnos is null)
+        and (CagrLucrosCincoAnos > 0.5 or CagrLucrosCincoAnos is null)
         and precoSobreLucro > 0
         order by EVSobreEBIT desc 
         """
@@ -212,7 +229,7 @@ def select_roic():
         and segmento != 'Bancos'
         and (divSobreEbit <= 2 or divSobrePatrimonio <= 2)
         and EVSobreEBIT >= 0
-        and (CagrLucrosCincoAnos > 0 or CagrLucrosCincoAnos is null)
+        and (CagrLucrosCincoAnos > 0.5 or CagrLucrosCincoAnos is null)
         and precoSobreLucro > 0
         order by ROIC asc 
         """
@@ -295,7 +312,9 @@ def select_details(stockcode):
             lucroPorAcao,
             divSobreEbit,
             CagrLucrosCincoAnos,
-            CagrReceitasCincoAnos
+            CagrReceitasCincoAnos,
+            Valorizacao12M,
+            ValorizacaoMesAtual
         from fundamentus 
         where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
         and stockCode = ?
@@ -382,6 +401,8 @@ def create_table():
              valorIntriseco NUMERIC,
              score NUMERIC,
              percentualDesconto NUMERIC,
+             Valorizacao12M NUMERIC,
+             ValorizacaoMesAtual NUMERIC,
              coletaUUID TEXT);"""
     )
 
@@ -400,27 +421,26 @@ def create_table():
     connector.close()
 
 
-def stock_code_cnpj(code):
+def consulta_detalhes_periodo(stock, tipo):
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
 
+    # TODO: add os demais
+    if tipo == "lucro":
+        t = "Lucro Líquido - (R$)"
+
     cursor.execute(
         """
-        select cnpj, nome from cnpj_code where stock_code = ?
+            select periodo, valor 
+            from detalhamento_historico
+            where stock = ?
+            and tipo like ?
+            order by periodo     
         """,
-        (code,),
+        (stock, t,),
     )
-    row = cursor.fetchone()
-
-    if not row:
-        cursor.execute(
-            """
-            select cnpj, nome from cnpj_code where stock_code like ?
-            """,
-            (f"%{code}%",),
-        )
-        row = cursor.fetchone()
+    rows = cursor.fetchall()
 
     cursor.close()
     connector.close()
-    return row
+    return rows

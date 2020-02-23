@@ -116,7 +116,10 @@ def details(stock, coleta_id):
     newStock["segmento"] = status_data["SEGMENTO DE ATUAÇÂO"]
     newStock["max52sem"] = normaliza_valor(status_data["MÁX. 52 SEMANAS"])
     newStock["min52sem"] = normaliza_valor(status_data["MIN. 52 SEMANAS"])
-
+    newStock["Valorizacao12M"] = normaliza_valor(status_data["VALORIZAÇÃO (12M)"])
+    newStock["ValorizacaoMesAtual"] = normaliza_valor(
+        status_data["VALORIZAÇÃO (MÊS ATUAL)"]
+    )
     newStock["lucroLiquido"] = normaliza_valor(status_data["LUCRO LIQUIDO 12M"])
 
     # intriseco
@@ -247,11 +250,8 @@ def main():
             )
         else:
             save_on_db("fundamentus", [d])
-            try:
-                save_on_db("dre", dre)
-            except Exception as err:
-                print(err)
-                pass
+            save_on_db("dre", dre)
+
 
 if __name__ == "__main__":
     main()

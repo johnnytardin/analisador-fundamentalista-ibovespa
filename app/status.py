@@ -206,8 +206,8 @@ def anos_anteriores():
 
 
 def dre(driver, stock):
-    df = pd.read_html(driver.page_source, decimal=',', thousands='.')
-    dre_dt = df[1].to_dict()                                                                                                                                                                                                                   
+    df = pd.read_html(driver.page_source, decimal=",", thousands=".")
+    dre_dt = df[1].to_dict()
 
     anos_considerar = anos_anteriores()
 
@@ -217,7 +217,14 @@ def dre(driver, stock):
             if periodo in anos_considerar or periodo.startswith("Últ. 12M") == 1:
                 if periodo.startswith("Últ. 12M"):
                     periodo = "Últ. 12M"
-                d.append({"stock": stock, "tipo": tipo, "periodo": periodo, "valor": normalize_money(valor[indice])})
+                d.append(
+                    {
+                        "stock": stock,
+                        "tipo": tipo,
+                        "periodo": periodo,
+                        "valor": normalize_money(valor[indice]),
+                    }
+                )
 
     DADOS["dre"] = d
 

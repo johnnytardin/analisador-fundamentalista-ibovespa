@@ -44,26 +44,28 @@ def consulta_dre(nome, tipo):
     connector.close()
     return rows
 
-def consulta_detalhes_periodo(stock, tipo):
+
+def stock_code_cnpj(code):
     connector = sqlite3.connect(DATABASE_HST)
     cursor = connector.cursor()
 
-    #TODO: add os demais 
-    if tipo == "lucro":
-        t = "Lucro Líquido - (R$)"
-
     cursor.execute(
         """
-            select periodo, valor 
-            from detalhamento_historico
-            where stock = ?
-            and tipo like ?
-            order by periodo     
+        select cnpj, nome from cnpj_code where stock_code = ?
         """,
-        (stock, t,),
+        (code,),
     )
-    rows = cursor.fetchall()
+    row = cursor.fetchone()
+
+    if not row:
+        cursor.execute(
+            """
+            select cnpj, nome from cnpj_code where stock_code like ?
+            """,
+            (f"%{code}%",),
+        )
+        row = cursor.fetchone()
 
     cursor.close()
     connector.close()
-    return rows
+    return row
