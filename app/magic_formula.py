@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+import argparse
 
 import db
 from log import config_log
@@ -11,17 +12,8 @@ import math
 logger = config_log("/tmp/analisador")
 
 
-def get_result(tipo="todos"):
-    if tipo == "financeiro":
-        print("Score para o setor Financeiro")
-
-        performance = db.select_roe()
-        value = db.select_pl()
-    else:
-        print("Score para todos os setores")
-
-        performance = db.select_roic()
-        value = db.select_ev_ebit()
+def get_result(estrategia, small_caps=False):
+    performance, value = db.select_rank_magic_formula(estrategia, small_caps)
 
     p, v, magic_formula, sem_lucro = {}, {}, {}, []
 
@@ -181,17 +173,6 @@ def check_dre(code):
     return dre
 
 
-def pl_setor(code):
-    avg = db.pl_setor(code)
-    vl = []
-    for row in avg:
-        vl.append(row[0])
-
-    if vl:
-        return percentile(vl, 50)
-    return None
-
-
 def millify(n):
     millnames = ["", " Mil", " Mi", " Bi", " Tri"]
 
@@ -207,119 +188,203 @@ def millify(n):
     return "{:.1f}{}".format(result[0], result[1])
 
 
+def pl_setor(code):
+    rows = db.pl_setor(code)
+    vl = []
+    for row in rows:
+        vl.append(row[0])
+
+    if vl:
+        return percentile(vl, 50)
+    return None
+
+
+def pl_bolsa():
+    rows = db.pl_geral()
+    vl = []
+    for row in rows:
+        vl.append(row[0])
+
+    for p in (("p50", 50), ("p90", 90), ("p95", 95)):
+        pv = p[1]
+        value = percentile(vl, pv)
+        print(f"{p[0]} do P/L Geral Bolsa: {value:.2f}")
+
+
 def format_number(n, repl="-"):
     if n:
         return round(n, 2)
     return repl
 
 
-def main():
-    print(chr(27) + "[2J")
-    logger.info("Iniciando a análise")
+def output_rank(estrategia, small_caps):
+    log = "Iniciando a análise "
+    if estrategia == "ev_ebit_roic":
+        log += "usando a estratégia EV/EBIT e ROIC "
+    else:
+        log += "usando a estratégia P/L e ROE "
 
-    for t in ["financeiro", "todos"]:
-        magic_result = get_result(t)
+    if small_caps:
+        log += "para SMALL CAPS"
 
-        l, count, setores_an, empresas = [], 0, {}, set()
-        for code, score in magic_result.items():
-            details = check_dre(code)
-            d = db.select_details(code)
+    logger.info(log)
+    print(log)
 
-            lucro = millify(details["media_lucro"])
+    magic_result = get_result(estrategia, small_caps)
 
-            setor = d[0][0][0:12] if d[0][0] else "-"
-            pvp = format_number(d[0][1], 0)
-            ev_ebit = format_number(d[0][2])
-            roic = format_number(d[0][3])
-            pl = format_number(d[0][4])
-            roe = format_number(d[0][5])
-            dist_min = format_number(d[0][6], 0)
-            preco = format_number(d[0][7])
-            intriseco = format_number(d[0][8])
-            dy = format_number(d[0][10], 0)
-            div_pat = format_number(d[0][11], 0)
-            margem = margem = format_number(d[0][12], "-")
-            lpa = format_number(d[0][13], 0)
-            div_ativo = format_number(d[0][14], 0)
-            cagr_lucro = format_number(d[0][15], "-")
-            cagr_receita = format_number(d[0][16], "-")
-            valor_12m = format_number(d[0][17], "-")
+    l, count, setores_an, empresas = [], 0, {}, set()
+    for code, score in magic_result.items():
+        details = check_dre(code)
+        d = db.select_details(code)
 
-            if setor in setores_an:
-                avg_pl = setores_an[setor]
-            else:
-                avg_pl = format_number(pl_setor(code), "-")
-                setores_an[setor] = avg_pl
+        lucro = millify(details["media_lucro"])
 
-            l.append(
-                [
-                    count,
-                    score,
-                    code,
-                    setor,
-                    ev_ebit,
-                    roic,
-                    pl,
-                    avg_pl,
-                    roe,
-                    pvp,
-                    margem,
-                    lpa,
-                    dy,
-                    lucro,
-                    cagr_receita,
-                    cagr_lucro,
-                    div_pat,
-                    div_ativo,
-                    preco,
-                    intriseco,
-                    dist_min,
-                    valor_12m,
-                ]
-            )
-            count += 1
+        setor = d[0][0][0:12] if d[0][0] else "-"
+        pvp = format_number(d[0][1], 0)
+        ev_ebit = format_number(d[0][2])
+        roic = format_number(d[0][3])
+        pl = format_number(d[0][4])
+        roe = format_number(d[0][5])
+        dist_min = format_number(d[0][6], 0)
+        preco = format_number(d[0][7])
+        dy = format_number(d[0][10], 0)
+        div_pat = format_number(d[0][11], 0)
+        margem = margem = format_number(d[0][12], "-")
+        div_ativo = format_number(d[0][14], 0)
+        cagr_lucro = format_number(d[0][15], "-")
+        cagr_receita = format_number(d[0][16], "-")
+        valor_12m = format_number(d[0][17], "-")
+        roa = format_number(d[0][19], "-")
+        vpa = format_number(d[0][20], "-")
 
-            if len(empresas) == 30:
-                break
-            empresas.add(code[:4])
+        if setor in setores_an:
+            avg_pl = setores_an[setor]
+        else:
+            avg_pl = format_number(pl_setor(code), "-")
+            setores_an[setor] = avg_pl
 
-        print(
-            tabulate(
-                l,
-                headers=[
-                    "Ord.",
-                    "Scr",
-                    "CODE",
-                    "St",
-                    "EV/EBIT",
-                    "ROIC%",
-                    "PL",
-                    "PL/S",
-                    "ROE%",
-                    "P/VP",
-                    "M.Lq.%",
-                    "LPA",
-                    "DY%",
-                    "Avg. Luc.",
-                    "CAGR Rec.%",
-                    "CAGR Lc.%",
-                    "Div/Pt",
-                    "Div/EBIT.",
-                    "Pr",
-                    "Intr.",
-                    "Dist.%",
-                    "Vlz/12M%",
-                ],
-                tablefmt="orgtbl",
-            )
+        l.append(
+            [
+                count,
+                score,
+                code,
+                setor,
+                ev_ebit,
+                roic,
+                pl,
+                avg_pl,
+                roe,
+                roa,
+                pvp,
+                margem,
+                vpa,
+                dy,
+                lucro,
+                cagr_receita,
+                cagr_lucro,
+                div_pat,
+                div_ativo,
+                preco,
+                dist_min,
+                valor_12m,
+            ]
         )
+        count += 1
+
+        if len(empresas) == 30:
+            break
+        empresas.add(code[:4])
+
+    print(
+        tabulate(
+            l,
+            headers=[
+                "Ord.",
+                "Scr",
+                "CODE",
+                "St",
+                "EV/EBIT",
+                "ROIC%",
+                "PL",
+                "PL/S",
+                "ROE%",
+                "ROA%",
+                "P/VP",
+                "M.Lq.%",
+                "VPA",
+                "DY%",
+                "Avg. Luc.",
+                "C.Rec.%",
+                "C.Lc.%",
+                "Div/Pt",
+                "Div/EBIT.",
+                "Pr",
+                "Dist.%",
+                "Vlz/12M%",
+            ],
+            tablefmt="orgtbl",
+        )
+    )
 
 
-if __name__ == "__main__":
+def set_log():
     logging.basicConfig(
         filename="/tmp/app.log",
         filemode="w",
         format="%(name)s - %(levelname)s - %(message)s",
     )
 
+
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ("yes", "true", "t", "y", "1"):
+        return True
+    elif v.lower() in ("no", "false", "f", "n", "0"):
+        return False
+    else:
+        raise argparse.ArgumentTypeError("Boolean value expected.")
+
+
+def parse_param():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-e",
+        "--ev_ebit",
+        type=str2bool,
+        nargs="?",
+        const=True,
+        default=False,
+        help="Usa a estratégia pelo EV/EBIT com ROIC",
+    )
+    parser.add_argument(
+        "-p",
+        "--pl",
+        type=str2bool,
+        nargs="?",
+        const=True,
+        default=False,
+        help="Usa a estratégia usando PL e ROE",
+    )
+    parser.add_argument(
+        "-s", "--small_caps", type=str2bool, nargs="?", const=True, default=False
+    )
+    args = parser.parse_args()
+
+    small_caps = args.small_caps
+    estrategia = "pl_roe" if args.pl else "ev_ebit_roic"
+
+    return (estrategia, small_caps)
+
+
+def main():
+    print(chr(27) + "[2J")
+
+    set_log()
+    setor, small_caps = parse_param()
+    pl_bolsa()
+    output_rank(setor, small_caps)
+
+
+if __name__ == "__main__":
     main()

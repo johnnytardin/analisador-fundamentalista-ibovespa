@@ -1,29 +1,43 @@
 import sqlite3
-
+import os
 
 DATABASE = "database/fund.db"
+
+
+def queries(tipo):
+    files = {
+        "detalhes_stock": "queries/select_detalhes_stock.sql",
+        "create_detalhamento_historico": "queries/create_table_detalhamento_historico.sql",
+        "create_fundamentus": "queries/create_table_fundamentus.sql",
+        "pl_setor": "queries/select_pl_setor.sql",
+        "pl_geral": "queries/select_pl_geral_bolsa.sql",
+        "details": "queries/select_details.sql",
+        "score": "queries/select_score.sql",
+        "insert_fundamentus": "queries/insert_fundamentus.sql",
+        "insert_dre": "queries/insert_dre.sql",
+        "update_dre": "queries/update_dre.sql",
+        "ev_ebit": "queries/select_ev_ebit.sql",
+        "ev_ebit_small_caps": "queries/select_ev_ebit_small_caps.sql",
+        "roic": "queries/select_roic.sql",
+        "roic_small_caps": "queries/select_roic_small_caps.sql",
+        "pl": "queries/select_pl.sql",
+        "pl_small_caps": "queries/select_pl_small_caps.sql",
+        "roe": "queries/select_roe.sql",
+        "roe_small_caps": "queries/select_roe_small_caps.sql",
+    }
+
+    current_dir = os.path.abspath(os.path.dirname(__file__))
+    query = os.path.join(current_dir, files[tipo])
+    with open(query, "r") as e:
+        return e.read()
 
 
 def select():
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
 
-    cursor.execute(
-        """
-        SELECT stockCode, setor, crescimentoCincoAnos, stockPrice, valorIntriseco, score, percentualDesconto, desconto, dividendos, "timestamp" 
-        FROM fundamentus 
-        WHERE coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1) 
-        AND crescimentoCincoAnos > 2
-        AND ROE > 10
-        AND desconto > 0
-        AND divSobrePatrimonio < 0.5
-        AND precoSobreLucro <= 15 AND precoSobreLucro >= 0
-        AND divSobreEbit <= 0.5
-        AND dividendos > 4.5
-        ORDER by score DESC, percentualDesconto ASC, precoSobreLucro ASC, dividendos DESC, liquidezMediaDiaria DESC
-        LIMIT 20;
-        """
-    )
+    q = queries("score")
+    cursor.execute(q)
     rows = cursor.fetchall()
 
     cursor.close()
@@ -31,7 +45,7 @@ def select():
     return rows
 
 
-def insert(data):
+def insert_fundamentus(data):
     try:
         create_table()
     except sqlite3.OperationalError:
@@ -40,109 +54,8 @@ def insert(data):
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
 
-    cursor.executemany(
-        """
-        INSERT INTO 
-            fundamentus
-            (
-                stockCode,
-                patrimonioLiquido,
-                liquidezCorrente,
-                ROE,
-                divSobrePatrimonio,
-                divSobreEbitda,
-                divSobreEbit,
-                PatrimonioSobreAtivos,
-                CagrReceitasCincoAnos,
-                CagrLucrosCincoAnos,
-                precoSobreVP,
-                precoSobreLucro,
-                dividendos,
-                stockPrice,
-                PSR,
-                precoSobreAtivo,
-                precoSobreCapitalGiro,
-                precoSobreEBIT,
-                precoSobreEBITDA,
-                precoSobreAtivoCirculante,
-                EVSobreEBIT,
-                EVSobreEBITDA,
-                margemEBIT,
-                margemEBITDA,
-                margemLiquida,
-                ROIC,
-                ROA,
-                liquidezMediaDiaria,
-                "timestamp",
-                setor,
-                subsetor,
-                segmento,
-                max52sem,
-                min52sem,
-                PercDistanciaMin52sem,
-                lucroPorAcao,
-                ValorPatrimonialPorAcao,
-                margemBruta,
-                giroAtivos,
-                lucroLiquido,
-                valorIntriseco,
-                score,
-                percentualDesconto,
-                Valorizacao12M,
-                ValorizacaoMesAtual,
-                coletaUUID
-            )
-        VALUES
-            (
-                :stockCode,
-                :patrimonioLiquido,
-                :liquidezCorrente,
-                :ROE,
-                :divSobrePatrimonio,
-                :divSobreEbitda,
-                :divSobreEbit,
-                :PatrimonioSobreAtivos,
-                :CagrReceitasCincoAnos,
-                :CagrLucrosCincoAnos,
-                :precoSobreVP,
-                :precoSobreLucro,
-                :dividendos,
-                :stockPrice,
-                :PSR,
-                :precoSobreAtivo,
-                :precoSobreCapitalGiro,
-                :precoSobreEBIT,
-                :precoSobreEBITDA,
-                :precoSobreAtivoCirculante,
-                :EVSobreEBIT,
-                :EVSobreEBITDA,
-                :margemEBIT,
-                :margemEBITDA,
-                :margemLiquida,
-                :ROIC,
-                :ROA,
-                :liquidezMediaDiaria,
-                :timestamp,
-                :setor,
-                :subsetor,
-                :segmento,
-                :max52sem,
-                :min52sem,
-                :PercDistanciaMin52sem,
-                :lucroPorAcao,
-                :ValorPatrimonialPorAcao,
-                :margemBruta,
-                :giroAtivos,
-                :lucroLiquido,
-                :valorIntriseco,
-                :score,
-                :percentualDesconto,
-                :Valorizacao12M,
-                :ValorizacaoMesAtual,
-                :coletaUUID
-            )""",
-        data,
-    )
+    q = queries("insert_fundamentus")
+    cursor.executemany(q, data)
     connector.commit()
 
     cursor.close()
@@ -154,31 +67,14 @@ def insert_dre(data):
     cursor = connector.cursor()
 
     try:
+        q = queries("insert_dre")
         cursor.executemany(
-            """
-            INSERT INTO detalhamento_historico
-                (
-                stock, 
-                tipo, 
-                periodo, 
-                valor
-                )
-            VALUES(
-                :stock, 
-                :tipo, 
-                :periodo, 
-                :valor
-            )""",
-            data,
+            q, data,
         )
     except sqlite3.IntegrityError:
+        q = queries("update_dre")
         cursor.executemany(
-            """
-            UPDATE detalhamento_historico
-            SET valor = :valor
-            WHERE stock = :stock and tipo = :tipo and periodo = :periodo
-            """,
-            data,
+            q, data,
         )
     except Exception as err:
         print(f"Falha inserindo dados históricos no banco de dados. Causa: {err}")
@@ -189,137 +85,45 @@ def insert_dre(data):
     connector.close()
 
 
-def select_ev_ebit():
+def select_rank_magic_formula(estrategia, small_cap=False):
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
 
-    cursor.execute(
-        """
-        select 
-        stockCode
-        from fundamentus 
-        where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
-        and liquidezMediaDiaria > 200000
-        and segmento != 'Bancos'
-        and (divSobreEbit <= 2 or divSobrePatrimonio <= 2)
-        and EVSobreEBIT >= 0
-        and (CagrLucrosCincoAnos > 0.5 or CagrLucrosCincoAnos is null)
-        and precoSobreLucro > 0
-        order by EVSobreEBIT desc 
-        """
-    )
-    rows = cursor.fetchall()
+    # arqui está o chaveamento dos tipos para as queries
+    if not small_cap:
+        r1_tipo = "ev_ebit"
+        r2_tipo = "roic"
+        if estrategia == "pl_roe":
+            r1_tipo = "pl"
+            r2_tipo = "roe"
+    else:
+        r1_tipo = "ev_ebit_small_caps"
+        r2_tipo = "roic_small_caps"
+        if estrategia == "pl_roe":
+            r1_tipo = "pl_small_caps"
+            r2_tipo = "roe_small_caps"
+
+    qr1 = queries(r1_tipo)
+    qr2 = queries(r2_tipo)
+
+    cursor.execute(qr1)
+    rank_1 = cursor.fetchall()
+
+    cursor.execute(qr2)
+    rank_2 = cursor.fetchall()
 
     cursor.close()
     connector.close()
-    return rows
-
-
-def select_roic():
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
-
-    cursor.execute(
-        """
-        select 
-        stockCode
-        from fundamentus 
-        where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
-        and liquidezMediaDiaria > 200000
-        and segmento != 'Bancos'
-        and (divSobreEbit <= 2 or divSobrePatrimonio <= 2)
-        and EVSobreEBIT >= 0
-        and (CagrLucrosCincoAnos > 0.5 or CagrLucrosCincoAnos is null)
-        and precoSobreLucro > 0
-        order by ROIC asc 
-        """
-    )
-    rows = cursor.fetchall()
-
-    cursor.close()
-    connector.close()
-    return rows
-
-
-def select_pl():
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
-
-    cursor.execute(
-        """
-        select 
-        stockCode
-        from fundamentus 
-        where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
-        and liquidezMediaDiaria > 200000
-        and segmento = 'Bancos'
-        and precoSobreLucro > 0
-        and ROE > 0
-        order by precoSobreLucro desc 
-        """
-    )
-    rows = cursor.fetchall()
-
-    cursor.close()
-    connector.close()
-    return rows
-
-
-def select_roe():
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
-
-    cursor.execute(
-        """
-        select 
-        stockCode
-        from fundamentus 
-        where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
-        and liquidezMediaDiaria > 200000
-        and segmento = 'Bancos'
-        and precoSobreLucro > 0
-        and ROE > 0
-        order by ROE asc
-        """
-    )
-    rows = cursor.fetchall()
-
-    cursor.close()
-    connector.close()
-    return rows
+    return (rank_1, rank_2)
 
 
 def select_details(stockcode):
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
 
+    q = queries("details")
     cursor.execute(
-        """
-        select 
-            segmento,
-            precoSobreVP,
-            EVSobreEBIT, 
-            ROIC, 
-            precoSobreLucro, 
-            ROE, 
-            PercDistanciaMin52sem, 
-            stockPrice, 
-            valorIntriseco, 
-            PercentualDesconto, 
-            dividendos,
-            divSobrePatrimonio,
-            margemLiquida,
-            lucroPorAcao,
-            divSobreEbit,
-            CagrLucrosCincoAnos,
-            CagrReceitasCincoAnos,
-            Valorizacao12M,
-            ValorizacaoMesAtual
-        from fundamentus 
-        where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
-        and stockCode = ?
-        """,
-        (stockcode,),
+        q, (stockcode,),
     )
     rows = cursor.fetchall()
 
@@ -332,17 +136,23 @@ def pl_setor(stockcode):
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
 
+    q = queries("pl_setor")
     cursor.execute(
-        """
-        select 
-            PrecoSobreLucro
-        from fundamentus 
-        where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
-        and setor = (select setor from fundamentus where stockCode = ? LIMIT 1)
-        and precoSobreLucro > 0
-        """,
-        (stockcode,),
+        q, (stockcode,),
     )
+    rows = cursor.fetchall()
+
+    cursor.close()
+    connector.close()
+    return rows
+
+
+def pl_geral():
+    connector = sqlite3.connect(DATABASE)
+    cursor = connector.cursor()
+
+    q = queries("pl_geral")
+    cursor.execute(q)
     rows = cursor.fetchall()
 
     cursor.close()
@@ -354,68 +164,11 @@ def create_table():
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()
 
-    cursor.execute(
-        """CREATE TABLE fundamentus
-            (id INTEGER PRIMARY KEY AUTOINCREMENT,
-             stockCode TEXT,
-             patrimonioLiquido NUMERIC,
-             liquidezCorrente NUMERIC,
-             ROE NUMERIC,
-             divSobrePatrimonio NUMERIC,
-             divSobreEbitda NUMERIC,
-             divSobreEbit NUMERIC,
-             PatrimonioSobreAtivos NUMERIC,
-             CagrReceitasCincoAnos NUMERIC,
-             CagrLucrosCincoAnos NUMERIC,
-             crescimentoCincoAnos NUMERIC,
-             precoSobreVP NUMERIC,
-             precoSobreLucro NUMERIC,
-             dividendos NUMERIC,
-             stockPrice NUMERIC,
-             PSR NUMERIC,
-             precoSobreAtivo NUMERIC,
-             precoSobreCapitalGiro NUMERIC,
-             precoSobreEBIT NUMERIC,
-             precoSobreEBITDA NUMERIC,
-             precoSobreAtivoCirculante NUMERIC,
-             EVSobreEBIT NUMERIC,
-             EVSobreEBITDA NUMERIC,
-             margemEBIT NUMERIC,
-             margemEBITDA NUMERIC,
-             margemLiquida NUMERIC,
-             ROIC NUMERIC,
-             ROA NUMERIC,
-             liquidezMediaDiaria NUMERIC,
-             timestamp DATETIME,
-             setor TEXT,
-             subsetor TEXT,
-             segmento TEXT,
-             max52sem NUMERIC,
-             min52sem NUMERIC,
-             PercDistanciaMin52sem NUMERIC,
-             lucroPorAcao NUMERIC,
-             ValorPatrimonialPorAcao NUMERIC,
-             margemBruta NUMERIC,
-             giroAtivos NUMERIC,
-             lucroLiquido NUMERIC,
-             valorIntriseco NUMERIC,
-             score NUMERIC,
-             percentualDesconto NUMERIC,
-             Valorizacao12M NUMERIC,
-             ValorizacaoMesAtual NUMERIC,
-             coletaUUID TEXT);"""
-    )
+    qf = queries("create_fundamentus")
+    cursor.execute(qf)
 
-    cursor.execute(
-        """CREATE TABLE detalhamento_historico (
-           id INTEGER PRIMARY KEY AUTOINCREMENT,
-           stock TEXT,
-           tipo TEXT,
-           periodo TEXT,
-           valor INTEGER,
-           UNIQUE(stock, tipo, periodo)
-        );"""
-    )
+    qdh = queries("create_detalhamento_historico")
+    cursor.execute(qdh)
 
     cursor.close()
     connector.close()
@@ -429,15 +182,9 @@ def consulta_detalhes_periodo(stock, tipo):
     if tipo == "lucro":
         t = "Lucro Líquido - (R$)"
 
+    q = queries("detalhes_stock")
     cursor.execute(
-        """
-            select periodo, valor 
-            from detalhamento_historico
-            where stock = ?
-            and tipo like ?
-            order by periodo     
-        """,
-        (stock, t,),
+        q, (stock, t,),
     )
     rows = cursor.fetchall()
 
