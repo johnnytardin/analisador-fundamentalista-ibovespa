@@ -217,7 +217,7 @@ def format_number(n, repl="-"):
     return repl
 
 
-def output_rank(estrategia, small_caps):
+def output_rank(estrategia, small_caps, numero_empresas):
     log = "Iniciando a análise "
     if estrategia == "ev_ebit_roic":
         log += "usando a estratégia EV/EBIT e ROIC "
@@ -291,7 +291,7 @@ def output_rank(estrategia, small_caps):
         )
         count += 1
 
-        if len(empresas) == 30:
+        if len(empresas) == numero_empresas:
             break
         empresas.add(code[:4])
 
@@ -369,21 +369,23 @@ def parse_param():
     parser.add_argument(
         "-s", "--small_caps", type=str2bool, nargs="?", const=True, default=False
     )
+    parser.add_argument("-n", "--numero_empresas", type=int, default=30)
     args = parser.parse_args()
 
     small_caps = args.small_caps
     estrategia = "pl_roe" if args.pl else "ev_ebit_roic"
+    numero_empresas = args.numero_empresas
 
-    return (estrategia, small_caps)
+    return (estrategia, small_caps, numero_empresas)
 
 
 def main():
     print(chr(27) + "[2J")
 
     set_log()
-    setor, small_caps = parse_param()
+    setor, small_caps, numero_empresas = parse_param()
     pl_bolsa()
-    output_rank(setor, small_caps)
+    output_rank(setor, small_caps, numero_empresas)
 
 
 if __name__ == "__main__":
