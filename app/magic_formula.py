@@ -12,7 +12,7 @@ import math
 logger = config_log("/tmp/analisador")
 
 
-def get_result(estrategia, small_caps=False):
+def get_result(estrategia, small_caps=False, setor=None):
     performance, value = db.select_rank_magic_formula(estrategia, small_caps)
 
     p, v, magic_formula, sem_lucro = {}, {}, {}, []
@@ -217,7 +217,7 @@ def format_number(n, repl="-"):
     return repl
 
 
-def output_rank(estrategia, small_caps, numero_empresas):
+def output_rank(estrategia, small_caps, numero_empresas, setor_especifico):
     log = "Iniciando a análise "
     if estrategia == "ev_ebit_roic":
         log += "usando a estratégia EV/EBIT e ROIC "
@@ -234,66 +234,67 @@ def output_rank(estrategia, small_caps, numero_empresas):
 
     l, count, setores_an, empresas = [], 0, {}, set()
     for code, score in magic_result.items():
-        details = check_dre(code)
         d = db.select_details(code)
-
-        lucro = millify(details["media_lucro"])
-
         setor = d[0][0][0:12] if d[0][0] else "-"
-        pvp = format_number(d[0][1], 0)
-        ev_ebit = format_number(d[0][2])
-        roic = format_number(d[0][3])
-        pl = format_number(d[0][4])
-        roe = format_number(d[0][5])
-        dist_min = format_number(d[0][6], 0)
-        preco = format_number(d[0][7])
-        dy = format_number(d[0][10], 0)
-        div_pat = format_number(d[0][11], 0)
-        margem = margem = format_number(d[0][12], "-")
-        div_ativo = format_number(d[0][14], 0)
-        cagr_lucro = format_number(d[0][15], "-")
-        cagr_receita = format_number(d[0][16], "-")
-        valor_12m = format_number(d[0][17], "-")
-        roa = format_number(d[0][19], "-")
-        vpa = format_number(d[0][20], "-")
+        if not setor_especifico or str(setor).lower() == str(setor_especifico).lower():
+            details = check_dre(code)
 
-        if setor in setores_an:
-            avg_pl = setores_an[setor]
-        else:
-            avg_pl = format_number(pl_setor(code), "-")
-            setores_an[setor] = avg_pl
+            lucro = millify(details["media_lucro"])
 
-        l.append(
-            [
-                count,
-                score,
-                code,
-                setor,
-                ev_ebit,
-                roic,
-                pl,
-                avg_pl,
-                roe,
-                roa,
-                pvp,
-                margem,
-                vpa,
-                dy,
-                lucro,
-                cagr_receita,
-                cagr_lucro,
-                div_pat,
-                div_ativo,
-                preco,
-                dist_min,
-                valor_12m,
-            ]
-        )
-        count += 1
+            pvp = format_number(d[0][1], 0)
+            ev_ebit = format_number(d[0][2])
+            roic = format_number(d[0][3])
+            pl = format_number(d[0][4])
+            roe = format_number(d[0][5])
+            dist_min = format_number(d[0][6], 0)
+            preco = format_number(d[0][7])
+            dy = format_number(d[0][10], 0)
+            div_pat = format_number(d[0][11], 0)
+            margem = margem = format_number(d[0][12], "-")
+            div_ativo = format_number(d[0][14], 0)
+            cagr_lucro = format_number(d[0][15], "-")
+            cagr_receita = format_number(d[0][16], "-")
+            valor_12m = format_number(d[0][17], "-")
+            roa = format_number(d[0][19], "-")
+            vpa = format_number(d[0][20], "-")
 
-        if len(empresas) == numero_empresas:
-            break
-        empresas.add(code[:4])
+            if setor in setores_an:
+                avg_pl = setores_an[setor]
+            else:
+                avg_pl = format_number(pl_setor(code), "-")
+                setores_an[setor] = avg_pl
+
+            l.append(
+                [
+                    count,
+                    score,
+                    code,
+                    setor,
+                    ev_ebit,
+                    roic,
+                    pl,
+                    avg_pl,
+                    roe,
+                    roa,
+                    pvp,
+                    margem,
+                    vpa,
+                    dy,
+                    lucro,
+                    cagr_receita,
+                    cagr_lucro,
+                    div_pat,
+                    div_ativo,
+                    preco,
+                    dist_min,
+                    valor_12m,
+                ]
+            )
+            count += 1
+
+            if len(empresas) == numero_empresas:
+                break
+            empresas.add(code[:4])
 
     print(
         tabulate(
@@ -370,22 +371,24 @@ def parse_param():
         "-s", "--small_caps", type=str2bool, nargs="?", const=True, default=False
     )
     parser.add_argument("-n", "--numero_empresas", type=int, default=30)
+    parser.add_argument("-t", "--setor", type=str, default=None)
     args = parser.parse_args()
 
     small_caps = args.small_caps
     estrategia = "pl_roe" if args.pl else "ev_ebit_roic"
     numero_empresas = args.numero_empresas
+    setor = args.setor
 
-    return (estrategia, small_caps, numero_empresas)
+    return (estrategia, small_caps, numero_empresas, setor)
 
 
 def main():
     print(chr(27) + "[2J")
 
     set_log()
-    setor, small_caps, numero_empresas = parse_param()
+    estrategia, small_caps, numero_empresas, setor = parse_param()
     pl_bolsa()
-    output_rank(setor, small_caps, numero_empresas)
+    output_rank(estrategia, small_caps, numero_empresas, setor)
 
 
 if __name__ == "__main__":
