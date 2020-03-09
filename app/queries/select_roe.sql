@@ -6,4 +6,4 @@ and liquidezMediaDiaria > 200000
 and precoSobreLucro > 0
 and ROA > 0
 and (margemLiquida >= 7 or margemLiquida is null)
-order by ROA asc
+order by ROE asc

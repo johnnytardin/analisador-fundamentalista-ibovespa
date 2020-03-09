@@ -1,4 +1,5 @@
-CREATE TABLE fundamentus
+CREATE TABLE IF NOT EXISTS
+fundamentus
 (id INTEGER PRIMARY KEY AUTOINCREMENT,
     stockCode TEXT,
     patrimonioLiquido NUMERIC,

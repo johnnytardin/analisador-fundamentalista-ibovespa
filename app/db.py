@@ -46,10 +46,7 @@ def select():
 
 
 def insert_fundamentus(data):
-    try:
-        create_table()
-    except sqlite3.OperationalError:
-        pass
+    create_table()
 
     connector = sqlite3.connect(DATABASE)
     cursor = connector.cursor()

@@ -113,4 +113,5 @@ rapina/.data/*.csv
 rapina/.data/*.zip
 rapina/reports/
 rapina/.data/rapina.db
+rapina/.data/
 rapina/setores.yml

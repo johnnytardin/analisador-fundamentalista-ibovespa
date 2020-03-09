@@ -1,4 +1,5 @@
-CREATE TABLE detalhamento_historico (
+CREATE TABLE IF NOT EXISTS
+detalhamento_historico (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
 stock TEXT,
 tipo TEXT,
