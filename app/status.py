@@ -127,7 +127,7 @@ def x_paths():
             "VALORIZAÇÃO (MÊS ATUAL)",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[3]/div/div/div[2]/div/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[3]/div/div/div[3]/div/div/div/strong""",
             "LIQUIDEZ MÉDIA DIÁRIA",
         ),
         (
