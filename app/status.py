@@ -13,17 +13,13 @@ def element(driver, x_path):
 
 def x_paths():
     return [
-
         ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[1]/div/div/strong""", "P/VP"),
         ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[2]/div/div/strong""", "P/L"),
         (
-
             """//*[@id="main-2"]/div[2]/div/div[5]/div/div[3]/div/div/strong""",
             "P/EBITDA",
         ),
-
-
-        ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[5]/div/div/strong""", "P/EBIT"),
+        ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[4]/div/div/strong""", "P/EBIT"),
         (
             """//*[@id="main-2"]/div[2]/div/div[5]/div/div[5]/div/div/strong""",
             "P/ATIVO",
@@ -115,7 +111,7 @@ def x_paths():
             "MÁX. 52 SEMANAS",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[1]/div/div[5]/div/div[1]/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[1]/div/div[4]/div/div[1]/strong""",
             "DIVIDEND YIELD",
         ),
         (
@@ -152,12 +148,12 @@ def x_paths():
         ),
         (
             """//*[@id="company-section"]/div/div[2]/div[11]/div/div/strong""",
-            "FREE FLOAT"
+            "FREE FLOAT",
         ),
         (
             """//*[@id="main-2"]/div[2]/div/div[3]/div/div/div[2]/div/div/div/strong""",
-            "TAG ALONG"
-        )
+            "TAG ALONG",
+        ),
     ]
 
 
