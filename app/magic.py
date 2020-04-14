@@ -257,6 +257,13 @@ def rank(estrategia, small_caps, numero_empresas, setor_especifico):
             roa = format_number(d[0][19], "-")
             vpa = format_number(d[0][20], "-")
 
+            try:
+                pegr = None
+                if d[0][4] and d[0][15]:
+                    pegr = format_number(float(d[0][4]) / float(d[0][15]))
+            except ZeroDivisionError:
+                pegr = None
+
             if setor in setores_an:
                 avg_pl = setores_an[setor]
             else:
@@ -272,6 +279,7 @@ def rank(estrategia, small_caps, numero_empresas, setor_especifico):
                     ev_ebit,
                     roic,
                     pl,
+                    pegr,
                     avg_pl,
                     roe,
                     roa,
@@ -304,6 +312,7 @@ def rank(estrategia, small_caps, numero_empresas, setor_especifico):
                 "EV/EB.",
                 "ROIC%",
                 "PL",
+                "PEGR",
                 "PL/S",
                 "ROE%",
                 "ROA%",

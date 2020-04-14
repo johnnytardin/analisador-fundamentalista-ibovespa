@@ -122,6 +122,8 @@ def details(stock, coleta_id):
         status_data["VALORIZAÇÃO (MÊS ATUAL)"]
     )
     newStock["lucroLiquido"] = normaliza_valor(status_data["LUCRO LIQUIDO 12M"])
+    newStock["freeFloat"] = normaliza_valor(status_data["FREE FLOAT"])
+    newStock["tagAlong"] = normaliza_valor(status_data["TAG ALONG"])
 
     # intriseco
     newStock["valorIntriseco"] = graham.valor_intriseco(

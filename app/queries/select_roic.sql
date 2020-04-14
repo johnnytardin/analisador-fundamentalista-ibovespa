@@ -9,4 +9,5 @@ and ROIC >= 0
 and (CagrLucrosCincoAnos > 0.5 or CagrLucrosCincoAnos is null)
 and (precoSobreLucro > 0 or precoSobreLucro is null)
 and (margemLiquida >= 7 or margemLiquida is null)
+and (freeFloat >= 15 or freeFloat is null)
 order by ROIC asc 

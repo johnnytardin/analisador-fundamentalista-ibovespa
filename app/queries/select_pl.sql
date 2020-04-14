@@ -6,4 +6,5 @@ and liquidezMediaDiaria > 200000
 and precoSobreLucro > 0
 and ROE > 0
 and (margemLiquida >= 7 or margemLiquida is null)
+and (freeFloat >= 15 or freeFloat is null)
 order by precoSobreLucro desc 

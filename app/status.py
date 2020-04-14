@@ -13,89 +13,93 @@ def element(driver, x_path):
 
 def x_paths():
     return [
-        ("""//*[@id="main-2"]/div[2]/div/div[4]/div/div[1]/div/div/strong""", "P/VP"),
-        ("""//*[@id="main-2"]/div[2]/div/div[4]/div/div[2]/div/div/strong""", "P/L"),
+
+        ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[1]/div/div/strong""", "P/VP"),
+        ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[2]/div/div/strong""", "P/L"),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[3]/div/div/strong""",
+
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[3]/div/div/strong""",
             "P/EBITDA",
         ),
-        ("""//*[@id="main-2"]/div[2]/div/div[4]/div/div[4]/div/div/strong""", "P/EBIT"),
+
+
+        ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[5]/div/div/strong""", "P/EBIT"),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[5]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[5]/div/div/strong""",
             "P/ATIVO",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[6]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[6]/div/div/strong""",
             "EV/EBITDA",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[7]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[7]/div/div/strong""",
             "EV/EBIT",
         ),
-        ("""//*[@id="main-2"]/div[2]/div/div[4]/div/div[8]/div/div/strong""", "PSR"),
+        ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[8]/div/div/strong""", "PSR"),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[9]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[9]/div/div/strong""",
             "P/CAP.GIRO",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[10]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[10]/div/div/strong""",
             "P/ATIVO CIRC LIQ",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[11]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[11]/div/div/strong""",
             "MARGEM BRUTA",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[12]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[12]/div/div/strong""",
             "MARGEM EBITDA",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[13]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[13]/div/div/strong""",
             "MARGEM EBIT",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[14]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[14]/div/div/strong""",
             "MARGEM LÍQUIDA",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[15]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[15]/div/div/strong""",
             "GIRO ATIVOS",
         ),
-        ("""//*[@id="main-2"]/div[2]/div/div[4]/div/div[16]/div/div/strong""", "ROE"),
-        ("""//*[@id="main-2"]/div[2]/div/div[4]/div/div[17]/div/div/strong""", "ROA"),
-        ("""//*[@id="main-2"]/div[2]/div/div[4]/div/div[18]/div/div/strong""", "ROIC"),
-        ("""//*[@id="main-2"]/div[2]/div/div[4]/div/div[19]/div/div/strong""", "LPA"),
-        ("""//*[@id="main-2"]/div[2]/div/div[4]/div/div[20]/div/div/strong""", "VPA"),
+        ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[16]/div/div/strong""", "ROE"),
+        ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[17]/div/div/strong""", "ROA"),
+        ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[18]/div/div/strong""", "ROIC"),
+        ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[19]/div/div/strong""", "LPA"),
+        ("""//*[@id="main-2"]/div[2]/div/div[5]/div/div[20]/div/div/strong""", "VPA"),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[21]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[21]/div/div/strong""",
             "DÍVIDA LÍQUIDA / PATRIMÔNIO",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[22]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[22]/div/div/strong""",
             "DÍVIDA LÍQUIDA / EBITDA",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[23]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[23]/div/div/strong""",
             "DÍVIDA LÍQUIDA / EBIT",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[24]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[24]/div/div/strong""",
             "PATRIMÔNIO / ATIVOS",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[25]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[25]/div/div/strong""",
             "PASSIVOS / ATIVOS",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[26]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[26]/div/div/strong""",
             "LIQUIDEZ CORRENTE",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[27]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[27]/div/div/strong""",
             "CAGR RECEITAS 5 ANOS",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[4]/div/div[28]/div/div/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[5]/div/div[28]/div/div/strong""",
             "CAGR LUCROS 5 ANOS",
         ),
         (
@@ -111,7 +115,7 @@ def x_paths():
             "MÁX. 52 SEMANAS",
         ),
         (
-            """//*[@id="main-2"]/div[2]/div/div[1]/div/div[4]/div/div[1]/strong""",
+            """//*[@id="main-2"]/div[2]/div/div[1]/div/div[5]/div/div[1]/strong""",
             "DIVIDEND YIELD",
         ),
         (
@@ -146,6 +150,14 @@ def x_paths():
             """//*[@id="company-section"]/div/div[3]/div/div[3]/div/div/div/a/strong""",
             "SEGMENTO DE ATUAÇÂO",
         ),
+        (
+            """//*[@id="company-section"]/div/div[2]/div[11]/div/div/strong""",
+            "FREE FLOAT"
+        ),
+        (
+            """//*[@id="main-2"]/div[2]/div/div[3]/div/div/div[2]/div/div/div/strong""",
+            "TAG ALONG"
+        )
     ]
 
 

@@ -48,4 +48,6 @@ fundamentus
     valorMercado NUMERIC,
     Valorizacao12M NUMERIC,
     ValorizacaoMesAtual NUMERIC,
+    freeFloat TEXT,
+    tagAlong NUMERIC,
     coletaUUID TEXT);

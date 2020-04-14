@@ -47,6 +47,8 @@ INSERT INTO
         valorMercado,
         Valorizacao12M,
         ValorizacaoMesAtual,
+        freeFloat,
+        tagAlong,
         coletaUUID
     )
 VALUES
@@ -97,5 +99,7 @@ VALUES
         :valorMercado,
         :Valorizacao12M,
         :ValorizacaoMesAtual,
+        :freeFloat,
+        :tagAlong,
         :coletaUUID
     );
