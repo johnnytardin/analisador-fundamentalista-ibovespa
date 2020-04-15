@@ -6,6 +6,7 @@ and liquidezMediaDiaria > 200000
 and valorMercado <= 4000000000
 and EVSobreEBIT >= 0
 and ROIC >= 0
+and liquidezCorrente >= 0.75
 and ((divSobreEbit <= 2 or divSobreEbit is null) or (divSobrePatrimonio <= 2 or divSobrePatrimonio))
 and (CagrLucrosCincoAnos > 0.5 or CagrLucrosCincoAnos is null)
 and (precoSobreLucro > 0 or precoSobreLucro is null)
