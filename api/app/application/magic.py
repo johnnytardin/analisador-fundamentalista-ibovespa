@@ -3,6 +3,7 @@ import logging
 import argparse
 
 import app.application.db as db
+from app.application.technical import Technical
 
 from numpy import percentile, median
 import math
@@ -269,6 +270,9 @@ def rank(estrategia, small_caps, numero_empresas, setor_especifico):
                 avg_pl = format_number(pl_setor(code), "-")
                 setores_an[setor] = avg_pl
 
+            technical = Technical.get_indicators(code)
+            medias = Technical.get_moving_averages(code)
+
             l.append(
                 [count,
                 score,
@@ -293,7 +297,9 @@ def rank(estrategia, small_caps, numero_empresas, setor_especifico):
                 preco,
                 intriseco,
                 dist_min,
-                valor_12m]
+                valor_12m, 
+                technical,
+                medias]
             )
 
             count += 1
@@ -331,6 +337,8 @@ def columns():
         {"text": "valor_intriseco", "type": "number"},
         {"text": "distancia_min", "type": "number"},
         {"text": "valorizacao_12m", "type": "number"},
+        {"text": "tecnico", "type": "string"},
+        {"text": "medias", "type": "string"},
     ]
 
 

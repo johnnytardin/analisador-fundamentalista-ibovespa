@@ -2,13 +2,10 @@
 import datetime
 from uuid import uuid4
 
-from tabulate import tabulate
-
 import graham
 import fundamentus
 import status
 import db
-from waitingbar import WaitingBar
 
 
 def normaliza_valor(data, replace=None):
@@ -233,9 +230,7 @@ def save_on_db(tipo, data):
 
 
 def main():
-    THE_BAR = WaitingBar("[*] Downloading...")
     stocks = lista_papeis()
-    THE_BAR.stop()
 
     coleta_id = str(uuid4())
 

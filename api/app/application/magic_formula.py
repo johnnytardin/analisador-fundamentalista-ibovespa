@@ -1,4 +1,5 @@
 import app.application.magic as magic
+from app.application.technical import Technical
 
 
 #TODO: gerar um outro endpoint com dados gerais da bolsa
