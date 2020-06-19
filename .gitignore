@@ -107,6 +107,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+.pyc
+
 # End of https://www.gitignore.io/api/python
 rapina/.data/cache/
 rapina/.data/*.csv

@@ -19,7 +19,7 @@ class MagicSearchController(Resource):
 class MagicRoicQueryController(Resource):
     def post(self):
         c = MagicFormula.columns()
-        r = MagicFormula.ev_ebit_query()
+        r = MagicFormula.ev_ebit_roic_query()
         return [{"type": "table", "rows": r, "columns": c}], 200
 
 
@@ -33,5 +33,5 @@ class MagicPlQueryController(Resource):
 
 api.add_resource(MagicRoicQueryController, "/roic/query", methods=["POST"])
 api.add_resource(MagicPlQueryController, "/pl/query", methods=["POST"])
-api.add_resource(MagicSearchController, "/roic/search", methods=["POST"])
-api.add_resource(MagicSearchController, "/pl/search", methods=["POST"])
+api.add_resource(MagicRoicQueryController, "/roic/search", methods=["POST"])
+api.add_resource(MagicPlQueryController, "/pl/search", methods=["POST"])

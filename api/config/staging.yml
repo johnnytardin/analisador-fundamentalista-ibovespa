@@ -1,4 +1,4 @@
 host: 0.0.0.0
 port: 8080
 debug: true
-enable_json_logging: true
+enable_json_logging: false

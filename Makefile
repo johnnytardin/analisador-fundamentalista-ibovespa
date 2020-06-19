@@ -1,4 +1,4 @@
-PROJECT_NAME:=systemlake
+PROJECT_NAME:=analisador
 container:=${container}
 
 help: ; @ \

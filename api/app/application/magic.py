@@ -232,7 +232,7 @@ def rank(estrategia, small_caps, numero_empresas, setor_especifico):
     l, count, setores_an, = [], 0, {}
     for code, score in magic_result.items():
         d = db.select_details(code)
-        setor = d[0][0][0:12] if d[0][0] else "-"
+        setor = d[0][0] if d[0][0] else "-"
         if not setor_especifico or str(setor).lower() == str(setor_especifico).lower():
             details = check_dre(code)
 
@@ -297,6 +297,10 @@ def rank(estrategia, small_caps, numero_empresas, setor_especifico):
             )
 
             count += 1
+
+            if count == numero_empresas:
+                break
+
 
     return l
 
