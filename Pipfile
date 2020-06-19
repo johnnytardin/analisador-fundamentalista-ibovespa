@@ -14,6 +14,7 @@ selenium = "*"
 beautifulsoup4 = "*"
 pandas = "*"
 html5lib = "*"
+flask = "*"
 
 [requires]
 python_version = "3.6"

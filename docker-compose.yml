@@ -1,0 +1,26 @@
+version: '2.2'
+services:
+  api:
+    image: api
+    build:
+      dockerfile: Dockerfile
+      context: ./api
+    command: make api
+    ports:
+      - 8080:8080
+    tty: true
+    stdin_open: true
+    env_file:
+      - ./api/env
+    volumes:
+      - ./api:/app
+
+  grafana:
+    image: grafana/grafana:7.0.3
+    ports:
+      - 3000:3000
+    user: "104"    
+    env_file:
+      - ./grafana/env
+    depends_on:
+      - api

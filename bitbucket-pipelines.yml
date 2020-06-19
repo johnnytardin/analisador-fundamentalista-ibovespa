@@ -1,0 +1,47 @@
+pipelines:
+  branches:
+    release/*:
+    - step:
+        name: build api image
+        script:
+          - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+          - docker build
+            -t ${DOCKERHUB_SYSTEMLAKE_API_REPOSITORY}:${BITBUCKET_COMMIT:0:8}
+            -t ${DOCKERHUB_SYSTEMLAKE_API_REPOSITORY}:lab
+            -f api/Dockerfile api/
+          - docker push ${DOCKERHUB_SYSTEMLAKE_API_REPOSITORY}:${BITBUCKET_COMMIT:0:8}
+          - docker push ${DOCKERHUB_SYSTEMLAKE_API_REPOSITORY}:lab
+    - step:
+        name: build portal image
+        script:
+          - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+          - docker build
+            -t ${DOCKERHUB_SYSTEMLAKE_PORTAL_REPOSITORY}:${BITBUCKET_COMMIT:0:8}
+            -t ${DOCKERHUB_SYSTEMLAKE_PORTAL_REPOSITORY}:lab
+            -f portal/Dockerfile portal/
+          - docker push ${DOCKERHUB_SYSTEMLAKE_PORTAL_REPOSITORY}:${BITBUCKET_COMMIT:0:8}
+          - docker push ${DOCKERHUB_SYSTEMLAKE_PORTAL_REPOSITORY}:lab
+  tags:
+    '*':
+    - step:
+        name: build api image
+        script:
+          - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+          - docker build
+            -t ${DOCKERHUB_SYSTEMLAKE_API_REPOSITORY}:${BITBUCKET_TAG}
+            -t ${DOCKERHUB_SYSTEMLAKE_API_REPOSITORY}:latest
+            -f api/Dockerfile api/
+          - docker push ${DOCKERHUB_SYSTEMLAKE_API_REPOSITORY}:${BITBUCKET_TAG}
+          - docker push ${DOCKERHUB_SYSTEMLAKE_API_REPOSITORY}:latest
+    - step:
+        name: build portal image
+        script:
+          - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+          - docker build
+            -t ${DOCKERHUB_SYSTEMLAKE_PORTAL_REPOSITORY}:${BITBUCKET_TAG}
+            -t ${DOCKERHUB_SYSTEMLAKE_PORTAL_REPOSITORY}:latest
+            -f portal/Dockerfile portal/
+          - docker push ${DOCKERHUB_SYSTEMLAKE_PORTAL_REPOSITORY}:${BITBUCKET_TAG}
+          - docker push ${DOCKERHUB_SYSTEMLAKE_PORTAL_REPOSITORY}:latest
+options:
+  docker: true
