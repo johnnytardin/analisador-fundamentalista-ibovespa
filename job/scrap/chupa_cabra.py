@@ -3,8 +3,10 @@ import datetime
 from uuid import uuid4
 
 import graham
-import fundamentus
 import status
+import db
+import stocks
+import technical
 import db
 
 
@@ -27,39 +29,15 @@ def normaliza_valor(data, replace=None):
     return n
 
 
-def lista_papeis():
-    lista = fundamentus.get_data()
-
-    # Transform em uma lista, agora preciso passar para formato JSON
-    array_format = list(lista.items())
-
-    hashes_list = []
-    # First include the list of all hashes
-    for i in range(0, len(array_format)):
-        hashes_list.append(array_format[i][1])
-
-    stocks = []
-    # Then from a list of hashes we will transform to a list of stocks
-    for i in range(0, len(hashes_list)):
-        for key in hashes_list[i]:
-            # Adds stockCode
-            hashes_list[i][key]["stockCode"] = key
-            stocks.append(hashes_list[i][key])
-    return stocks
-
-
 def details(stock, coleta_id):
     newStock = {}
-    newStock["coletaUUID"] = coleta_id
-    newStock["timestamp"] = datetime.datetime.now()
-    newStock["stockCode"] = stock["stockCode"]
+    newStock["stockCode"] = stock
 
     # Get more information
     print("Getting more information from stock ", newStock["stockCode"])
     status_data = status.get_specific_data(newStock["stockCode"])
 
-    dre = status_data["dre"]
-
+    newStock["dre"] = status_data["dre"]
     liqCorr = normaliza_valor(status_data["LIQUIDEZ CORRENTE"])
     roe = normaliza_valor(status_data["ROE"])
     roic = normaliza_valor(status_data["ROIC"])
@@ -219,36 +197,29 @@ def details(stock, coleta_id):
 
     newStock["score"] = float(nota) / score_steps * 10.0
 
-    return newStock, dre
+    # tecnicos
+    newStock["tecnicos"] = technical.get_indicators(stock)
+    newStock["medias"] = technical.get_moving_averages(stock)
 
-
-def save_on_db(tipo, data):
-    if tipo == "fundamentus":
-        db.insert_fundamentus(data)
-    elif tipo == "dre":
-        db.insert_dre(data)
+    return newStock
 
 
 def main():
-    stocks = lista_papeis()
+    st = stocks.stocks_codes()
 
     coleta_id = str(uuid4())
+    timestamp = datetime.datetime.now().isoformat()
 
     final_stocks = []
-    for stock in stocks:
+    for stock in st:
         d = []
         try:
-            d, dre = details(stock, coleta_id)
+            d = details(stock, coleta_id)
             final_stocks.append(d)
         except Exception as err:
-            print(
-                "Falha coletando os dados do papel {}. Causa: {}".format(
-                    stock["stockCode"], err
-                )
-            )
+            print("Falha coletando os dados do papel {}. Causa: {}".format(stock, err))
         else:
-            save_on_db("fundamentus", [d])
-            save_on_db("dre", dre)
+            db.insert_fundamentus(stock, coleta_id, timestamp, d)
 
 
 if __name__ == "__main__":

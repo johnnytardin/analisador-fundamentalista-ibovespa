@@ -1,29 +1,22 @@
 import sqlite3
+DATABASE = "teste"
+
+
 import os
 
-DATABASE = "../../api/app/database/fund.db"
+import json
+import psycopg2
+
+
+def get_conn():
+    conn = psycopg2.connect("dbname='analisador' user='analisador' host='localhost' password='analisador'")
+    return conn
 
 
 def queries(tipo):
     files = {
-        "detalhes_stock": "queries/select_detalhes_stock.sql",
-        "create_detalhamento_historico": "queries/create_table_detalhamento_historico.sql",
         "create_fundamentus": "queries/create_table_fundamentus.sql",
-        "pl_setor": "queries/select_pl_setor.sql",
-        "pl_geral": "queries/select_pl_geral_bolsa.sql",
-        "details": "queries/select_details.sql",
-        "score": "queries/select_score.sql",
         "insert_fundamentus": "queries/insert_fundamentus.sql",
-        "insert_dre": "queries/insert_dre.sql",
-        "update_dre": "queries/update_dre.sql",
-        "ev_ebit": "queries/select_ev_ebit.sql",
-        "ev_ebit_small_caps": "queries/select_ev_ebit_small_caps.sql",
-        "roic": "queries/select_roic.sql",
-        "roic_small_caps": "queries/select_roic_small_caps.sql",
-        "pl": "queries/select_pl.sql",
-        "pl_small_caps": "queries/select_pl_small_caps.sql",
-        "roe": "queries/select_roe.sql",
-        "roe_small_caps": "queries/select_roe_small_caps.sql",
     }
 
     current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -45,18 +38,18 @@ def select():
     return rows
 
 
-def insert_fundamentus(data):
+def insert_fundamentus(stock, coleta_id, timestamp, data):
     create_table()
 
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
+    conn = get_conn()
+    cursor = conn.cursor()
 
     q = queries("insert_fundamentus")
-    cursor.executemany(q, data)
-    connector.commit()
+    cursor.execute(q, (stock, coleta_id, timestamp, json.dumps(data)))
+    conn.commit()
 
     cursor.close()
-    connector.close()
+    conn.close()
 
 
 def insert_dre(data):
@@ -158,17 +151,15 @@ def pl_geral():
 
 
 def create_table():
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
+    conn = get_conn()
+    cursor = conn.cursor()
 
     qf = queries("create_fundamentus")
     cursor.execute(qf)
-
-    qdh = queries("create_detalhamento_historico")
-    cursor.execute(qdh)
+    conn.commit()
 
     cursor.close()
-    connector.close()
+    conn.close()
 
 
 def consulta_detalhes_periodo(stock, tipo):

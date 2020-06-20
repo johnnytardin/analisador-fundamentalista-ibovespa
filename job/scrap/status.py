@@ -13,13 +13,22 @@ def element(driver, x_path):
 
 def x_paths():
     return [
-        ("""/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[3]/div/div/strong""", "P/VP"),
-        ("""/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[1]/div/div/strong""", "P/L"),
+        (
+            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[3]/div/div/strong""",
+            "P/VP",
+        ),
+        (
+            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[1]/div/div/strong""",
+            "P/L",
+        ),
         (
             """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[5]/div/div/strong""",
             "P/EBITDA",
         ),
-        ("""/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[6]/div/div/strong""", "P/EBIT"),
+        (
+            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[6]/div/div/strong""",
+            "P/EBIT",
+        ),
         (
             """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[8]/div/div/strong""",
             "P/ATIVO",
@@ -32,7 +41,10 @@ def x_paths():
             """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[4]/div/div/strong""",
             "EV/EBIT",
         ),
-        ("""/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[10]/div/div/strong""", "PSR"),
+        (
+            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[10]/div/div/strong""",
+            "PSR",
+        ),
         (
             """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[11]/div/div/strong""",
             "P/CAP.GIRO",
@@ -61,11 +73,26 @@ def x_paths():
             """/html/body/main/div[2]/div/div[5]/div/div[4]/div/div[4]/div/div/strong""",
             "GIRO ATIVOS",
         ),
-        ("""/html/body/main/div[2]/div/div[5]/div/div[4]/div/div[1]/div/div/strong""", "ROE"),
-        ("""/html/body/main/div[2]/div/div[5]/div/div[4]/div/div[2]/div/div/strong""", "ROA"),
-        ("""/html/body/main/div[2]/div/div[5]/div/div[4]/div/div[3]/div/div/strong""", "ROIC"),
-        ("""/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[9]/div/div/strong""", "LPA"),
-        ("""/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[7]/div/div/strong""", "VPA"),
+        (
+            """/html/body/main/div[2]/div/div[5]/div/div[4]/div/div[1]/div/div/strong""",
+            "ROE",
+        ),
+        (
+            """/html/body/main/div[2]/div/div[5]/div/div[4]/div/div[2]/div/div/strong""",
+            "ROA",
+        ),
+        (
+            """/html/body/main/div[2]/div/div[5]/div/div[4]/div/div[3]/div/div/strong""",
+            "ROIC",
+        ),
+        (
+            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[9]/div/div/strong""",
+            "LPA",
+        ),
+        (
+            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[7]/div/div/strong""",
+            "VPA",
+        ),
         (
             """/html/body/main/div[2]/div/div[5]/div/div[2]/div/div[1]/div/div/strong""",
             "DÍVIDA LÍQUIDA / PATRIMÔNIO",
@@ -146,10 +173,7 @@ def x_paths():
             """/html/body/main/div[3]/div/div[3]/div/div[3]/div/div/div/a/strong""",
             "SEGMENTO DE ATUAÇÂO",
         ),
-        (
-            """/html/body/main/div[3]/div/div[2]/div[11]/div/div/strong""",
-            "FREE FLOAT",
-        ),
+        ("""/html/body/main/div[3]/div/div[2]/div[11]/div/div/strong""", "FREE FLOAT",),
         (
             """/html/body/main/div[2]/div/div[3]/div/div/div[2]/div/div/div/strong""",
             "TAG ALONG",
