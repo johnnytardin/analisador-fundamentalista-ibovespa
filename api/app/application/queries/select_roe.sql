@@ -1,11 +1,11 @@
 select 
-stockCode
+stock_code
 from fundamentus 
-where coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
-and liquidezMediaDiaria > 200000
-and precoSobreLucro > 0
-and ROA > 0
-and liquidezCorrente >= 0.75
-and (margemLiquida >= 7 or margemLiquida is null)
-and (freeFloat >= 15 or freeFloat is null)
-order by ROE asc
+where coleta_id = (SELECT coleta_id FROM fundamentus ORDER BY timestamp DESC LIMIT 1)
+and (details->>'liquidezMediaDiaria')::numeric > 200000
+and (details->>'precoSobreLucro')::numeric > 0
+and (details->>'ROE')::numeric > 0
+and (details->>'liquidezCorrente')::numeric >= 0.75
+and ((details->>'margemLiquida')::numeric >= 7 or (details->>'margemLiquida' is null))
+and ((details->>'freeFloat')::numeric >= 15 or (details->>'freeFloat' is null))
+order by details->>'ROE' asc

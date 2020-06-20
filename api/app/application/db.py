@@ -1,10 +1,15 @@
 import sqlite3
+DATABASE = "app/database/fund.db"
+
 import os
 
+import psycopg2
 
-print(os.curdir)
 
-DATABASE = "app/database/fund.db"
+def get_conn():
+    conn = psycopg2.connect("dbname='analisador' user='analisador' host='postgres' password='analisador'")
+    return conn
+
 
 
 def queries(tipo):
@@ -36,35 +41,35 @@ def queries(tipo):
 
 
 def select():
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
+    conn = get_conn()
+    cursor = conn.cursor()
 
     q = queries("score")
     cursor.execute(q)
     rows = cursor.fetchall()
 
     cursor.close()
-    connector.close()
+    conn.close()
     return rows
 
 
 def insert_fundamentus(data):
     create_table()
 
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
+    conn = get_conn()
+    cursor = conn.cursor()
 
     q = queries("insert_fundamentus")
     cursor.executemany(q, data)
-    connector.commit()
+    conn.commit()
 
     cursor.close()
-    connector.close()
+    conn.close()
 
 
 def insert_dre(data):
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
+    conn = get_conn()
+    cursor = conn.cursor()
 
     try:
         q = queries("insert_dre")
@@ -79,15 +84,15 @@ def insert_dre(data):
     except Exception as err:
         print(f"Falha inserindo dados históricos no banco de dados. Causa: {err}")
     finally:
-        connector.commit()
+        conn.commit()
 
     cursor.close()
-    connector.close()
+    conn.close()
 
 
 def select_rank_magic_formula(estrategia, small_cap=False):
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
+    conn = get_conn()
+    cursor = conn.cursor()
 
     # arqui está o chaveamento dos tipos para as queries
     if not small_cap:
@@ -113,13 +118,13 @@ def select_rank_magic_formula(estrategia, small_cap=False):
     rank_2 = cursor.fetchall()
 
     cursor.close()
-    connector.close()
+    conn.close()
     return (rank_1, rank_2)
 
 
 def select_details(stockcode):
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
+    conn = get_conn()
+    cursor = conn.cursor()
 
     q = queries("details")
     cursor.execute(
@@ -128,13 +133,13 @@ def select_details(stockcode):
     rows = cursor.fetchall()
 
     cursor.close()
-    connector.close()
+    conn.close()
     return rows
 
 
 def pl_setor(stockcode):
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
+    conn = get_conn()
+    cursor = conn.cursor()
 
     q = queries("pl_setor")
     cursor.execute(
@@ -143,26 +148,26 @@ def pl_setor(stockcode):
     rows = cursor.fetchall()
 
     cursor.close()
-    connector.close()
+    conn.close()
     return rows
 
 
 def pl_geral():
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
+    conn = get_conn()
+    cursor = conn.cursor()
 
     q = queries("pl_geral")
     cursor.execute(q)
     rows = cursor.fetchall()
 
     cursor.close()
-    connector.close()
+    conn.close()
     return rows
 
 
 def create_table():
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
+    conn = get_conn()
+    cursor = conn.cursor()
 
     qf = queries("create_fundamentus")
     cursor.execute(qf)
@@ -171,12 +176,12 @@ def create_table():
     cursor.execute(qdh)
 
     cursor.close()
-    connector.close()
+    conn.close()
 
 
 def consulta_detalhes_periodo(stock, tipo):
-    connector = sqlite3.connect(DATABASE)
-    cursor = connector.cursor()
+    conn = get_conn()
+    cursor = conn.cursor()
 
     # TODO: add os demais
     if tipo == "lucro":
@@ -189,5 +194,5 @@ def consulta_detalhes_periodo(stock, tipo):
     rows = cursor.fetchall()
 
     cursor.close()
-    connector.close()
+    conn.close()
     return rows

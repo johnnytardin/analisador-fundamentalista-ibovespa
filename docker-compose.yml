@@ -14,6 +14,27 @@ services:
       - ./api/env
     volumes:
       - ./api:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      #migrate_api:
+      #  condition: service_started
+
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=analisador
+      - POSTGRES_PASSWORD=analisador
+      - POSTGRES_DB=analisador
+    volumes:
+      - ./api/tmp/pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U analisador"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
 
   grafana:
     image: grafana/grafana:7.0.3

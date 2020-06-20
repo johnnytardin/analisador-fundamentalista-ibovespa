@@ -15,6 +15,11 @@ beautifulsoup4 = "*"
 pandas = "*"
 html5lib = "*"
 flask = "*"
+psycopg2 = "*"
+psycopg2-binary = "*"
+investpy = "*"
+simplejson = "*"
+bson = "*"
 
 [requires]
 python_version = "3.6"

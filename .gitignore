@@ -117,3 +117,4 @@ rapina/reports/
 rapina/.data/rapina.db
 rapina/.data/
 rapina/setores.yml
+api/tmp/
