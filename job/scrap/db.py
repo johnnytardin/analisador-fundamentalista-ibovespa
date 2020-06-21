@@ -1,4 +1,5 @@
 import sqlite3
+
 DATABASE = "teste"
 
 
@@ -9,7 +10,9 @@ import psycopg2
 
 
 def get_conn():
-    conn = psycopg2.connect("dbname='analisador' user='analisador' host='localhost' password='analisador'")
+    conn = psycopg2.connect(
+        "dbname='analisador' user='analisador' host='localhost' password='analisador'"
+    )
     return conn
 
 

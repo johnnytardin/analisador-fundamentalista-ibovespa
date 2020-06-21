@@ -1,5 +1,5 @@
-select periodo, valor 
-from detalhamento_historico
-where stock = ?
-and tipo like ?
-order by periodo
+select 
+--details->>'dre'
+    details
+from fundamentus
+where stock_code = %s

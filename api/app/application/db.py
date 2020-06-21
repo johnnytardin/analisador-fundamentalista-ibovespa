@@ -1,37 +1,32 @@
 import sqlite3
+
 DATABASE = "app/database/fund.db"
 
 import os
+import json
 
 import psycopg2
 
 
 def get_conn():
-    conn = psycopg2.connect("dbname='analisador' user='analisador' host='postgres' password='analisador'")
+    conn = psycopg2.connect(
+        "dbname='analisador' user='analisador' host='postgres' password='analisador'"
+    )
     return conn
-
 
 
 def queries(tipo):
     files = {
         "detalhes_stock": "queries/select_detalhes_stock.sql",
-        "create_detalhamento_historico": "queries/create_table_detalhamento_historico.sql",
-        "create_fundamentus": "queries/create_table_fundamentus.sql",
         "pl_setor": "queries/select_pl_setor.sql",
         "pl_geral": "queries/select_pl_geral_bolsa.sql",
         "details": "queries/select_details.sql",
         "score": "queries/select_score.sql",
         "insert_fundamentus": "queries/insert_fundamentus.sql",
-        "insert_dre": "queries/insert_dre.sql",
-        "update_dre": "queries/update_dre.sql",
         "ev_ebit": "queries/select_ev_ebit.sql",
-        "ev_ebit_small_caps": "queries/select_ev_ebit_small_caps.sql",
         "roic": "queries/select_roic.sql",
-        "roic_small_caps": "queries/select_roic_small_caps.sql",
         "pl": "queries/select_pl.sql",
-        "pl_small_caps": "queries/select_pl_small_caps.sql",
         "roe": "queries/select_roe.sql",
-        "roe_small_caps": "queries/select_roe_small_caps.sql",
     }
 
     current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -53,60 +48,16 @@ def select():
     return rows
 
 
-def insert_fundamentus(data):
-    create_table()
-
-    conn = get_conn()
-    cursor = conn.cursor()
-
-    q = queries("insert_fundamentus")
-    cursor.executemany(q, data)
-    conn.commit()
-
-    cursor.close()
-    conn.close()
-
-
-def insert_dre(data):
-    conn = get_conn()
-    cursor = conn.cursor()
-
-    try:
-        q = queries("insert_dre")
-        cursor.executemany(
-            q, data,
-        )
-    except sqlite3.IntegrityError:
-        q = queries("update_dre")
-        cursor.executemany(
-            q, data,
-        )
-    except Exception as err:
-        print(f"Falha inserindo dados históricos no banco de dados. Causa: {err}")
-    finally:
-        conn.commit()
-
-    cursor.close()
-    conn.close()
-
-
-def select_rank_magic_formula(estrategia, small_cap=False):
+def select_rank_magic_formula(estrategia):
     conn = get_conn()
     cursor = conn.cursor()
 
     # arqui está o chaveamento dos tipos para as queries
-    if not small_cap:
-        r1_tipo = "ev_ebit"
-        r2_tipo = "roic"
-        if estrategia == "pl_roe":
-            r1_tipo = "pl"
-            r2_tipo = "roe"
-    else:
-        r1_tipo = "ev_ebit_small_caps"
-        r2_tipo = "roic_small_caps"
-        if estrategia == "pl_roe":
-            r1_tipo = "pl_small_caps"
-            r2_tipo = "roe_small_caps"
+    r1_tipo = "ev_ebit"
+    r2_tipo = "roic"
+    if estrategia == "pl_roe":
+        r1_tipo = "pl"
+        r2_tipo = "roe"
 
     qr1 = queries(r1_tipo)
     qr2 = queries(r2_tipo)
@@ -165,34 +116,16 @@ def pl_geral():
     return rows
 
 
-def create_table():
+def consulta_detalhes(stock, tipo="dre"):
     conn = get_conn()
     cursor = conn.cursor()
-
-    qf = queries("create_fundamentus")
-    cursor.execute(qf)
-
-    qdh = queries("create_detalhamento_historico")
-    cursor.execute(qdh)
-
-    cursor.close()
-    conn.close()
-
-
-def consulta_detalhes_periodo(stock, tipo):
-    conn = get_conn()
-    cursor = conn.cursor()
-
-    # TODO: add os demais
-    if tipo == "lucro":
-        t = "Lucro Líquido - (R$)"
 
     q = queries("detalhes_stock")
-    cursor.execute(
-        q, (stock, t,),
-    )
+
+    cursor.execute(q, (stock,))
     rows = cursor.fetchall()
 
     cursor.close()
     conn.close()
-    return rows
+
+    return rows[0][0][tipo]

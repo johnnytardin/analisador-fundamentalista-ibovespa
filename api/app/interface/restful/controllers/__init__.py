@@ -2,16 +2,16 @@ from flask import Blueprint
 from flask_restplus import Api
 
 from .magic import *
+from .financial import *
+from .technical import *
+from .stocks import *
 
 
 def create_blueprint(description=str(), version=str(), prefix=str(), apis={}):
-    blueprint = Blueprint(f'v{version}', __name__, url_prefix=prefix)
+    blueprint = Blueprint(f"v{version}", __name__, url_prefix=prefix)
 
     bp_api = Api(
-        blueprint,
-        version=version,
-        title=description,
-        description=description,
+        blueprint, version=version, title=description, description=description,
     )
 
     for api in apis:
@@ -21,7 +21,7 @@ def create_blueprint(description=str(), version=str(), prefix=str(), apis={}):
 
 
 blueprints = [
-    create_blueprint('System Lake API', '1.0', '/v1', {
-        v1_magic
-    }),
+    create_blueprint(
+        "Stocks API", "1.0", "/v1", {v1_magic, v1_financial, v1_technical, v1_stocks}
+    ),
 ]

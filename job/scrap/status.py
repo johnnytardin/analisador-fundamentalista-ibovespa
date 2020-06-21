@@ -2,6 +2,8 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 import pandas as pd
 
+from datetime import datetime
+
 
 DADOS = {}
 
@@ -231,8 +233,6 @@ def anos_anteriores():
     para controlar os valores do dict para dados de dre
     string pois o dic vindo do pandas esta nesse formato
     """
-    from datetime import datetime
-
     anos = [str(datetime.now().year)]
 
     for r in range(1, 11):
@@ -255,7 +255,6 @@ def dre(driver, stock):
                     periodo = "Últ. 12M"
                 d.append(
                     {
-                        "stock": stock,
                         "tipo": tipo,
                         "periodo": periodo,
                         "valor": normalize_money(valor[indice]),

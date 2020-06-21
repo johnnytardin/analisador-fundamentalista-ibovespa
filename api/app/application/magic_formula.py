@@ -1,13 +1,7 @@
 import app.application.magic as magic
-from app.application.technical import Technical
-
-
-#TODO: gerar um outro endpoint com dados gerais da bolsa
-#magic.pl_bolsa()
 
 
 class MagicFormula:
-
     @staticmethod
     def ev_ebit_roic_query():
         rank = magic.rank("ev_ebit_roic", False, 30, None)
@@ -21,5 +15,3 @@ class MagicFormula:
     @staticmethod
     def columns():
         return magic.columns()
-
-

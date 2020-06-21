@@ -1,4 +1,4 @@
-#TODO: acertar a comparação dos textos abaixo
+--#TODO: acertar a comparação dos textos abaixo
 select
 	details->'PrecoSobreLucro'
 from fundamentus 

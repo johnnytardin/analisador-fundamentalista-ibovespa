@@ -26,9 +26,9 @@ for blueprint, api in blueprints:
     app.register_blueprint(blueprint)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(
         debug=os.getenv("API_DEBUG", config.debug or False),
         host=os.getenv("API_BIND", config.host or "0.0.0.0"),
-        port=os.getenv("API_PORT", config.port or 5000)
-        )
+        port=os.getenv("API_PORT", config.port or 5000),
+    )

@@ -11,4 +11,4 @@ and ((details->>'CagrLucrosCincoAnos')::numeric > 0.5 or (details->>'CagrLucrosC
 and ((details->>'precoSobreLucro')::numeric > 0 or (details->>'precoSobreLucro' is null))
 and ((details->>'margemLiquida')::numeric >= 7 or (details->>'margemLiquida' is null))
 and ((details->>'freeFloat')::numeric >= 15 or (details->>'freeFloat' is null))
-order by details->>'EVSobreEBIT' desc
+order by (details->>'EVSobreEBIT')::numeric desc

@@ -3,7 +3,6 @@ import logging
 import argparse
 
 import app.application.db as db
-from app.application.technical import Technical
 
 from numpy import percentile, median
 import math
@@ -12,8 +11,8 @@ import math
 logger = logging.getLogger(__name__)
 
 
-def get_result(estrategia, small_caps=False, setor=None):
-    performance, value = db.select_rank_magic_formula(estrategia, small_caps)
+def get_result(estrategia, setor=None):
+    performance, value = db.select_rank_magic_formula(estrategia)
 
     p, v, magic_formula, sem_lucro = {}, {}, {}, []
 
@@ -144,17 +143,18 @@ def valida_empresa(code):
 
 
 def get_lucro_details(code):
-    lucros = db.consulta_detalhes_periodo(code, "lucro")
+    details = db.consulta_detalhes(code, "dre")
 
     lc = {}
     ultimos_12m = None
-    for row in lucros:
-        tipo = row[0]
-        lucro = row[1]
-        if tipo == "Últ. 12M":
-            ultimos_12m = row[1]
-        else:
-            lc[int(tipo)] = float(lucro)
+    for row in details:
+        if row["tipo"] == "Lucro Líquido - (R$)":
+            periodo = row["periodo"]
+            lucro = row["valor"]
+            if periodo == "Últ. 12M":
+                ultimos_12m = lucro
+            else:
+                lc[int(periodo)] = float(lucro)
 
     values = [x for x in lc.values()]
     media = safe_div(sum(values), len(values))
@@ -212,7 +212,7 @@ def pl_bolsa():
 
 def format_number(n, repl="-"):
     if n:
-        return round(n, 2)
+        return round(float(n), 2)
     return repl
 
 
@@ -222,10 +222,6 @@ def rank(estrategia, small_caps, numero_empresas, setor_especifico):
         log += "usando a estratégia EV/EBIT e ROIC "
     else:
         log += "usando a estratégia P/L e ROE "
-
-    if small_caps:
-        log += "para SMALL CAPS"
-
     logger.info(log)
 
     magic_result = get_result(estrategia, small_caps)
@@ -270,43 +266,39 @@ def rank(estrategia, small_caps, numero_empresas, setor_especifico):
                 avg_pl = format_number(pl_setor(code), "-")
                 setores_an[setor] = avg_pl
 
-            technical = Technical.get_indicators(code)
-            medias = Technical.get_moving_averages(code)
-
             l.append(
-                [count,
-                score,
-                code,
-                setor,
-                ev_ebit,
-                roic,
-                pl,
-                pegr,
-                pl_setor(code),
-                roe,
-                roa,
-                pvp,
-                margem,
-                vpa,
-                dy,
-                lucro,
-                cagr_receita,
-                cagr_lucro,
-                div_pat,
-                div_ativo,
-                preco,
-                intriseco,
-                dist_min,
-                valor_12m, 
-                technical,
-                medias]
+                [
+                    count,
+                    score,
+                    code,
+                    setor,
+                    ev_ebit,
+                    roic,
+                    pl,
+                    pegr,
+                    pl_setor(code),
+                    roe,
+                    roa,
+                    pvp,
+                    margem,
+                    vpa,
+                    dy,
+                    lucro,
+                    cagr_receita,
+                    cagr_lucro,
+                    div_pat,
+                    div_ativo,
+                    preco,
+                    intriseco,
+                    dist_min,
+                    valor_12m,
+                ]
             )
 
             count += 1
 
             if count == numero_empresas:
                 break
-
 
     return l
 
@@ -337,8 +329,6 @@ def columns():
         {"text": "valor_intriseco", "type": "number"},
         {"text": "distancia_min", "type": "number"},
         {"text": "valorizacao_12m", "type": "number"},
-        {"text": "tecnico", "type": "string"},
-        {"text": "medias", "type": "string"},
     ]
 
 

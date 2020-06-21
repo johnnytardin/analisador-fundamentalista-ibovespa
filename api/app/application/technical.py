@@ -1,21 +1,37 @@
-import time
+import logging
 import json
 
-import investpy as inv
+import app.application.db as db
 
 
-class Technical:
-    @staticmethod
-    def get_indicators(stock, interval='weekly'):
-        time.sleep(1.5)
-
-        data = inv.technical_indicators(stock, country='brazil', product_type='stock', interval=interval).to_dict('records')
-        return json.dumps(data)
+logger = logging.getLogger(__name__)
 
 
-    @staticmethod
-    def get_moving_averages(stock, interval='weekly'):
-        time.sleep(1.5)
+def technical_indicators(stock):
+    rows = db.consulta_detalhes(stock, "tecnicos")
 
-        mov = inv.moving_averages(stock, country='brazil', product_type='stock', interval=interval).to_dict('records')
-        return json.dumps(mov)
+    indicadores = {}
+    for row in rows:
+        indicadores[row["technical_indicator"]] = {
+            "value": row["value"],
+            "signal": row["signal"],
+        }
+    return indicadores
+
+
+def moving_averages(stock, interval="weekly"):
+    medias = db.consulta_detalhes(stock, "medias")
+    return medias
+
+
+def indicators(stock):
+    t = technical_indicators(stock)
+    m = moving_averages(stock)
+
+    return [t["RSI(14)"]["value"]] 
+
+
+def columns():
+    return [
+        {"text": "RSI", "type": "number"},
+    ]

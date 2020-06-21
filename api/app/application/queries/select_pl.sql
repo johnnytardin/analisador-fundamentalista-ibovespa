@@ -8,4 +8,4 @@ and (details->>'ROE')::numeric > 0
 and (details->>'liquidezCorrente')::numeric >= 0.75
 and ((details->>'margemLiquida')::numeric >= 7 or (details->>'margemLiquida' is null))
 and ((details->>'freeFloat')::numeric >= 15 or (details->>'freeFloat' is null))
-order by details->>'precoSobreLucro' desc
+order by (details->>'precoSobreLucro')::numeric desc

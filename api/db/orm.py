@@ -9,7 +9,7 @@ def init_app(app=None):
     if app:
         from flask_orator import Orator
 
-        app.config['ORATOR_DATABASES'] = DATABASES
+        app.config["ORATOR_DATABASES"] = DATABASES
         Orator(app)
 
     else:
@@ -21,10 +21,9 @@ def init_app(app=None):
         return db
 
 
-
-def uuid(entity, column='uuid'):
+def uuid(entity, column="uuid"):
 
     while True:
         uuid = str(uuid4())
-        if not getattr(entity, 'where')(column, uuid).exists():
+        if not getattr(entity, "where")(column, uuid).exists():
             return uuid
