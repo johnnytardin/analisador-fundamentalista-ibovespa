@@ -1,6 +1,16 @@
-SELECT stockCode, setor, crescimentoCincoAnos, stockPrice, valorIntriseco, score, percentualDesconto, desconto, dividendos, "timestamp" 
-FROM fundamentus 
-WHERE coletaUUID = (SELECT coletaUUID FROM fundamentus ORDER BY timestamp DESC LIMIT 1) 
+SELECT 
+    stockCode, 
+    setor, 
+    crescimentoCincoAnos, 
+    stockPrice, 
+    valorIntriseco, 
+    score, 
+    percentualDesconto, 
+    desconto, 
+    dividendos, 
+    "timestamp" 
+FROM financial 
+WHERE coletaUUID = (SELECT coletaUUID FROM financial ORDER BY timestamp DESC LIMIT 1) 
 AND crescimentoCincoAnos > 2
 AND ROE > 10
 AND desconto > 0

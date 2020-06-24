@@ -16,7 +16,7 @@ class Health(Resource):
 
 class TechnicalQueryController(Resource):
     def post(self):
-        return [{"type": "table", "rows": [], "columns": []}], 200
+        return [{"type": "table", "rows": [], "columns": ["codes"]}], 200
 
 
 class TechnicalSearchController(Resource):

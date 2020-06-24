@@ -3,7 +3,7 @@ import logging
 from flask import request, jsonify
 from flask_restplus import Namespace, Resource
 
-from app.application.magic_formula import MagicFormula
+from app.application import magic_formula
 
 
 api = Namespace("magic", description="Magic Formula")
@@ -16,15 +16,10 @@ class Health(Resource):
         return None, 200
 
 
-class MagicSearchController(Resource):
-    def post(self):
-        return [], 200
-
-
 class MagicRoicQueryController(Resource):
     def post(self):
-        c = MagicFormula.columns()
-        r = MagicFormula.ev_ebit_roic_query()
+        c = magic_formula.columns()
+        r = magic_formula.ev_ebit_roic_query()
         return [{"type": "table", "rows": r, "columns": c}], 200
 
 
@@ -35,8 +30,8 @@ class MagicRoicSearchController(Resource):
 
 class MagicPlQueryController(Resource):
     def post(self):
-        c = MagicFormula.columns()
-        r = MagicFormula.pl_roe_query()
+        c = magic_formula.columns()
+        r = magic_formula.pl_roe_query()
         return [{"type": "table", "rows": r, "columns": c}], 200
 
 

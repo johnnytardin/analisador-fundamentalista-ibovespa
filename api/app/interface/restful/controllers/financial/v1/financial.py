@@ -3,7 +3,7 @@ import logging
 from flask import request, jsonify
 from flask_restplus import Namespace, Resource
 
-from app.application.financial import get_summary, columns
+from app.application.financial import financial, columns
 
 
 api = Namespace("financial", description="Financial Informations")
@@ -17,8 +17,11 @@ class Health(Resource):
 
 class FinancialQueryController(Resource):
     def post(self):
-        code = request.json.get("targets")[0].get("target")
-        summary = [get_summary(code)]
+        code = None        
+        if request.json:
+            code = request.json.get("targets")[0].get("target")
+
+        summary = financial(code)
         return [{"type": "table", "rows": summary, "columns": columns()}], 200
 
 

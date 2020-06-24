@@ -37,7 +37,7 @@ services:
       retries: 5
 
   grafana:
-    image: grafana/grafana:6.7.4
+    image: grafana/grafana:7.0.3
     ports:
       - 3000:3000
     user: "104"    

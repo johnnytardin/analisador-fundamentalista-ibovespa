@@ -1,7 +1,3 @@
-import sqlite3
-
-DATABASE = "app/database/fund.db"
-
 import os
 import json
 
@@ -17,7 +13,14 @@ def get_conn():
 
 def queries(tipo):
     files = {
-        "detalhes_stock": "queries/select_detalhes_stock.sql",
+        "dre": "queries/select_dre.sql",
+        "technical": "queries/select_technical.sql",
+        "average": "queries/select_average.sql",
+        "financial": "queries/select_financial.sql",
+        "dre_per_stock": "queries/select_dre_per_stock.sql",
+        "technical_per_stock": "queries/select_technical_per_stock.sql",
+        "average_per_stock": "queries/select_average_per_stock.sql",
+        "financial_per_stock": "queries/select_financial_per_stock.sql",
         "pl_setor": "queries/select_pl_setor.sql",
         "pl_geral": "queries/select_pl_geral_bolsa.sql",
         "details": "queries/select_details.sql",
@@ -35,44 +38,6 @@ def queries(tipo):
         return e.read()
 
 
-def select():
-    conn = get_conn()
-    cursor = conn.cursor()
-
-    q = queries("score")
-    cursor.execute(q)
-    rows = cursor.fetchall()
-
-    cursor.close()
-    conn.close()
-    return rows
-
-
-def select_rank_magic_formula(estrategia):
-    conn = get_conn()
-    cursor = conn.cursor()
-
-    # arqui está o chaveamento dos tipos para as queries
-    r1_tipo = "ev_ebit"
-    r2_tipo = "roic"
-    if estrategia == "pl_roe":
-        r1_tipo = "pl"
-        r2_tipo = "roe"
-
-    qr1 = queries(r1_tipo)
-    qr2 = queries(r2_tipo)
-
-    cursor.execute(qr1)
-    rank_1 = cursor.fetchall()
-
-    cursor.execute(qr2)
-    rank_2 = cursor.fetchall()
-
-    cursor.close()
-    conn.close()
-    return (rank_1, rank_2)
-
-
 def select_details(stockcode):
     conn = get_conn()
     cursor = conn.cursor()
@@ -88,44 +53,23 @@ def select_details(stockcode):
     return rows
 
 
-def pl_setor(stockcode):
+def consulta_detalhes(tipo, stock=None):
     conn = get_conn()
     cursor = conn.cursor()
 
-    q = queries("pl_setor")
-    cursor.execute(
-        q, (stockcode,),
-    )
-    rows = cursor.fetchall()
+    if stock:
+        tipo = f"{tipo}_per_stock"
 
-    cursor.close()
-    conn.close()
-    return rows
-
-
-def pl_geral():
-    conn = get_conn()
-    cursor = conn.cursor()
-
-    q = queries("pl_geral")
-    cursor.execute(q)
-    rows = cursor.fetchall()
-
-    cursor.close()
-    conn.close()
-    return rows
-
-
-def consulta_detalhes(stock, tipo="dre"):
-    conn = get_conn()
-    cursor = conn.cursor()
-
-    q = queries("detalhes_stock")
-
+    q = queries(tipo)
     cursor.execute(q, (stock,))
     rows = cursor.fetchall()
 
     cursor.close()
     conn.close()
 
-    return rows[0][0][tipo]
+    #tuple to dict
+    new_data = []
+    for row in rows:
+        new_data.append(row[0])
+
+    return new_data
