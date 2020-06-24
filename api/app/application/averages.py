@@ -12,13 +12,15 @@ def moving_averages(stock):
 
     avg = []
     for row in averages:
-        avg.append([
-            row["period"],
-            row["sma_value"],
-            row["sma_signal"],
-            row["ema_value"],
-            row["ema_signal"],
-        ])
+        avg.append(
+            [
+                row["period"],
+                row["sma_value"],
+                row["sma_signal"],
+                row["ema_value"],
+                row["ema_signal"],
+            ]
+        )
     return avg
 
 

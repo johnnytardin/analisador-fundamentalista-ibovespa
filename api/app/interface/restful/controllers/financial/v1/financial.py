@@ -17,7 +17,7 @@ class Health(Resource):
 
 class FinancialQueryController(Resource):
     def post(self):
-        code = None        
+        code = None
         if request.json:
             code = request.json.get("targets")[0].get("target")
 

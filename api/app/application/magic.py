@@ -8,15 +8,18 @@ from numpy import percentile, median
 import math
 import pandas as pd
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 
 logger = logging.getLogger(__name__)
 
 
 def get_estrategia(estrategia):
-    mp = {"ev_ebit_roic": ("EVSobreEBIT", "ROIC",),
-          "pl_roe": ("precoSobreLucro", "ROE",)}
+    mp = {
+        "ev_ebit_roic": ("EVSobreEBIT", "ROIC",),
+        "pl_roe": ("precoSobreLucro", "ROE",),
+    }
     return mp[estrategia]
 
 
@@ -25,13 +28,15 @@ def stocks_list(estrategia, valor, liquidez_media_minima=1000000):
 
     df = pd.DataFrame(data)
     df.set_index("code")
-    df = df[ (df.liquidezMediaDiaria > liquidez_media_minima) & \
-             (df.margemLiquida >= 7) & \
-             (df[valor] > 0) ]
+    df = df[
+        (df.liquidezMediaDiaria > liquidez_media_minima)
+        & (df.margemLiquida >= 7)
+        & (df[valor] > 0)
+    ]
 
     # Essas métricas não funcionam para instituições financeiras
     if estrategia == "ev_ebit_roic":
-        df = df[ (df.setor != "Financeiro e Outros") ]
+        df = df[(df.setor != "Financeiro e Outros")]
 
     return df
 
@@ -40,16 +45,18 @@ def get_result(estrategia):
     valor, performance = get_estrategia(estrategia)
 
     df = stocks_list(estrategia, valor)
-    valor_ordered = df.sort_values(by=[valor])['code'][:150].values
-    performance_ordered = df.sort_values(by=[performance], ascending=False)['code'][:150].values
+    valor_ordered = df.sort_values(by=[valor])["code"][:150].values
+    performance_ordered = df.sort_values(by=[performance], ascending=False)["code"][
+        :150
+    ].values
 
     ranking = pd.DataFrame()
-    ranking['position'] = range(1, valor_ordered.size + 1)
+    ranking["position"] = range(1, valor_ordered.size + 1)
     ranking[valor] = valor_ordered
     ranking[performance] = performance_ordered
 
-    valor_list = ranking.pivot_table(columns=valor, values='position')
-    performance_list = ranking.pivot_table(columns=performance, values='position')
+    valor_list = ranking.pivot_table(columns=valor, values="position")
+    performance_list = ranking.pivot_table(columns=performance, values="position")
     concatenado = pd.concat([valor_list, performance_list])
 
     rank = concatenado.dropna(axis=1).sum()
@@ -57,7 +64,7 @@ def get_result(estrategia):
 
     rank_validated = []
     for code, score in rank_sorted.iteritems():
-         if valida_empresa(code):
+        if valida_empresa(code):
             rank_validated.append([score, code])
 
     return rank_validated

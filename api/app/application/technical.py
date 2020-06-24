@@ -21,5 +21,5 @@ def columns():
     return [
         {"text": "technical_indicator", "type": "string"},
         {"text": "value", "type": "number"},
-        {"text": "signal", "type": "string"}
+        {"text": "signal", "type": "string"},
     ]

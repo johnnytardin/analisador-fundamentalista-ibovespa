@@ -67,7 +67,7 @@ def consulta_detalhes(tipo, stock=None):
     cursor.close()
     conn.close()
 
-    #tuple to dict
+    # tuple to dict
     new_data = []
     for row in rows:
         new_data.append(row[0])

@@ -68,7 +68,9 @@ def details(code, coleta_id):
     financial["lucroPorAcao"] = normaliza_valor(status_data["LPA"])
     financial["ValorPatrimonialPorAcao"] = normaliza_valor(status_data["VPA"])
     financial["divSobrePatrimonio"] = divPat
-    financial["divSobreEbitda"] = normaliza_valor(status_data["DÍVIDA LÍQUIDA / EBITDA"])
+    financial["divSobreEbitda"] = normaliza_valor(
+        status_data["DÍVIDA LÍQUIDA / EBITDA"]
+    )
     financial["divSobreEbit"] = normaliza_valor(status_data["DÍVIDA LÍQUIDA / EBIT"])
     financial["PatrimonioSobreAtivos"] = normaliza_valor(
         status_data["PATRIMÔNIO / ATIVOS"]
@@ -78,7 +80,9 @@ def details(code, coleta_id):
     financial["CagrReceitasCincoAnos"] = normaliza_valor(
         status_data["CAGR RECEITAS 5 ANOS"]
     )
-    financial["CagrLucrosCincoAnos"] = normaliza_valor(status_data["CAGR LUCROS 5 ANOS"])
+    financial["CagrLucrosCincoAnos"] = normaliza_valor(
+        status_data["CAGR LUCROS 5 ANOS"]
+    )
     financial["liquidezMediaDiaria"] = normaliza_valor(
         status_data["LIQUIDEZ MÉDIA DIÁRIA"]
     )
