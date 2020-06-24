@@ -30,6 +30,9 @@ def stocks_list(estrategia, valor, liquidez_media_minima=1000000):
     df.set_index("code")
     df = df[
         (df.liquidezMediaDiaria > liquidez_media_minima)
+        & (df.liquidezCorrente > 0.75)
+        & (df.precoSobreLucro > 0)
+        & (df.freeFloat > 15)
         & (df.margemLiquida >= 7)
         & (df[valor] > 0)
     ]
