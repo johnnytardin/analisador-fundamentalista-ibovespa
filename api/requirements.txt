@@ -16,3 +16,6 @@ numpy
 pandas==0.25.3
 investpy==0.9.14
 psycopg2-binary
+alpha_vantage
+pendulum
+python-decouple

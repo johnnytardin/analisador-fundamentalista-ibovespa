@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1592961405645,
+  "iteration": 1593046259908,
   "links": [],
   "panels": [
     {
@@ -166,76 +166,16 @@
       "id": 8,
       "panels": [
         {
+          "aliasColors": {},
+          "bars": false,
           "cacheTimeout": null,
-          "datasource": "Technical",
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Technical2",
           "fieldConfig": {
             "defaults": {
               "custom": {
-                "align": "center",
-                "displayMode": "auto"
-              },
-              "mappings": [
-                {
-                  "from": "",
-                  "id": 0,
-                  "operator": "",
-                  "text": "",
-                  "to": "",
-                  "type": 1,
-                  "value": ""
-                }
-              ],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 14,
-            "w": 7,
-            "x": 2,
-            "y": 2
-          },
-          "id": 13,
-          "interval": null,
-          "links": [],
-          "maxDataPoints": 100,
-          "options": {
-            "showHeader": true,
-            "sortBy": []
-          },
-          "pluginVersion": "7.0.3",
-          "targets": [
-            {
-              "rawQuery": false,
-              "refId": "A",
-              "target": "${Stocks}",
-              "type": "table"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Technical Indicators",
-          "type": "table"
-        },
-        {
-          "cacheTimeout": null,
-          "datasource": "Averages",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "align": "center"
+                "align": null
               },
               "mappings": [],
               "thresholds": {
@@ -252,47 +192,116 @@
                 ]
               }
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "ema_value"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": null
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
+          "fill": 0,
+          "fillGradient": 0,
           "gridPos": {
             "h": 8,
             "w": 11,
-            "x": 12,
-            "y": 2
+            "x": 0,
+            "y": 11
           },
-          "id": 17,
+          "hiddenSeries": false,
+          "id": 20,
           "interval": null,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": true,
+            "hideEmpty": false,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
           "links": [],
           "maxDataPoints": 100,
+          "nullPointMode": "null",
           "options": {
-            "showHeader": true,
-            "sortBy": []
+            "dataLinks": []
           },
+          "percentage": false,
           "pluginVersion": "7.0.3",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
           "targets": [
             {
+              "data": "{ \"indicator\": \"rsi\" }",
+              "hide": false,
               "refId": "A",
               "target": "${Stocks}",
-              "type": "table"
+              "type": "timeseries"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "lt",
+              "value": 30,
+              "yaxis": "left"
+            },
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 70,
+              "yaxis": "left"
             }
           ],
           "timeFrom": null,
+          "timeRegions": [],
           "timeShift": null,
-          "title": "Moving Averages",
-          "type": "table"
+          "title": "RSI",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "transparent": true,
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": null,
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": "100",
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
         }
       ],
       "title": "Technical",
@@ -377,6 +386,7 @@
       "type": "row"
     }
   ],
+  "refresh": false,
   "schemaVersion": 25,
   "style": "dark",
   "tags": [],
@@ -386,8 +396,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "ELET6",
-          "value": "ELET6"
+          "text": "SAPR11",
+          "value": "SAPR11"
         },
         "datasource": "Stocks",
         "definition": "",
@@ -407,11 +417,70 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "weekly",
+          "value": "weekly"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "Interval",
+        "options": [
+          {
+            "selected": false,
+            "text": "1min",
+            "value": "1min"
+          },
+          {
+            "selected": false,
+            "text": "5min",
+            "value": "5min"
+          },
+          {
+            "selected": false,
+            "text": "15min",
+            "value": "15min"
+          },
+          {
+            "selected": false,
+            "text": "30min",
+            "value": "30min"
+          },
+          {
+            "selected": false,
+            "text": "60min",
+            "value": "60min"
+          },
+          {
+            "selected": false,
+            "text": "daily",
+            "value": "daily"
+          },
+          {
+            "selected": true,
+            "text": "weekly",
+            "value": "weekly"
+          },
+          {
+            "selected": false,
+            "text": "monthly",
+            "value": "monthly"
+          }
+        ],
+        "query": "1min,5min,15min,30min,60min,daily,weekly,monthly",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
       }
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-6M",
     "to": "now"
   },
   "timepicker": {
@@ -430,5 +499,5 @@
   "timezone": "",
   "title": "Análise de Ativos",
   "uid": "d6T7Q5ZMk",
-  "version": 20
+  "version": 31
 }

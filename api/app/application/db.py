@@ -73,3 +73,20 @@ def consulta_detalhes(tipo, stock=None):
         new_data.append(row[0])
 
     return new_data
+
+
+def all_details(tipo, stock=None):
+    conn = get_conn()
+    cursor = conn.cursor()
+
+    if stock:
+        tipo = f"{tipo}_per_stock"
+
+    q = queries(tipo)
+    cursor.execute(q, (stock,))
+    rows = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return rows
