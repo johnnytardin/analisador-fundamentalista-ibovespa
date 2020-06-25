@@ -2,7 +2,7 @@ from datetime import datetime
 import logging
 import argparse
 
-import app.application.db as db
+from app.application import db
 
 from numpy import percentile, median
 import math

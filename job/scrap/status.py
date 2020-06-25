@@ -160,10 +160,6 @@ def x_paths():
             "LIQUIDEZ MÉDIA DIÁRIA",
         ),
         (
-            """/html/body/main/div[3]/div/div[2]/div[1]/div/div/strong""",
-            "PATRIMÔNIO LÍQUIDO",
-        ),
-        (
             """/html/body/main/div[3]/div/div[3]/div/div[1]/div/div/div/a/strong""",
             "SETOR DE ATUAÇÂO",
         ),
@@ -209,23 +205,6 @@ def normalize_money(value):
             return float(vlr) * 1000
         elif vlr == "-":
             return None
-
-
-def lucro(driver):
-    x_path = """//*[@id="contabil-section"]/div/div/div[2]/div[1]/div/table/tbody/tr[10]/td[2]/span"""
-    indicadores = driver.find_elements_by_xpath(x_path)[0]
-    DADOS["LUCRO LIQUIDO 12M"] = normalize_money(indicadores.text)
-
-    lucro_ano = {}
-    x_path = """//*[@id="contabil-section"]/div/div/div[2]/div[1]/div/table/tbody/tr[10]/td[4]/span"""
-    indicadores = driver.find_elements_by_xpath(x_path)[0]
-    lucro_ano["ano_1"] = normalize_money(indicadores.text)
-
-    x_path = """//*[@id="contabil-section"]/div/div/div[2]/div[1]/div/table/tbody/tr[10]/td[7]/span"""
-    indicadores = driver.find_elements_by_xpath(x_path)[0]
-    lucro_ano["ano_2"] = normalize_money(indicadores.text)
-
-    DADOS["LUCRO POR ANO"] = lucro_ano
 
 
 def anos_anteriores():
@@ -276,7 +255,6 @@ def get_specific_data(stock):
 
         dre(driver, stock)
         fundamentus(driver)
-        lucro(driver)
     except Exception as err:
         print("Falha coletando os dados na stock para {}. Causa: {}".format(stock, err))
         return {}

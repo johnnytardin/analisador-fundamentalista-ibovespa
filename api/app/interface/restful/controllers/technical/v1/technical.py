@@ -4,7 +4,7 @@ import pendulum
 from flask import request, jsonify
 from flask_restplus import Namespace, Resource
 
-from app.application.technical import indicators_stock
+from app.application import technical
 
 
 api = Namespace("technical", description="Technical Informations")
@@ -23,20 +23,36 @@ class TechnicalAnnotationsController(Resource):
     def post(self):
         return [], 200
 
-class TechnicalQueryController(Resource):
+class IndicatorsQueryController(Resource):
     def post(self):
         code = request.json.get("targets")[0].get("target")
-        indicator = request.json.get("targets")[0].get("data").get("indicator")
         interval = request.json.get("scopedVars").get("Interval").get("value")
 
-        range_time = request.json.get("range")
-        range_from = pendulum.parse(range_time["from"])
-        range_to = pendulum.parse(range_time["to"])
+        #range_time = request.json.get("range")
+        #range_from = pendulum.parse(range_time["from"])
+        #range_to = pendulum.parse(range_time["to"])
 
-        summary = indicators_stock(indicator, code, interval, range_from, range_to)
-        return summary, 200
+        summary = technical.get_technical_indicators(code, interval)
+        columns = technical.columns_technical_indicators()
 
-api.add_resource(Health, "/", methods=["GET"])
-api.add_resource(TechnicalQueryController, "/query", methods=["POST"])
-api.add_resource(TechnicalSearchController, "/search", methods=["POST"])
-api.add_resource(TechnicalAnnotationsController, "/annotations", methods=["POST"])
+        return [{"type": "table", "rows": summary, "columns": columns}], 200
+
+class MovingAveragesQueryController(Resource):
+    def post(self):
+        code = request.json.get("targets")[0].get("target")
+        interval = request.json.get("scopedVars").get("Interval").get("value")
+
+        summary = technical.get_moving_averages(code, interval)
+        columns = technical.columns_moving_averages()
+
+        return [{"type": "table", "rows": summary, "columns": columns}], 200
+
+api.add_resource(Health, "/indicators/", methods=["GET"])
+api.add_resource(IndicatorsQueryController, "/indicators/query", methods=["POST"])
+api.add_resource(TechnicalSearchController, "/indicators/search", methods=["POST"])
+api.add_resource(TechnicalAnnotationsController, "/indicators/annotations", methods=["POST"])
+
+api.add_resource(Health, "/movingaverages/", methods=["GET"])
+api.add_resource(MovingAveragesQueryController, "/movingaverages/query", methods=["POST"])
+api.add_resource(TechnicalSearchController, "/movingaverages/search", methods=["POST"])
+api.add_resource(TechnicalAnnotationsController, "/movingaverages/annotations", methods=["POST"])

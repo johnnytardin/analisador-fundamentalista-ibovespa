@@ -41,7 +41,6 @@ def details(code, coleta_id):
     pvp = normaliza_valor(status_data["P/VP"])
     pl = normaliza_valor(status_data["P/L"])
     dy = normaliza_valor(status_data["DIVIDEND YIELD"], 0)
-    patrLiq = normaliza_valor(status_data["PATRIMÔNIO LÍQUIDO"])
     divPat = normaliza_valor(status_data["DÍVIDA LÍQUIDA / PATRIMÔNIO"])
 
     financial["code"] = code
@@ -86,7 +85,6 @@ def details(code, coleta_id):
     financial["liquidezMediaDiaria"] = normaliza_valor(
         status_data["LIQUIDEZ MÉDIA DIÁRIA"]
     )
-    financial["patrimonioLiquido"] = patrLiq
     financial["dividendos"] = dy
     financial["stockPrice"] = normaliza_valor(status_data["VALOR ATUAL"])
     financial["setor"] = status_data["SETOR DE ATUAÇÂO"]
@@ -99,7 +97,6 @@ def details(code, coleta_id):
     financial["ValorizacaoMesAtual"] = normaliza_valor(
         status_data["VALORIZAÇÃO (MÊS ATUAL)"]
     )
-    financial["lucroLiquido"] = normaliza_valor(status_data["LUCRO LIQUIDO 12M"])
     financial["freeFloat"] = normaliza_valor(status_data["FREE FLOAT"])
     financial["tagAlong"] = normaliza_valor(status_data["TAG ALONG"])
 
@@ -107,6 +104,13 @@ def details(code, coleta_id):
     financial["valorIntriseco"] = graham.valor_intriseco(
         financial["lucroPorAcao"], financial["ValorPatrimonialPorAcao"]
     )
+
+    # PEG Ratio
+    try:
+        pegr = financial["precoSobreLucro"] / financial["CagrLucrosCincoAnos"]
+    except (ZeroDivisionError, TypeError):
+        pegr = None
+    financial["pegr"] = pegr
 
     # percentual de desconto
     try:
@@ -125,80 +129,6 @@ def details(code, coleta_id):
         except ZeroDivisionError:
             distancia = 0
     financial["PercDistanciaMin52sem"] = distancia
-
-    # score
-    nota = 0
-    score_steps = 0
-
-    score_steps += 1
-    if patrLiq > 2000000000:
-        nota += 1
-
-    if liqCorr:
-        score_steps += 1
-        if liqCorr > 1.5:
-            nota += 1
-
-    if roe:
-        score_steps += 1
-        if roe > 20:
-            nota += 1
-        elif roe >= 10:
-            nota += 0.5
-
-    if roic:
-        score_steps += 1
-        if roic > 20:
-            nota += 1
-        elif roic >= 10:
-            nota += 0.5
-
-    if divPat:
-        score_steps += 1
-        if divPat < 0.5 and divPat >= 0:
-            """
-            Resultados inferiores a uma unidade indicam que a empresa deve menos
-            do que ela vale. Se o indicativo apontar vários múltiplos, significa que a
-            empresa opera seriamente endividada e merece ser evitada.
-            """
-            nota += 1
-
-    if financial["CagrLucrosCincoAnos"]:
-        score_steps += 1
-        if financial["CagrLucrosCincoAnos"] > 1:
-            nota += 1
-
-    if financial["CagrReceitasCincoAnos"]:
-        score_steps += 1
-        if financial["CagrReceitasCincoAnos"] > 1:
-            nota += 1
-
-    if pvp:
-        score_steps += 1
-        if pvp < 2 and pvp > 0:
-            nota += 1
-
-    if pl:
-        score_steps += 1
-        if pl <= 20 and pl > 0:
-            nota += 1
-
-    score_steps += 1
-    if dy > 2.5:
-        nota += 1
-
-    if financial["margemLiquida"]:
-        score_steps += 1
-        if financial["margemLiquida"] >= 20:
-            nota += 1
-        elif financial["margemLiquida"] >= 10:
-            nota += 0.5
-
-    score_steps += 1
-    if p_desc < -10:
-        nota += 1
-
-    financial["score"] = float(nota) / score_steps * 10.0
 
     # outros dados
     dre = status_data["dre"]
