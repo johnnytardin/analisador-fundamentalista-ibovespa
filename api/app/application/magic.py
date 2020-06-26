@@ -26,7 +26,7 @@ def filter_barganhas(df):
     return df
 
 
-def stocks_filter(estrategia, valor, liquidez_media_minima=500000, barganhas=False):
+def stocks_filter(estrategia, valor, promocao=True, liquidez_media_minima=500000):
     data = db.consulta_detalhes("financial")
 
     df = pd.DataFrame(data)
@@ -43,7 +43,7 @@ def stocks_filter(estrategia, valor, liquidez_media_minima=500000, barganhas=Fal
         & (getattr(df, valor) > 0)
     ]
 
-    if barganhas:
+    if promocao:
         df = filter_barganhas(df)
 
     # Essas métricas não funcionam para instituições financeiras
@@ -53,10 +53,10 @@ def stocks_filter(estrategia, valor, liquidez_media_minima=500000, barganhas=Fal
     return df
 
 
-def rank(estrategia):
+def rank(estrategia, promocao):
     valor, performance = get_estrategia(estrategia)
 
-    df = stocks_filter(estrategia, valor)
+    df = stocks_filter(estrategia, valor, promocao)
     valor_ordered = df.sort_values(by=[valor])["code"].values
     performance_ordered = df.sort_values(by=[performance], ascending=False)[
         "code"

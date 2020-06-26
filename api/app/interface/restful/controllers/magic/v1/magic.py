@@ -18,8 +18,14 @@ class Health(Resource):
 
 class MagicRoicQueryController(Resource):
     def post(self):
+        promocao = request.json.get("scopedVars").get("on_sale").get("value").lower()
+        if promocao == "yes":
+            promocao = True
+        else:
+            promocao = False
+
         c = magic_formula.columns()
-        r = magic_formula.ev_ebit_roic_query()
+        r = magic_formula.ev_ebit_roic_query(promocao)
         return [{"type": "table", "rows": r, "columns": c}], 200
 
 
@@ -30,8 +36,14 @@ class MagicRoicSearchController(Resource):
 
 class MagicPlQueryController(Resource):
     def post(self):
+        promocao = request.json.get("scopedVars").get("on_sale").get("value").lower()
+        if promocao == "yes":
+            promocao = True
+        else:
+            promocao = False
+
         c = magic_formula.columns()
-        r = magic_formula.pl_roe_query()
+        r = magic_formula.pl_roe_query(promocao)
         return [{"type": "table", "rows": r, "columns": c}], 200
 
 

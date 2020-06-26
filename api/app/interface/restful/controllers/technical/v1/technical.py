@@ -28,10 +28,6 @@ class IndicatorsQueryController(Resource):
         code = request.json.get("targets")[0].get("target")
         interval = request.json.get("scopedVars").get("Interval").get("value")
 
-        #range_time = request.json.get("range")
-        #range_from = pendulum.parse(range_time["from"])
-        #range_to = pendulum.parse(range_time["to"])
-
         summary = technical.get_technical_indicators(code, interval)
         columns = technical.columns_technical_indicators()
 

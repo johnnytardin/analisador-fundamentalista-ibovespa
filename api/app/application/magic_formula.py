@@ -1,13 +1,13 @@
 import app.application.magic as magic
 
 
-def ev_ebit_roic_query():
-    rank = magic.rank("ev_ebit_roic")
+def ev_ebit_roic_query(promocao):
+    rank = magic.rank("ev_ebit_roic", promocao)
     return rank
 
 
-def pl_roe_query():
-    rank = magic.rank("pl_roe")
+def pl_roe_query(promocao):
+    rank = magic.rank("pl_roe", promocao)
     return rank
 
 
