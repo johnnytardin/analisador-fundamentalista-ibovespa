@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1593222446945,
+  "iteration": 1593283723779,
   "links": [],
   "panels": [
     {
@@ -200,7 +200,7 @@
           "options": {
             "showHeader": true
           },
-          "pluginVersion": "7.0.3",
+          "pluginVersion": "7.0.4",
           "targets": [
             {
               "data": "",
@@ -254,7 +254,7 @@
           "options": {
             "showHeader": true
           },
-          "pluginVersion": "7.0.3",
+          "pluginVersion": "7.0.4",
           "targets": [
             {
               "data": "",
@@ -537,8 +537,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "CAMB4",
-          "value": "CAMB4"
+          "text": "ABCB4",
+          "value": "ABCB4"
         },
         "datasource": "Stocks",
         "definition": "",
@@ -563,8 +563,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "weekly",
-          "value": "weekly"
+          "text": "daily",
+          "value": "daily"
         },
         "hide": 0,
         "includeAll": false,
@@ -598,12 +598,12 @@
             "value": "5hours"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "daily",
             "value": "daily"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "weekly",
             "value": "weekly"
           },
@@ -621,7 +621,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "No",
           "value": "No"
         },
@@ -646,11 +646,46 @@
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "Sectors",
+        "definition": "*",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Sector",
+        "multi": false,
+        "name": "sector",
+        "options": [],
+        "query": "*",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [
+          {
+            "selected": false,
+            "text": "Utilidade Pública"
+          },
+          {
+            "selected": false,
+            "text": "Comércio"
+          }
+        ],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       }
     ]
   },
   "time": {
-    "from": "now-5y",
+    "from": "now-3y",
     "to": "now"
   },
   "timepicker": {
@@ -669,5 +704,5 @@
   "timezone": "",
   "title": "Análise de Ativos",
   "uid": "d6T7Q5ZMk",
-  "version": 64
+  "version": 73
 }

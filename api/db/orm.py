@@ -1,5 +1,3 @@
-import yaml
-
 from uuid import uuid4
 from config.databases import DATABASES
 

@@ -2,10 +2,10 @@ import os
 import logging
 
 from flask import Flask
-from flask_restplus import Resource, Api
+from flask_restplus import Api
 import json_logging
 
-import fixpath
+import fixpath  # noqa
 
 from config.config import config
 from app.interface.restful.controllers import blueprints

@@ -1,5 +1,4 @@
 import os
-import json
 
 import psycopg2
 from decouple import config
@@ -28,6 +27,7 @@ def queries(tipo):
         "roic": "queries/select_roic.sql",
         "pl": "queries/select_pl.sql",
         "roe": "queries/select_roe.sql",
+        "sectors": "queries/select_sectors.sql",
     }
 
     current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -45,6 +45,25 @@ def consulta_detalhes(tipo, stock=None):
 
     q = queries(tipo)
     cursor.execute(q, (stock,))
+    rows = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    # tuple to dict
+    new_data = []
+    for row in rows:
+        new_data.append(row[0])
+
+    return new_data
+
+
+def sectors():
+    conn = get_conn()
+    cursor = conn.cursor()
+
+    q = queries("sectors")
+    cursor.execute(q)
     rows = cursor.fetchall()
 
     cursor.close()

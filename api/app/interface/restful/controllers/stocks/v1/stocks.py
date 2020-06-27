@@ -1,9 +1,7 @@
 import logging
-from datetime import datetime
 
-from flask import request, jsonify
+from flask import request
 from flask_restplus import Namespace, Resource
-import investpy as inv
 import pendulum
 
 from app.application import historical

@@ -21,12 +21,17 @@ def get_estrategia(estrategia):
     return mp[estrategia]
 
 
-def filter_barganhas(df):
+def filter_on_sale(df):
     df = df[(df.PSR <= 1) & (df.pegr <= 1)]
     return df
 
 
-def stocks_filter(estrategia, valor, performance, promocao=True, liquidez_media_minima=100000):
+def filter_per_sector(df, sector):
+    df = df[df.setor == sector]
+    return df
+
+
+def filter_by_indicators(valor, performance, liquidez_media_minima=50000):
     data = db.consulta_detalhes("financial")
 
     df = pd.DataFrame(data)
@@ -35,29 +40,40 @@ def stocks_filter(estrategia, valor, performance, promocao=True, liquidez_media_
     df = df[
         (df.liquidezMediaDiaria > liquidez_media_minima)
         & (df.precoSobreLucro > 0)
-        & (df.freeFloat >= 15)
         & (df.margemLiquida >= 7)
+        & ((df.freeFloat >= 15) | (pd.isnull(df.freeFloat)))
         & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
-        & ((df.PSR <= 5) | (pd.isnull(df.PSR)))
-        & (((df.pegr <= 5) & (df.pegr > 0)) | (pd.isnull(df.pegr)))
+        & ((df.PSR <= 8) | (pd.isnull(df.PSR)))
+        & ((df.pegr <= 8) | (pd.isnull(df.pegr)))
         & (getattr(df, valor) >= 0)
-        & (getattr(df, performance) > 0)
+        & (getattr(df, performance) >= 0)
     ]
 
-    if promocao:
-        df = filter_barganhas(df)
+    return df
 
-    # Essas métricas não funcionam para instituições financeiras
+
+def stocks_filter(estrategia, payload, valor, performance):
+    df = filter_by_indicators(valor, performance)
+
+    on_sale = payload.get("scopedVars").get("on_sale").get("text")
+    if on_sale.lower() == "yes":
+        df = filter_on_sale(df)
+
+    sector = payload.get("scopedVars").get("sector").get("text")
+    if sector.lower() != "all":
+        df = filter_per_sector(df, sector)
+
     if estrategia == "ev_ebit_roic":
+        # Essas métricas não funcionam para instituições financeiras
         df = df[(df.setor != "Financeiro e Outros")]
 
     return df
 
 
-def rank(estrategia, promocao):
+def sort_magic_formula(estrategia, payload):
     valor, performance = get_estrategia(estrategia)
 
-    df = stocks_filter(estrategia, valor, performance, promocao)
+    df = stocks_filter(estrategia, payload, valor, performance)
     valor_ordered = df.sort_values(by=[valor])["code"].values
     performance_ordered = df.sort_values(by=[performance], ascending=False)[
         "code"
@@ -73,7 +89,13 @@ def rank(estrategia, promocao):
     concatenado = pd.concat([valor_list, performance_list])
 
     rank = concatenado.dropna(axis=1).sum()
-    rank_sorted = rank.sort_values()[:50]
+    rank_sorted = rank.sort_values()[:70]
+
+    return rank_sorted
+
+
+def rank(estrategia, payload):
+    rank_sorted = sort_magic_formula(estrategia, payload)
 
     rank_validated = []
     for code, score in rank_sorted.iteritems():
