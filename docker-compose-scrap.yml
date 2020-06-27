@@ -22,8 +22,8 @@ services:
     image: postgres
     ports:
       - 5432:5432
-      env_file:
-        - ./api/env
+    env_file:
+      - ./api/env
     volumes:
       - ./api/tmp/pg_data:/var/lib/postgresql/data
     healthcheck:
