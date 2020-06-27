@@ -26,7 +26,7 @@ def filter_barganhas(df):
     return df
 
 
-def stocks_filter(estrategia, valor, promocao=True, liquidez_media_minima=500000):
+def stocks_filter(estrategia, valor, promocao=True, liquidez_media_minima=100000):
     data = db.consulta_detalhes("financial")
 
     df = pd.DataFrame(data)

@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime 
+from datetime import datetime
 
 from flask import request, jsonify
 from flask_restplus import Namespace, Resource
@@ -7,6 +7,7 @@ import investpy as inv
 import pendulum
 
 from app.application import historical
+from app.application import stocks
 
 
 api = Namespace("stocks", description="Stocks Codes")
@@ -25,7 +26,7 @@ class TechnicalQueryController(Resource):
 
 class TechnicalSearchController(Resource):
     def post(self):
-        summary = inv.get_stocks_list(country="brazil")
+        summary = stocks.get_stocks_tickers()
         return summary, 200
 
 
@@ -35,15 +36,14 @@ class HistoricalQueryController(Resource):
         interval = request.json.get("scopedVars").get("Interval").get("value").title()
 
         range_time = request.json.get("range")
-        range_from = pendulum.parse(range_time["from"]).format('DD/MM/YYYY')
-        range_to = pendulum.parse(range_time["to"]).format('DD/MM/YYYY')
+        range_from = pendulum.parse(range_time["from"]).format("DD/MM/YYYY")
+        range_to = pendulum.parse(range_time["to"]).format("DD/MM/YYYY")
 
-        ht_datapoints = historical.get_historical_data(code, range_from, range_to, interval)
+        ht_datapoints = historical.get_historical_data(
+            code, range_from, range_to, interval
+        )
 
-        h = [{
-            "target":"price",
-            "datapoints": ht_datapoints
-        }]
+        h = [{"target": "price", "datapoints": ht_datapoints}]
 
         return h, 200
 

@@ -1,0 +1,12 @@
+numpy
+lxml
+selenium
+beautifulsoup4
+pandas
+html5lib
+psycopg2-binary
+investpy
+simplejson
+bson
+python-decouple
+

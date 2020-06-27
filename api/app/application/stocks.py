@@ -1,4 +1,9 @@
+import logging
+
 import investpy as inv
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_stocks_tickers(fiis=False, as_list=True):

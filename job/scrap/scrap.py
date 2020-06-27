@@ -5,7 +5,6 @@ from uuid import uuid4
 import graham
 import status
 import stocks
-import technical
 import db
 
 
@@ -132,28 +131,24 @@ def details(code, coleta_id):
 
     # outros dados
     dre = status_data["dre"]
-    indicators = technical.get_indicators(code)
-    averages = technical.get_moving_averages(code)
 
-    return (financial, dre, indicators, averages)
+    return (financial, dre)
 
 
 def main():
-    st = stocks.stocks_codes()
+    st = stocks.get_stocks_tickers()
 
     coleta_id = str(uuid4())
     timestamp = datetime.datetime.now().isoformat()
 
     for stock in st:
         try:
-            financial, dre, indicators, averages = details(stock, coleta_id)
+            financial, dre = details(stock, coleta_id)
         except Exception as err:
             print("Falha coletando os dados do papel {}. Causa: {}".format(stock, err))
         else:
             db.insert_data("financial", stock, coleta_id, timestamp, financial)
             db.insert_data("dre", stock, coleta_id, timestamp, dre)
-            db.insert_data("indicators", stock, coleta_id, timestamp, indicators)
-            db.insert_data("averages", stock, coleta_id, timestamp, averages)
 
 
 if __name__ == "__main__":

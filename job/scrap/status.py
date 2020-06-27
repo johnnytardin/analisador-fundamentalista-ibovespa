@@ -1,8 +1,9 @@
+from datetime import datetime
+
 from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 import pandas as pd
-
-from datetime import datetime
 
 
 DADOS = {}
@@ -248,9 +249,7 @@ def get_specific_data(stock):
         url = "https://statusinvest.com.br/acoes/{}".format(stock.lower())
         options = webdriver.ChromeOptions()
         options.add_argument("headless")
-        driver = webdriver.Chrome(
-            "/usr/lib/chromium-browser/chromedriver", chrome_options=options
-        )
+        driver = webdriver.Chrome("/usr/bin/chromedriver", chrome_options=options)
         driver.get(url)
 
         dre(driver, stock)

@@ -41,3 +41,17 @@ services:
       - ./grafana/env
     depends_on:
       - api
+
+  scrap:
+    build:
+      dockerfile: Dockerfile
+      context: ./job
+    tty: true
+    env_file:
+      - ./job/env
+    volumes:
+      - ./job/:/app/
+    command: python3 /app/scrap/scrap.py
+    depends_on:
+      postgres:
+        condition: service_healthy

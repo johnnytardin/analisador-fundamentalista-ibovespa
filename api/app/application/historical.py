@@ -19,7 +19,5 @@ def get_historical_data(code, from_date, to_date, interval):
 
     h = []
     for index, values in data.iterrows():
-        h.append(
-            [values.Close, index.timestamp() * 1000]
-        )
+        h.append([values.Close, index.timestamp() * 1000])
     return h
