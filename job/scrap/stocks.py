@@ -9,4 +9,8 @@ def get_stocks_tickers(fiis=False, as_list=True):
     else:
         stocks = stocks[stocks["isin"].str[-3:-1] != "00"]
 
-    return stocks["symbol"].to_list() if as_list else stocks
+    if as_list:
+        stocks = stocks["symbol"].to_list()
+        stocks.sort()
+
+    return stocks
