@@ -26,7 +26,7 @@ def filter_barganhas(df):
     return df
 
 
-def stocks_filter(estrategia, valor, promocao=True, liquidez_media_minima=100000):
+def stocks_filter(estrategia, valor, performance, promocao=True, liquidez_media_minima=100000):
     data = db.consulta_detalhes("financial")
 
     df = pd.DataFrame(data)
@@ -39,8 +39,9 @@ def stocks_filter(estrategia, valor, promocao=True, liquidez_media_minima=100000
         & (df.margemLiquida >= 7)
         & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
         & ((df.PSR <= 5) | (pd.isnull(df.PSR)))
-        & ((df.pegr <= 5) | (pd.isnull(df.pegr)))
-        & (getattr(df, valor) > 0)
+        & (((df.pegr <= 5) & (df.pegr > 0)) | (pd.isnull(df.pegr)))
+        & (getattr(df, valor) >= 0)
+        & (getattr(df, performance) > 0)
     ]
 
     if promocao:
@@ -56,7 +57,7 @@ def stocks_filter(estrategia, valor, promocao=True, liquidez_media_minima=100000
 def rank(estrategia, promocao):
     valor, performance = get_estrategia(estrategia)
 
-    df = stocks_filter(estrategia, valor, promocao)
+    df = stocks_filter(estrategia, valor, performance, promocao)
     valor_ordered = df.sort_values(by=[valor])["code"].values
     performance_ordered = df.sort_values(by=[performance], ascending=False)[
         "code"
@@ -84,6 +85,7 @@ def rank(estrategia, promocao):
                 [
                     score,
                     code,
+                    ind["subsetor"],
                     ind["precoSobreLucro"],
                     ind["pegr"],
                     ind["PSR"],
@@ -102,13 +104,14 @@ def rank(estrategia, promocao):
 
 def columns():
     return [
-        {"text": "SCORE", "type": "number"},
+        {"text": "SC.", "type": "number"},
         {"text": "CODE", "type": "string"},
+        {"text": "SECTOR", "type": "string"},
         {"text": "P/L", "type": "number"},
         {"text": "PEGR", "type": "number"},
         {"text": "PSR", "type": "number"},
         {"text": "ROE", "type": "number"},
-        {"text": "MARGEM", "type": "number"},
+        {"text": "MARG", "type": "number"},
         {"text": "DL/EBIT", "type": "number"},
         {"text": "CAGR LL", "type": "number"},
         {"text": "VPA", "type": "number"},

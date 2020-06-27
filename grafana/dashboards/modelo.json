@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1593046259908,
+  "iteration": 1593222446945,
   "links": [],
   "panels": [
     {
@@ -28,130 +28,122 @@
         "x": 0,
         "y": 0
       },
-      "id": 16,
+      "id": 25,
       "panels": [
         {
-          "columns": [],
-          "datasource": "Magic-ROIC",
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Stocks-Histocial",
           "fieldConfig": {
             "defaults": {
-              "custom": {}
+              "custom": {},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
             },
             "overrides": []
           },
-          "fontSize": "100%",
+          "fill": 1,
+          "fillGradient": 0,
           "gridPos": {
-            "h": 9,
-            "w": 7,
-            "x": 3,
+            "h": 11,
+            "w": 13,
+            "x": 0,
             "y": 1
           },
-          "id": 10,
-          "pageSize": null,
-          "showHeader": true,
-          "sort": {
-            "col": 0,
-            "desc": false
+          "hiddenSeries": false,
+          "id": 23,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
           },
-          "styles": [
-            {
-              "alias": "Time",
-              "align": "auto",
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "pattern": "Time",
-              "type": "date"
-            },
-            {
-              "alias": "",
-              "align": "right",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "decimals": 2,
-              "pattern": "/.*/",
-              "thresholds": [],
-              "type": "number",
-              "unit": "short"
-            }
-          ],
+          "lines": true,
+          "linewidth": 3,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "7.0.3",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
           "targets": [
             {
+              "data": "",
+              "hide": false,
               "refId": "A",
-              "target": "ABCB4",
-              "type": "table"
+              "target": "${Stocks}",
+              "type": "timeseries"
             }
           ],
+          "thresholds": [],
           "timeFrom": null,
+          "timeRegions": [],
           "timeShift": null,
-          "title": "Magic Formula (EV/EBIT / ROIC)",
-          "transform": "table",
-          "type": "table-old"
-        },
-        {
-          "columns": [],
-          "datasource": "Magic-PL",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
+          "title": "Stock Price",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
           },
-          "fontSize": "100%",
-          "gridPos": {
-            "h": 9,
-            "w": 7,
-            "x": 13,
-            "y": 1
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
           },
-          "id": 14,
-          "pageSize": null,
-          "showHeader": true,
-          "sort": {
-            "col": 0,
-            "desc": false
-          },
-          "styles": [
+          "yaxes": [
             {
-              "alias": "Time",
-              "align": "auto",
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "pattern": "Time",
-              "type": "date"
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
             },
             {
-              "alias": "",
-              "align": "right",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "decimals": 2,
-              "pattern": "/.*/",
-              "thresholds": [],
-              "type": "number",
-              "unit": "short"
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
             }
           ],
-          "targets": [
-            {
-              "refId": "A",
-              "target": "ABCB4",
-              "type": "table"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Magic Formula (PL/ROE)",
-          "transform": "table",
-          "type": "table-old"
+          "yaxis": {
+            "align": false,
+            "alignLevel": 2
+          }
         }
       ],
-      "title": "Magic Formula",
+      "title": "Price",
       "type": "row"
     },
     {
@@ -166,16 +158,71 @@
       "id": 8,
       "panels": [
         {
-          "aliasColors": {},
-          "bars": false,
           "cacheTimeout": null,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "Technical2",
+          "datasource": "Technical-Indicators",
           "fieldConfig": {
             "defaults": {
               "custom": {
-                "align": null
+                "align": "center",
+                "displayMode": "auto"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "SIGNAL"
+                },
+                "properties": []
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 9,
+            "x": 2,
+            "y": 2
+          },
+          "id": 20,
+          "interval": null,
+          "links": [],
+          "maxDataPoints": 100,
+          "options": {
+            "showHeader": true
+          },
+          "pluginVersion": "7.0.3",
+          "targets": [
+            {
+              "data": "",
+              "hide": false,
+              "refId": "A",
+              "target": "${Stocks}",
+              "type": "table"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Technical Indicators",
+          "transparent": true,
+          "type": "table"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": "Technical-Moving-Averages",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "align": "center"
               },
               "mappings": [],
               "thresholds": {
@@ -194,114 +241,34 @@
             },
             "overrides": []
           },
-          "fill": 0,
-          "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 9,
             "w": 11,
-            "x": 0,
-            "y": 11
+            "x": 12,
+            "y": 2
           },
-          "hiddenSeries": false,
-          "id": 20,
+          "id": 21,
           "interval": null,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": false,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
           "links": [],
           "maxDataPoints": 100,
-          "nullPointMode": "null",
           "options": {
-            "dataLinks": []
+            "showHeader": true
           },
-          "percentage": false,
           "pluginVersion": "7.0.3",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
           "targets": [
             {
-              "data": "{ \"indicator\": \"rsi\" }",
+              "data": "",
               "hide": false,
               "refId": "A",
               "target": "${Stocks}",
-              "type": "timeseries"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "lt",
-              "value": 30,
-              "yaxis": "left"
-            },
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 70,
-              "yaxis": "left"
+              "type": "table"
             }
           ],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
-          "title": "RSI",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
+          "title": "Moving Averages",
           "transparent": true,
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": null,
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": "100",
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "type": "table"
         }
       ],
       "title": "Technical",
@@ -316,28 +283,17 @@
         "x": 0,
         "y": 2
       },
-      "id": 6,
+      "id": 27,
       "panels": [
         {
-          "cacheTimeout": null,
-          "datasource": "Financial",
+          "datasource": "Magic-ROIC",
           "fieldConfig": {
             "defaults": {
               "custom": {
-                "align": "center",
-                "displayMode": "auto"
+                "align": "center"
               },
-              "mappings": [
-                {
-                  "from": "",
-                  "id": 0,
-                  "operator": "",
-                  "text": "",
-                  "to": "",
-                  "type": 1,
-                  "value": ""
-                }
-              ],
+              "decimals": 2,
+              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -352,25 +308,84 @@
                 ]
               }
             },
-            "overrides": []
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "SCORE"
+                },
+                "properties": [
+                  {
+                    "id": "decimals"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "P/L"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 122
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "PEGR"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 107
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "SC."
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 80
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CODE"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 128
+                  }
+                ]
+              }
+            ]
           },
           "gridPos": {
-            "h": 20,
-            "w": 10,
-            "x": 5,
+            "h": 12,
+            "w": 24,
+            "x": 0,
             "y": 3
           },
-          "id": 18,
-          "interval": null,
-          "links": [],
-          "maxDataPoints": 100,
+          "id": 10,
           "options": {
-            "showHeader": true
+            "showHeader": true,
+            "sortBy": []
           },
-          "pluginVersion": "7.0.3",
+          "pluginVersion": "7.0.4",
           "targets": [
             {
-              "rawQuery": false,
+              "data": "",
+              "hide": false,
               "refId": "A",
               "target": "${Stocks}",
               "type": "table"
@@ -378,11 +393,137 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Financial",
+          "title": "Magic Formula (EV/EBIT / ROIC)",
           "type": "table"
         }
       ],
-      "title": "Financial",
+      "title": "Magic Formula EV/EBIT / ROIC",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "id": 16,
+      "panels": [
+        {
+          "datasource": "Magic-PL",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "align": "center"
+              },
+              "decimals": 2,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "SCORE"
+                },
+                "properties": [
+                  {
+                    "id": "decimals"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "P/L"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 122
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "PEGR"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 107
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "SC."
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 80
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CODE"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 128
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 12,
+            "w": 24,
+            "x": 0,
+            "y": 4
+          },
+          "id": 28,
+          "options": {
+            "showHeader": true,
+            "sortBy": []
+          },
+          "pluginVersion": "7.0.4",
+          "targets": [
+            {
+              "data": "",
+              "hide": false,
+              "refId": "A",
+              "target": "${Stocks}",
+              "type": "table"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Magic Formula (PL/ROE)",
+          "type": "table"
+        }
+      ],
+      "title": "Magic Formula PL/ROE",
       "type": "row"
     }
   ],
@@ -396,8 +537,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "SAPR11",
-          "value": "SAPR11"
+          "text": "CAMB4",
+          "value": "CAMB4"
         },
         "datasource": "Stocks",
         "definition": "",
@@ -433,28 +574,28 @@
         "options": [
           {
             "selected": false,
-            "text": "1min",
-            "value": "1min"
+            "text": "5mins",
+            "value": "5mins"
           },
           {
             "selected": false,
-            "text": "5min",
-            "value": "5min"
+            "text": "15mins",
+            "value": "15mins"
           },
           {
             "selected": false,
-            "text": "15min",
-            "value": "15min"
+            "text": "30mins",
+            "value": "30mins"
           },
           {
             "selected": false,
-            "text": "30min",
-            "value": "30min"
+            "text": "1hour",
+            "value": "1hour"
           },
           {
             "selected": false,
-            "text": "60min",
-            "value": "60min"
+            "text": "5hours",
+            "value": "5hours"
           },
           {
             "selected": false,
@@ -472,7 +613,36 @@
             "value": "monthly"
           }
         ],
-        "query": "1min,5min,15min,30min,60min,daily,weekly,monthly",
+        "query": "5mins,15mins,30mins,1hour,5hours,daily,weekly,monthly",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "No",
+          "value": "No"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "On Sale",
+        "multi": false,
+        "name": "on_sale",
+        "options": [
+          {
+            "selected": false,
+            "text": "Yes",
+            "value": "Yes"
+          },
+          {
+            "selected": true,
+            "text": "No",
+            "value": "No"
+          }
+        ],
+        "query": "Yes,No",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
@@ -480,7 +650,7 @@
     ]
   },
   "time": {
-    "from": "now-6M",
+    "from": "now-5y",
     "to": "now"
   },
   "timepicker": {
@@ -499,5 +669,5 @@
   "timezone": "",
   "title": "Análise de Ativos",
   "uid": "d6T7Q5ZMk",
-  "version": 31
+  "version": 64
 }

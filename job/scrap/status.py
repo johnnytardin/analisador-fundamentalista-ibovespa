@@ -259,4 +259,6 @@ def get_specific_data(stock):
         return {}
     finally:
         driver.close()
+        driver.quit()
+
     return DADOS
