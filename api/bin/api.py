@@ -16,11 +16,12 @@ app = Flask(__name__)
 api = Api(app)
 
 
-if os.environ.get('PORT'):
+if os.environ.get("DYNO"):
+
     @property
     def specs_url(self):
-        return url_for(self.endpoint('specs'), _external=True, _scheme='https')
- 
+        return url_for(self.endpoint("specs"), _external=True, _scheme="https")
+
     Api.specs_url = specs_url
 
 
@@ -37,7 +38,7 @@ for blueprint, api in blueprints:
 
 if __name__ == "__main__":
     app.run(
-        debug=os.getenv("API_DEBUG", config.debug or False),
-        host=os.getenv("API_BIND", config.host or "0.0.0.0"),
-        port=dconfig("PORT", 5000)
+        debug=dconfig("API_DEBUG", config.debug or False),
+        host=dconfig("API_BIND", config.host or "0.0.0.0"),
+        port=dconfig("PORT", config.port or 5000),
     )

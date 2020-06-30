@@ -23,4 +23,6 @@ class Config:
             return yaml.safe_load(__file__)
 
 
-config = Config(os.getenv("ENVIRONMENT", "staging")).struct
+config = Config(
+    os.getenv("ENVIRONMENT", "staging" if not os.getenv("DYNO") else "production")
+).struct
