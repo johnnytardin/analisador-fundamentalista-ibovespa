@@ -11,7 +11,7 @@ services:
     tty: true
     stdin_open: true
     env_file:
-      - ./api/env
+      - ./api/.env
     volumes:
       - ./api:/app
     depends_on:
@@ -23,7 +23,7 @@ services:
     ports:
       - 5432:5432
     env_file:
-      - ./api/env
+      - ./api/.env
     volumes:
       - ./api/tmp/pg_data:/var/lib/postgresql/data
     healthcheck:
@@ -38,6 +38,6 @@ services:
       - 3000:3000
     user: "104"    
     env_file:
-      - ./grafana/env
+      - ./grafana/.env
     depends_on:
       - api

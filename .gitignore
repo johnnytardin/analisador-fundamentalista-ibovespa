@@ -119,3 +119,7 @@ rapina/.data/
 rapina/setores.yml
 api/tmp/
 .vscode
+Pipfile
+Pipfile.lock
+api/.env
+job/.env
