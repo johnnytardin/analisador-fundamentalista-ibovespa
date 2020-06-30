@@ -4,16 +4,21 @@ import psycopg2
 from decouple import config
 
 
-POSTGRES_HOST = config("POSTGRES_HOST")
-POSTGRES_USER = config("POSTGRES_USER")
-POSTGRES_PASSWORD = config("POSTGRES_PASSWORD")
-POSTGRES_DB = config("POSTGRES_DB")
+POSTGRES_HOST = config("POSTGRES_HOST", "")
+POSTGRES_USER = config("POSTGRES_USER", "")
+POSTGRES_PASSWORD = config("POSTGRES_PASSWORD", "")
+POSTGRES_DB = config("POSTGRES_DB", "")
+DATABASE_URL = config('DATABASE_URL', None)
 
 
 def get_conn():
-    conn = psycopg2.connect(
-        f"dbname={POSTGRES_DB} user={POSTGRES_USER} host={POSTGRES_HOST} password={POSTGRES_PASSWORD}"
-    )
+    if config("DATABASE_URL"):
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    else:
+        conn = psycopg2.connect(
+            f"dbname={POSTGRES_DB} user={POSTGRES_USER} host={POSTGRES_HOST} password={POSTGRES_PASSWORD}"
+        )
+
     return conn
 
 
