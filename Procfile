@@ -1,1 +1,1 @@
-web: api/make api
+web: python api/bin/api.py
