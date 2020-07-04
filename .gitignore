@@ -123,3 +123,4 @@ Pipfile
 Pipfile.lock
 api/.env
 job/.env
+grafana/.env

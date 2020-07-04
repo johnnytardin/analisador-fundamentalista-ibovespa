@@ -117,7 +117,7 @@ def rank(estrategia, payload):
                     ind["margemLiquida"],
                     ind["divSobreEbit"],
                     ind["CagrLucrosCincoAnos"],
-                    ind["ValorPatrimonialPorAcao"],
+                    ind["stockPrice"] / ind["ValorPatrimonialPorAcao"],
                     ind["stockPrice"],
                     ind["dividendos"],
                 ]
@@ -140,7 +140,7 @@ def columns():
         {"text": "MARG", "type": "number"},
         {"text": "DL/EBIT", "type": "number"},
         {"text": "CAGR LL", "type": "number"},
-        {"text": "VPA", "type": "number"},
+        {"text": "P/VPA", "type": "number"},
         {"text": "PREÇO", "type": "number"},
         {"text": "DY", "type": "number"},
     ]
