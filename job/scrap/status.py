@@ -177,6 +177,10 @@ def x_paths():
             """/html/body/main/div[2]/div/div[3]/div/div/div[2]/div/div/div/strong""",
             "TAG ALONG",
         ),
+        (
+            """/html/body/main/div[3]/div/div[2]/div[10]/div/div/strong""",
+            "SEGMENTO DE LISTAGEM",
+        ),
     ]
 
 

@@ -98,6 +98,7 @@ def details(code, coleta_id):
     )
     financial["freeFloat"] = normaliza_valor(status_data["FREE FLOAT"])
     financial["tagAlong"] = normaliza_valor(status_data["TAG ALONG"])
+    financial["segmentoListagem"] = normaliza_valor(status_data["SEGMENTO DE LISTAGEM"])
 
     # intriseco
     financial["valorIntriseco"] = graham.valor_intriseco(
