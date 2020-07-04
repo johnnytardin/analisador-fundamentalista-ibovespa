@@ -22,7 +22,7 @@ def get_estrategia(estrategia):
 
 
 def filter_on_sale(df):
-    df = df[(df.PSR <= 1) & (df.pegr <= 1)]
+    df = df[((df.stockPrice / df.ValorPatrimonialPorAcao)  <= 1) & (df.pegr <= 1)]
     return df
 
 
