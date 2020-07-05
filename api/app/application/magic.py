@@ -42,10 +42,10 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=50000):
         & (df.precoSobreLucro > 0)
         & (df.margemLiquida >= 7)
         & (df.tagAlong >= 80)
-        & (df.freeFloat >= 15)
+        & (df.freeFloat >= 25)
         & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
         & ((df.pegr <= 8) | (pd.isnull(df.pegr)))
-        & ((df.CagrLucrosCincoAnos >= 0) | (df.CagrReceitasCincoAnos >= 0))
+        & ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
         & (getattr(df, valor) >= 0)
         & (getattr(df, performance) >= 0)
     ]
@@ -108,6 +108,7 @@ def rank(estrategia, payload):
                 [
                     score,
                     code,
+                    ind["segmentoListagem"],
                     ind["subsetor"],
                     ind["precoSobreLucro"],
                     ind["ROE"],
@@ -130,6 +131,7 @@ def columns():
     return [
         {"text": "SC.", "type": "number"},
         {"text": "CODE", "type": "string"},
+        {"text": "SEGMENTO", "type": "string"},
         {"text": "SECTOR", "type": "string"},
         {"text": "P/L", "type": "number"},
         {"text": "ROE", "type": "number"},
