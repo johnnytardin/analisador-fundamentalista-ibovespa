@@ -42,9 +42,10 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=50000):
         & (df.precoSobreLucro > 0)
         & (df.margemLiquida >= 7)
         & (df.tagAlong >= 80)
-        & ((df.freeFloat >= 15) | (pd.isnull(df.freeFloat)))
+        & (df.freeFloat >= 15)
         & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
         & ((df.pegr <= 8) | (pd.isnull(df.pegr)))
+        & ((df.CagrLucrosCincoAnos >= 0) | (df.CagrReceitasCincoAnos >= 0))
         & (getattr(df, valor) >= 0)
         & (getattr(df, performance) >= 0)
     ]
@@ -113,7 +114,6 @@ def rank(estrategia, payload):
                     ind["EVSobreEBIT"],
                     ind["ROIC"],
                     ind["pegr"],
-                    ind["PSR"],
                     ind["margemLiquida"],
                     ind["divSobreEbit"],
                     ind["CagrLucrosCincoAnos"],
@@ -136,7 +136,6 @@ def columns():
         {"text": "EV/EBIT", "type": "number"},
         {"text": "ROIC", "type": "number"},
         {"text": "PEGR", "type": "number"},
-        {"text": "PSR", "type": "number"},
         {"text": "MARG", "type": "number"},
         {"text": "DL/EBIT", "type": "number"},
         {"text": "CAGR LL", "type": "number"},
