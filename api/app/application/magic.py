@@ -40,10 +40,10 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=50000):
     df = df[
         (df.liquidezMediaDiaria > liquidez_media_minima)
         & (df.precoSobreLucro > 0)
-        & (df.margemLiquida >= 7)
+        & (df.margemLiquida >= 3)
         & (df.tagAlong >= 80)
         & (df.freeFloat >= 25)
-        & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
+        & ((df.divSobreEbit <= 8) | (pd.isnull(df.divSobreEbit)))
         & ((df.pegr <= 8) | (pd.isnull(df.pegr)))
         & ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
         & (getattr(df, valor) >= 0)
@@ -55,6 +55,8 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=50000):
 
 def stocks_filter(estrategia, payload, valor, performance):
     df = filter_by_indicators(valor, performance)
+
+    print(payload)
 
     on_sale = payload.get("scopedVars").get("on_sale").get("text")
     if on_sale.lower() == "yes":
