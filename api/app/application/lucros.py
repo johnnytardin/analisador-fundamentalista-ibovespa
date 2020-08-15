@@ -30,11 +30,14 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
 
     # verificar os ultimos anos se tem prejuizo
     count = 0
+    counter = 0
     for v in data_p:
         vlr = v[1]
 
-        if vlr < 0:
+        if vlr < 0 and counter != 0:
+            # para o periodo do covid
             count += 1
+        counter += 1
 
     if count > 0:
         logger.info(f"{count} anos com prejuízo")
@@ -54,7 +57,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
             # verifica se o lucro vem caindo
             if ultimo_lucro:
                 # ex: se 2018 for menor que 2017 (gordura de 15%)
-                if vlr < (ultimo_lucro * 0.85):
+                if vlr < (ultimo_lucro * 0.7):
                     lucros_desc += 1
                     ultimo_lucro = vlr
             else:
@@ -66,7 +69,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
             logger.info(f"{lucros_desc} lucros decrescendo")
 
         # veririca se o lucro dos ultimos 12m é abaixo do p70 dos ultimos 2 anos fechados
-        ptl = percentile(data_l[-2:], 62)
+        ptl = percentile(data_l[-2:], 60)
         if ultimos_12m < ptl:
             status = False
             logger.info(f"Descartando pois lucros de 12m com {ultimos_12m} e p70 {ptl}")
