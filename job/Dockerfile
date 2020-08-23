@@ -5,8 +5,6 @@ USER        root
 ARG         VER
 ENV         VER=${VER}
 
-COPY        scrap/ /app/
-
 RUN         apt update && apt install python3-pip -y
 
 ADD         requirements.txt /mnt/

@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 
 from selenium import webdriver
 
@@ -10,122 +11,126 @@ DADOS = {}
 
 
 def element(driver, x_path):
-    indicadores = driver.find_elements_by_xpath(x_path)[0]
+    try:
+        indicadores = driver.find_elements_by_xpath(x_path)[0]
+    except Exception:
+        logging.exception(f"Falha coletando {x_path}")
+        raise
     return indicadores.text
 
 
 def x_paths():
     return [
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[3]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[3]/div/div/strong""",
             "P/VP",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[1]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[1]/div/div/strong""",
             "P/L",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[5]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[5]/div/div/strong""",
             "P/EBITDA",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[6]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[6]/div/div/strong""",
             "P/EBIT",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[8]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[8]/div/div/strong""",
             "P/ATIVO",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[2]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[2]/div/div/strong""",
             "EV/EBITDA",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[4]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[4]/div/div/strong""",
             "EV/EBIT",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[10]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[10]/div/div/strong""",
             "PSR",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[11]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[11]/div/div/strong""",
             "P/CAP.GIRO",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[12]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[12]/div/div/strong""",
             "P/ATIVO CIRC LIQ",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[3]/div/div[1]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[3]/div/div[1]/div/div/strong""",
             "MARGEM BRUTA",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[3]/div/div[2]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[3]/div/div[2]/div/div/strong""",
             "MARGEM EBITDA",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[3]/div/div[3]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[3]/div/div[3]/div/div/strong""",
             "MARGEM EBIT",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[3]/div/div[4]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[3]/div/div[4]/div/div/strong""",
             "MARGEM LÍQUIDA",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[4]/div/div[4]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[4]/div/div[4]/div/div/strong""",
             "GIRO ATIVOS",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[4]/div/div[1]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[4]/div/div[1]/div/div/strong""",
             "ROE",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[4]/div/div[2]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[4]/div/div[2]/div/div/strong""",
             "ROA",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[4]/div/div[3]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[4]/div/div[3]/div/div/strong""",
             "ROIC",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[9]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[9]/div/div/strong""",
             "LPA",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[7]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[7]/div/div/strong""",
             "VPA",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[2]/div/div[1]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[2]/div/div[1]/div/div/strong""",
             "DÍVIDA LÍQUIDA / PATRIMÔNIO",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[2]/div/div[2]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[2]/div/div[2]/div/div/strong""",
             "DÍVIDA LÍQUIDA / EBITDA",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[2]/div/div[3]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[2]/div/div[3]/div/div/strong""",
             "DÍVIDA LÍQUIDA / EBIT",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[1]/div/div[8]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[1]/div/div[8]/div/div/strong""",
             "PATRIMÔNIO / ATIVOS",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[2]/div/div[5]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[2]/div/div[6]/div/div/strong""",
             "PASSIVOS / ATIVOS",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[2]/div/div[6]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[2]/div/div[6]/div/div/strong""",
             "LIQUIDEZ CORRENTE",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[5]/div/div[1]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[5]/div/div[1]/div/div/strong""",
             "CAGR RECEITAS 5 ANOS",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div[5]/div/div[2]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div/div[5]/div/div[2]/div/div/strong""",
             "CAGR LUCROS 5 ANOS",
         ),
         (
@@ -157,7 +162,7 @@ def x_paths():
             "VALORIZAÇÃO (MÊS ATUAL)",
         ),
         (
-            """/html/body/main/div[2]/div/div[3]/div/div/div[3]/div/div/div/strong""",
+            """/html/body/main/div[2]/div/div[4]/div/div/div[3]/div/div/div/strong""",
             "LIQUIDEZ MÉDIA DIÁRIA",
         ),
         (
@@ -174,7 +179,7 @@ def x_paths():
         ),
         ("""/html/body/main/div[3]/div/div[2]/div[11]/div/div/strong""", "FREE FLOAT",),
         (
-            """/html/body/main/div[2]/div/div[3]/div/div/div[2]/div/div/div/strong""",
+            """/html/body/main/div[2]/div/div[4]/div/div/div[2]/div/div/div/strong""",
             "TAG ALONG",
         ),
         (
@@ -227,10 +232,9 @@ def anos_anteriores():
 
 def dre(driver, stock):
     df = pd.read_html(driver.page_source, decimal=",", thousands=".")
-    dre_dt = df[1].to_dict()
+    dre_dt = df[2].to_dict()
 
     anos_considerar = anos_anteriores()
-
     d = []
     for indice, tipo in dre_dt["#"].items():
         for periodo, valor in dre_dt.items():
@@ -259,7 +263,7 @@ def get_specific_data(stock):
         dre(driver, stock)
         fundamentus(driver)
     except Exception as err:
-        print("Falha coletando os dados na stock para {}. Causa: {}".format(stock, err))
+        logging.exception("Falha coletando os dados na stock para {}. Causa: {}".format(stock, err), exc_info=True)
         return {}
     finally:
         driver.close()

@@ -34,7 +34,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
     for v in data_p:
         vlr = v[1]
 
-        if vlr < 0 and counter != 0:
+        if vlr < 0 and counter > 0:
             # para o periodo do covid
             count += 1
         counter += 1
