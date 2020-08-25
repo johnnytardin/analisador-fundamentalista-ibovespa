@@ -3,7 +3,7 @@ apiVersion: 1
 datasources:
   - name: Financial
     type: simpod-json-datasource
-    access: server
+    access: proxy
     orgId: 1
     url: https://evening-beyond-37382.herokuapp.com/v1/financial
     basicAuth: false
@@ -11,7 +11,7 @@ datasources:
     editable: true
   - name: Magic-PL
     type: simpod-json-datasource
-    access: server
+    access: proxy
     orgId: 1
     url: https://evening-beyond-37382.herokuapp.com/v1/magic/pl
     basicAuth: false
@@ -19,33 +19,49 @@ datasources:
     editable: true
   - name: Magic-ROIC
     type: simpod-json-datasource
-    access: server
+    access: proxy
     orgId: 1
     url: https://evening-beyond-37382.herokuapp.com/v1/magic/roic
     basicAuth: false
     isDefault: false
     editable: true        
-  - name: Stocks
+  - name: Technical-Indicators
     type: simpod-json-datasource
-    access: server
+    access: proxy
     orgId: 1
-    url: https://evening-beyond-37382.herokuapp.com/v1/stocks
+    url: https://evening-beyond-37382.herokuapp.com/v1/technical/indicators
     basicAuth: false
     isDefault: false
     editable: true    
-  - name: Technical
+  - name: Technical-Moving-Averages
     type: simpod-json-datasource
-    access: server
+    access: proxy
     orgId: 1
-    url: https://evening-beyond-37382.herokuapp.com/v1/technical
+    url: https://evening-beyond-37382.herokuapp.com/v1/technical/movingaverages
     basicAuth: false
     isDefault: false
     editable: true    
   - name: Sectors
     type: simpod-json-datasource
-    access: server
+    access: proxy
     orgId: 1
     url: https://evening-beyond-37382.herokuapp.com/v1/sectors
+    basicAuth: false
+    isDefault: false
+    editable: true    
+  - name: Stocks
+    type: simpod-json-datasource
+    access: proxy
+    orgId: 1
+    url: https://evening-beyond-37382.herokuapp.com/v1/stocks
+    basicAuth: false
+    isDefault: false
+    editable: true    
+  - name: Stocks-Historical
+    type: simpod-json-datasource
+    access: proxy
+    orgId: 1
+    url: https://evening-beyond-37382.herokuapp.com/v1/stocks/historical
     basicAuth: false
     isDefault: false
     editable: true    

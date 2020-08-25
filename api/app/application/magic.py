@@ -122,6 +122,7 @@ def rank(estrategia, payload):
                     ind["CagrLucrosCincoAnos"],
                     ind["stockPrice"] / ind["ValorPatrimonialPorAcao"],
                     ind["stockPrice"],
+                    ind["valorIntriseco"],
                     ind["dividendos"],
                 ]
             )
@@ -144,6 +145,7 @@ def columns():
         {"text": "DL/EBIT", "type": "number"},
         {"text": "CAGR LL", "type": "number"},
         {"text": "P/VPA", "type": "number"},
+        {"text": "INTR.", "type": "number"},
         {"text": "PREÇO", "type": "number"},
         {"text": "DY", "type": "number"},
     ]

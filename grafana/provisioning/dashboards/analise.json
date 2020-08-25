@@ -35,7 +35,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Stocks-Histocial",
+          "datasource": "Stocks-Historical",
           "fieldConfig": {
             "defaults": {
               "custom": {},
