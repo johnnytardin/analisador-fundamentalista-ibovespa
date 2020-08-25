@@ -6,7 +6,6 @@ services:
       - 3000:3000
     user: "104"    
     volumes:
-      - ./grafana/database/grafana.db:/var/lib/grafana/grafana.db
       - ./grafana/provisioning/:/etc/grafana/provisioning/
     restart: unless-stopped
     env_file:
