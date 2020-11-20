@@ -19,7 +19,7 @@ scrap: ; @\
 	clear; \
 	echo "[Starting Environment and scraping...]"; \
 	echo ""; \
-	docker-compose -f docker-compose-scrap.yml -p ${PROJECT_NAME} up -d ${container}
+	docker-compose -f docker-compose-scrap.yml -p ${PROJECT_NAME} up -d ${container} --build
 
 stop: ; @\
 	clear; \
