@@ -103,7 +103,9 @@ def lucro_resultado_geral(data, media):
 def valida_empresa(code):
     lc, media, ultimos_12m = get_lucro_details(code)
 
-    logger.info(code)
+    if code == "AGRO3":
+        logger.info(lc)
+
     status = valida_ultimos_lucros(lc, ultimos_12m)
     if not status:
         logger.info(f"Descartando {code} pelos últimos lucros")

@@ -108,6 +108,7 @@ def rank(estrategia, payload):
 
     rank_validated = []
     for code, score in rank_sorted.iteritems():
+        logger.info(f"Analisando os lucros de {code}")
         if lucros.valida_empresa(code):
             # adiciona indicadores
             ind = financial.financial_get_indicators(code)
