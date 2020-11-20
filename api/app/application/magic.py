@@ -124,7 +124,6 @@ def rank(estrategia, payload):
                     ind["stockPrice"],
                     ind["valorIntriseco"],
                     ind["dividendos"],
-                    get_technical_indicators(code)
                 ]
             )
 
