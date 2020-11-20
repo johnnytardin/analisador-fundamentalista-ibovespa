@@ -97,19 +97,6 @@ def sort_magic_formula(estrategia, payload):
     return rank_sorted
 
 
-def technical_details(code):
-    technical = db.consulta_detalhes("dre", code)[0]
-
-    logger.info(type(technical))
-    logger.info(technical)
-
-    d = {}
-    for name in technical:
-        d[name["tipo"]] = name["value"]
-    
-    return d
-
-
 def rank(estrategia, payload):
     rank_sorted = sort_magic_formula(estrategia, payload)
 
@@ -118,7 +105,7 @@ def rank(estrategia, payload):
         if lucros.valida_empresa(code):
             # adiciona indicadores
             ind = financial.financial_get_indicators(code)
-            technical = technical_details(code)
+            technical = db.consulta_detalhes("technical", code)
 
             rank_validated.append(
                 [

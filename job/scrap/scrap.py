@@ -6,6 +6,7 @@ import graham
 import status
 import stocks
 import db
+import technical
 
 
 def normaliza_valor(data, replace=None):
@@ -145,11 +146,13 @@ def main():
     for stock in st:
         try:
             financial, dre = details(stock, coleta_id)
+            technical_values = technical.get_technical_indicators(stock)
         except Exception as err:
             print("Falha coletando os dados do papel {}. Causa: {}".format(stock, err))
         else:
             db.insert_data("financial", stock, coleta_id, timestamp, financial)
             db.insert_data("dre", stock, coleta_id, timestamp, dre)
+            db.insert_data("technical", stock, coleta_id, timestamp, technical_values)
 
 
 if __name__ == "__main__":

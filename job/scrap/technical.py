@@ -14,10 +14,8 @@ def get_technical_indicators(code, interval="weekly"):
         code, country="brazil", product_type="stock", interval=interval
     )
 
-    indicators_list = []
+    indicators = {}
     for _, values in data.iterrows():
-        indicators_list.append(
-            [values.technical_indicator, values.value, values.signal]
-        )
+        indicators[values.technical_indicator] = [values.value, values.signal]
 
-    return indicators_list
+    return indicators

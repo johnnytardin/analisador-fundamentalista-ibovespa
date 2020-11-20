@@ -28,6 +28,7 @@ def queries(tipo):
         "financial": "queries/select_financial.sql",
         "dre_per_stock": "queries/select_dre_per_stock.sql",
         "financial_per_stock": "queries/select_financial_per_stock.sql",
+        "technical_per_stock": "queries/select_technical_per_stock.sql",
         "ev_ebit": "queries/select_ev_ebit.sql",
         "roic": "queries/select_roic.sql",
         "pl": "queries/select_pl.sql",

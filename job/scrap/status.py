@@ -6,8 +6,6 @@ from selenium import webdriver
 # from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import pandas as pd
 
-from technical import get_technical_indicators
-
 
 DADOS = {}
 
@@ -250,16 +248,6 @@ def dre(driver, stock):
                         "valor": normalize_money(valor[indice]),
                     }
                 )
-
-    tech_values = get_technical_indicators(stock)
-    for detail in tech_values:
-        d.append(
-            {
-                "tipo": detail[0],
-                "periodo": None,
-                "valor": detail[1],
-            }
-        )
 
     DADOS["dre"] = d
 
