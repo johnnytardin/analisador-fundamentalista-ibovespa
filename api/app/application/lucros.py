@@ -118,6 +118,9 @@ def valida_empresa(code):
 def get_lucro_details(code):
     details = db.consulta_detalhes("dre", code)
 
+    if code == "DIRR3":
+        logger.info(f"{details} Detalhes")
+
     lc = {}
     ultimos_12m = None
     for row in details[0]:
