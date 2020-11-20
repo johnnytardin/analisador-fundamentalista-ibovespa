@@ -131,7 +131,7 @@ def rank(estrategia, payload):
                     ind["stockPrice"],
                     ind["valorIntriseco"],
                     ind["dividendos"],
-                    "{0} ({1})".format(technical["RSI(14)"][0], technical["RSI(14)"][1]),
+                    "{0} ({1})".format(int(technical["RSI(14)"][0]), technical["RSI(14)"][1]),
                 ]
             )
 
