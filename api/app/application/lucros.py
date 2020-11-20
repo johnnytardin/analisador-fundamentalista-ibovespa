@@ -104,7 +104,7 @@ def valida_empresa(code):
     lc, media, ultimos_12m = get_lucro_details(code)
 
     if code == "AGRO3":
-        logger.info(lc)
+        logger.info(f"{lc} - {media} - {ultimos_12m}")
 
     status = valida_ultimos_lucros(lc, ultimos_12m)
     if not status:
