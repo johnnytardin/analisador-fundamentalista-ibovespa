@@ -3,7 +3,6 @@ import logging
 from app.application import db
 from app.application import lucros
 from app.application import financial
-from app.application import technical
 
 import pandas as pd
 import warnings
@@ -125,7 +124,7 @@ def rank(estrategia, payload):
                     ind["stockPrice"],
                     ind["valorIntriseco"],
                     ind["dividendos"],
-                    technical.get_technical_indicators(code)
+                    get_technical_indicators(code)
                 ]
             )
 
@@ -150,5 +149,4 @@ def columns():
         {"text": "INTR.", "type": "number"},
         {"text": "PREÇO", "type": "number"},
         {"text": "DY", "type": "number"},
-        {"text": "RSI", "type": "string"},
     ]
