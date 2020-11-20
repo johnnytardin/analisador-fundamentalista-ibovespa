@@ -177,7 +177,10 @@ def x_paths():
             """/html/body/main/div[3]/div/div[3]/div/div[3]/div/div/div/a/strong""",
             "SEGMENTO DE ATUAÇÂO",
         ),
-        ("""/html/body/main/div[3]/div/div[2]/div[11]/div/div/strong""", "FREE FLOAT",),
+        (
+            """/html/body/main/div[3]/div/div[2]/div[11]/div/div/strong""",
+            "FREE FLOAT",
+        ),
         (
             """/html/body/main/div[2]/div/div[4]/div/div/div[2]/div/div/div/strong""",
             "TAG ALONG",
@@ -257,14 +260,19 @@ def get_specific_data(stock):
         url = "https://statusinvest.com.br/acoes/{}".format(stock.lower())
         options = webdriver.ChromeOptions()
         options.add_argument("headless")
-        options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36")
+        options.add_argument(
+            "user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36"
+        )
         driver = webdriver.Chrome("/usr/bin/chromedriver", chrome_options=options)
         driver.get(url)
 
         dre(driver, stock)
         fundamentus(driver)
     except Exception as err:
-        logging.exception("Falha coletando os dados na stock para {}. Causa: {}".format(stock, err), exc_info=True)
+        logging.exception(
+            "Falha coletando os dados na stock para {}. Causa: {}".format(stock, err),
+            exc_info=True,
+        )
         return {}
     finally:
         driver.close()

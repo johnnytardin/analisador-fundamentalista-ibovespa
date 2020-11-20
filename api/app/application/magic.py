@@ -15,14 +15,20 @@ logger = logging.getLogger(__name__)
 
 def get_estrategia(estrategia):
     mp = {
-        "ev_ebit_roic": ("EVSobreEBIT", "ROIC",),
-        "pl_roe": ("precoSobreLucro", "ROE",),
+        "ev_ebit_roic": (
+            "EVSobreEBIT",
+            "ROIC",
+        ),
+        "pl_roe": (
+            "precoSobreLucro",
+            "ROE",
+        ),
     }
     return mp[estrategia]
 
 
 def filter_on_sale(df):
-    df = df[((df.stockPrice / df.ValorPatrimonialPorAcao)  <= 1) & (df.pegr <= 1)]
+    df = df[((df.stockPrice / df.ValorPatrimonialPorAcao) <= 1) & (df.pegr <= 1)]
     return df
 
 
@@ -125,7 +131,7 @@ def rank(estrategia, payload):
                     ind["stockPrice"],
                     ind["valorIntriseco"],
                     ind["dividendos"],
-                    technical["RSI(14)"],
+                    "{0} ({1})".format(technical["RSI(14)"][0], ["RSI(14)"][1]),
                 ]
             )
 
