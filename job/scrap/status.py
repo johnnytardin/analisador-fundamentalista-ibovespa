@@ -257,6 +257,7 @@ def get_specific_data(stock):
         url = "https://statusinvest.com.br/acoes/{}".format(stock.lower())
         options = webdriver.ChromeOptions()
         options.add_argument("headless")
+        options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36")
         driver = webdriver.Chrome("/usr/bin/chromedriver", chrome_options=options)
         driver.get(url)
 
