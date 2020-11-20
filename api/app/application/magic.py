@@ -106,6 +106,7 @@ def rank(estrategia, payload):
             # adiciona indicadores
             ind = financial.financial_get_indicators(code)
             technical = db.consulta_detalhes("dre")
+            logger.info(technical)
 
             rank_validated.append(
                 [
