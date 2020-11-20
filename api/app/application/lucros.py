@@ -20,6 +20,8 @@ def safe_div(n, d):
 
 
 def valida_ultimos_lucros(lucros, ultimos_12m):
+    logger.info(lucros)
+    logger.info(ultimos_12m)
     """
     Verifica se os últimos resultados foram positivos
     """
