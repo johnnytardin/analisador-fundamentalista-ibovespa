@@ -69,15 +69,11 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
             logger.info(f"{lucros_desc} lucros decrescendo")
 
         # veririca se o lucro dos ultimos 12m é abaixo do p70 dos ultimos 2 anos fechados
-        if data_l:
-            ptl = percentile(data_l[-2:], 60)
+        ptl = percentile(data_l[-2:], 60)
 
-            if ultimos_12m < ptl:
-                status = False
-                logger.info(f"Descartando pois lucros de 12m com {ultimos_12m} e p70 {ptl}")
-        else:
-            logger.info(f"Não existem dados para analisar os lucros - {lucros} - {ultimos_12m}")
+        if ultimos_12m < ptl:
             status = False
+            logger.info(f"Descartando pois lucros de 12m com {ultimos_12m} e p70 {ptl}")
 
     return status
 
@@ -116,7 +112,7 @@ def get_lucro_details(code):
     lc = {}
     ultimos_12m = None
     for row in details[0]:
-        if row["tipo"] == "Lucro Líquido - (R$)":
+        if row["tipo"] == "Lucro Líquido - (R$) format_quote":
             periodo = row["periodo"]
             lucro = row["valor"]
             if periodo == "Últ. 12M":
