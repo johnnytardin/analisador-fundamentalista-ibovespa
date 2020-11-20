@@ -105,7 +105,7 @@ def rank(estrategia, payload):
         if lucros.valida_empresa(code):
             # adiciona indicadores
             ind = financial.financial_get_indicators(code)
-            technical = db.consulta_detalhes("technical", code)
+            technical = db.consulta_detalhes("technical", code)[0]
 
             rank_validated.append(
                 [
