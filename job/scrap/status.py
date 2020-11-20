@@ -197,13 +197,6 @@ def fundamentus(driver):
         DADOS[path_data[1]] = d
 
 
-def technical(stock):
-    d = {}
-    for indicator in get_technical_indicators(stock):
-        d[indicator[0]] = indicator[1]
-    return d
-
-
 def normalize_money(value):
     try:
         return float(value)
@@ -258,7 +251,16 @@ def dre(driver, stock):
                     }
                 )
 
-    d.append({"technical": technical(stock)})
+    tech_values = get_technical_indicators(stock)
+    for detail in tech_values:
+        d.append(
+            {
+                "tipo": detail[0],
+                "periodo": None,
+                "valor": detail[1],
+            }
+        )
+
     DADOS["dre"] = d
 
 
