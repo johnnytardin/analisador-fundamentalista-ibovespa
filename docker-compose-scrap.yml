@@ -1,47 +1,5 @@
 version: '2.2'
 services:
-  api:
-    image: api
-    build:
-      dockerfile: Dockerfile
-      context: ./api
-    command: make api
-    ports:
-      - 8080:8080
-    tty: true
-    stdin_open: true
-    env_file:
-      - ./api/.env
-    volumes:
-      - ./api:/app
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-  postgres:
-    image: postgres
-    ports:
-      - 5432:5432
-    env_file:
-      - ./api/.env
-    volumes:
-      - ./api/tmp/pg_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U analisador"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-
-  grafana:
-    image: grafana/grafana:7.0.4
-    ports:
-      - 3000:3000
-    user: "104"    
-    env_file:
-      - ./grafana/.env
-    depends_on:
-      - api
-
   scrap:
     build:
       dockerfile: Dockerfile
@@ -52,6 +10,4 @@ services:
     volumes:
       - ./job/:/app/
     command: python3 /app/scrap/scrap.py
-    depends_on:
-      postgres:
-        condition: service_healthy
+
