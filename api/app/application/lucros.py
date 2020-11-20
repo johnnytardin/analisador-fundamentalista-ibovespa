@@ -76,6 +76,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
                 status = False
                 logger.info(f"Descartando pois lucros de 12m com {ultimos_12m} e p70 {ptl}")
         else:
+            logger.info(f"Não existem dados para analisar os lucros - {lucros} - {ultimos_12m}")
             status = False
 
     return status
