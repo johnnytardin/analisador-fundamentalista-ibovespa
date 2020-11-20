@@ -98,7 +98,7 @@ def sort_magic_formula(estrategia, payload):
 
 
 def technical_details(code):
-    technical = db.consulta_detalhes("dre", code)
+    technical = db.consulta_detalhes("dre", code)[0]
 
     logger.info(type(technical))
     logger.info(technical)
