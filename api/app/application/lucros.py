@@ -20,8 +20,6 @@ def safe_div(n, d):
 
 
 def valida_ultimos_lucros(lucros, ultimos_12m):
-    logger.info(lucros)
-    logger.info(ultimos_12m)
     """
     Verifica se os últimos resultados foram positivos
     """
@@ -85,7 +83,9 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
 
 def lucro_resultado_geral(data, media):
     # se p50 for menor que zero ou media menor que zero
-    p50 = percentile([x for x in data.values()], 50)
+    #p50 = percentile([x for x in data.values()], 50)
+    p50 = 0
+
     if p50 < 0:
         logger.info(f"Lucro p50 abaixo de zero {p50}")
         return False
