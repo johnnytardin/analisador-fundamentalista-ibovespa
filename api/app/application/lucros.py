@@ -103,18 +103,19 @@ def lucro_resultado_geral(data, media):
 def valida_empresa(code):
     lc, media, ultimos_12m = get_lucro_details(code)
 
-    if code == "AGRO3":
-        logger.info(f"{lc} - {media} - {ultimos_12m}")
-
-    status = valida_ultimos_lucros(lc, ultimos_12m)
-    if not status:
-        logger.info(f"Descartando {code} pelos últimos lucros")
-
-    if status:
-        # somente valida o geral se os ultimos forem positivos
-        status = lucro_resultado_geral(lc, media)
+    if lc and media and ultimos_12m:
+        status = valida_ultimos_lucros(lc, ultimos_12m)
         if not status:
-            logger.info(f"Descartado {code} pelos lucros históricos negativos")
+            logger.info(f"Descartando {code} pelos últimos lucros")
+
+        if status:
+            # somente valida o geral se os ultimos forem positivos
+            status = lucro_resultado_geral(lc, media)
+            if not status:
+                logger.info(f"Descartado {code} pelos lucros históricos negativos")
+    else:
+        logger.info(f"Falha nos dados para {code} - {lc} - {media} - {ultimos_12m}")
+        return False
 
     return status
 
