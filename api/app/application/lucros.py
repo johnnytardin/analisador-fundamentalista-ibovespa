@@ -73,7 +73,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
 
         if ultimos_12m < ptl:
             status = False
-            logger.info(f"Descartando pois lucros de 12m com {ultimos_12m} e p70 {ptl}")
+            logger.info(f"Descartando pois lucros de 12m com {ultimos_12m} e p40 {ptl}")
 
     return status
 
