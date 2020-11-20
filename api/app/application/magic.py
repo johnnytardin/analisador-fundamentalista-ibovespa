@@ -153,8 +153,8 @@ def columns():
         {"text": "DL/EBIT", "type": "number"},
         {"text": "CAGR LL", "type": "number"},
         {"text": "P/VPA", "type": "number"},
-        {"text": "INTR.", "type": "number"},
         {"text": "PREÇO", "type": "number"},
+        {"text": "INTR.", "type": "number"},
         {"text": "DY", "type": "number"},
         {"text": "RSI", "type": "number"},
     ]
