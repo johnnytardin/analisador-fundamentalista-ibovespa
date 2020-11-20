@@ -71,11 +71,14 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
             logger.info(f"{lucros_desc} lucros decrescendo")
 
         # veririca se o lucro dos ultimos 12m é abaixo do p40 dos ultimos 2 anos fechados
-        ptl = percentile(data_l[-2:], 40)
+        try:
+            ptl = percentile(data_l[-2:], 40)
 
-        if ultimos_12m < ptl:
-            status = False
-            logger.info(f"Descartando pois lucros de 12m com {ultimos_12m} e p40 {ptl}")
+            if ultimos_12m < ptl:
+                status = False
+                logger.info(f"Descartando pois lucros de 12m com {ultimos_12m} e p40 {ptl}")
+        except Exception:
+            logger.exception("Exception")
 
     return status
 
