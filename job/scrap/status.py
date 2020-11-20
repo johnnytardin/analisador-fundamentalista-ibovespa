@@ -6,6 +6,8 @@ from selenium import webdriver
 # from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import pandas as pd
 
+from technical import get_technical_indicators
+
 
 DADOS = {}
 
@@ -195,6 +197,13 @@ def fundamentus(driver):
         DADOS[path_data[1]] = d
 
 
+def technical(stock):
+    d = {}
+    for indicator in get_technical_indicators(stock):
+        d[indicator[0]] = indicator[1]
+    return d
+
+
 def normalize_money(value):
     try:
         return float(value)
@@ -249,6 +258,7 @@ def dre(driver, stock):
                     }
                 )
 
+    d.append({"technical": technical(stock)})
     DADOS["dre"] = d
 
 

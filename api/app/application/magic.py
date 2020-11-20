@@ -105,6 +105,7 @@ def rank(estrategia, payload):
         if lucros.valida_empresa(code):
             # adiciona indicadores
             ind = financial.financial_get_indicators(code)
+            technical = db.consulta_detalhes("financial")
 
             rank_validated.append(
                 [
@@ -124,6 +125,7 @@ def rank(estrategia, payload):
                     ind["stockPrice"],
                     ind["valorIntriseco"],
                     ind["dividendos"],
+                    technical["RSI(14)"],
                 ]
             )
 
@@ -148,4 +150,5 @@ def columns():
         {"text": "INTR.", "type": "number"},
         {"text": "PREÇO", "type": "number"},
         {"text": "DY", "type": "number"},
+        {"text": "RSI", "type": "number"},
     ]
