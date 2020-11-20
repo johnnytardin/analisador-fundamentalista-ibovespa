@@ -120,7 +120,7 @@ def get_lucro_details(code):
     lc = {}
     ultimos_12m = None
     for row in details[0]:
-        if row["tipo"] == "Lucro Líquido - (R$) format_quote":
+        if row["tipo"] in ["Lucro Líquido - (R$) format_quote", "Lucro Líquido - (R$)"]:
             periodo = row["periodo"]
             lucro = row["valor"]
             if periodo == "Últ. 12M":
