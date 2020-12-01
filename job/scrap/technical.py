@@ -7,7 +7,7 @@ import investpy as inv
 logger = logging.getLogger(__name__)
 
 
-def get_technical_indicators(code, interval="weekly"):
+def get_technical_indicators(code, interval="daily"):
     time.sleep(1.5)
 
     data = inv.technical_indicators(

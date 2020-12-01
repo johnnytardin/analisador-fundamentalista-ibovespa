@@ -134,6 +134,11 @@ def get_lucro_details(code):
             else:
                 lc[int(periodo)] = float(lucro)
 
+    if not ultimos_12m:
+        # caso nao exista 12m usa o ultimo ano
+        ultimos_12m = list(lc.keys())[0]
+        logger.info(f"Sem 12m para {code}. Usando {ultimos_12m} em {lc}")
+
     values = [x for x in lc.values()]
     media = safe_div(sum(values), len(values))
 
