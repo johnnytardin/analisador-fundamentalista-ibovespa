@@ -68,14 +68,14 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
             status = False
             logger.info(f"{lucros_desc} lucros decrescendo")
 
-        # veririca se o lucro dos ultimos 12m é abaixo do p40 dos ultimos 2 anos fechados
+        # veririca se o lucro dos ultimos 12m é abaixo do p60 dos ultimos 2 anos fechados
         try:
-            ptl = percentile(data_l[-2:], 40)
+            ptl = percentile(data_l[-2:], 60)
 
             if ultimos_12m < ptl:
                 status = False
                 logger.info(
-                    f"Descartando pois lucros de 12m com {ultimos_12m} e p40 {ptl}"
+                    f"Descartando pois lucros de 12m com {ultimos_12m} e p60 {ptl}"
                 )
         except Exception:
             logger.exception("Exception")
@@ -137,7 +137,7 @@ def get_lucro_details(code):
     if not ultimos_12m and lc:
         # caso nao exista 12m usa o ultimo ano
         ultimos_12m = list(lc.values())[0]
-        logger.info(f"Sem 12m para {code}. Usando {ultimos_12m} em {lc}")
+        logger.warning(f"Sem 12m para {code}. Usando {ultimos_12m} em {lc}")
 
     values = [x for x in lc.values()]
     media = safe_div(sum(values), len(values))
