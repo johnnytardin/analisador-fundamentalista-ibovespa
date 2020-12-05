@@ -134,7 +134,7 @@ def get_lucro_details(code):
             else:
                 lc[int(periodo)] = float(lucro)
 
-    if not ultimos_12m:
+    if not ultimos_12m and lc:
         # caso nao exista 12m usa o ultimo ano
         ultimos_12m = list(lc.values())[0]
         logger.info(f"Sem 12m para {code}. Usando {ultimos_12m} em {lc}")
