@@ -138,6 +138,7 @@ def details(code, coleta_id):
 
 
 def main():
+    db.delete_data()
     st = stocks.get_stocks_tickers()
 
     coleta_id = str(uuid4())
