@@ -28,7 +28,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
 
     status = True
 
-    # verificar os ultimos anos se tem prejuizo
+    # verificar os ultimos anos se vem tendo prejuizo
     count = 0
     counter = 0
     for v in data_p:
@@ -56,8 +56,8 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
 
             # verifica se o lucro vem caindo
             if ultimo_lucro:
-                # ex: se 2018 for menor que 2017 (gordura de 15%)
-                if vlr < (ultimo_lucro * 0.7):
+                # ex: se 2018 for menor que 2017 (gordura de x%)
+                if vlr < (ultimo_lucro * 0.6):
                     lucros_desc += 1
                     ultimo_lucro = vlr
             else:
@@ -68,7 +68,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
             status = False
             logger.info(f"{lucros_desc} lucros decrescendo")
 
-        # veririca se o lucro dos ultimos 12m é abaixo do p60 dos ultimos 2 anos fechados
+        # verifica se o lucro dos ultimos 12m é abaixo do percentile dos ultimos 2 anos fechados
         try:
             ptl = percentile(data_l[-2:], 40)
 
@@ -84,15 +84,15 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
 
 
 def lucro_resultado_geral(data, media):
-    # se p50 for menor que zero ou media menor que zero
-    p50 = 0
+    # se percentile for menor que zero ou media menor que zero
+    p = 0
     try:
-        p50 = percentile([x for x in data.values()], 50)
+        p = percentile([x for x in data.values()], 60)
     except:
         logger.info(f"{data} - {media}")
 
-    if p50 < 0:
-        logger.info(f"Lucro p50 abaixo de zero {p50}")
+    if p < 0:
+        logger.info(f"Lucro p60 abaixo de zero {p}")
         return False
     elif media < 0:
         logger.info(f"Média lucros geral abaixo de zero {media}")
