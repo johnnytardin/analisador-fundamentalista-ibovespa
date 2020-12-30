@@ -36,10 +36,10 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
     # os ultimos 3 anos a partir do primeiro
     # verifica se os lucros vem caindo
     lucros_desc, ctrl = 0, 0
-    data_l = sorted(lucros.items(), key=lambda item: item[0], reverse=False)[-3:].sort(reverse=True)
+    data_l = sorted(lucros.items(), key=lambda item: item[0], reverse=False)[-3:]
 
     ultimo_lucro, ctrl = None, 0
-    for v in data_l:
+    for v in data_l.sort(reverse=True):
         vlr = v[1]
         ctrl += 1
 
