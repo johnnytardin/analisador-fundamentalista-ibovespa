@@ -55,7 +55,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
 
     # se tem muitos lucros descrescentes na lista desc
     if lucros_desc == (ctrl - 1):
-        logger.info(f"{lucros_desc} lucros decrescendo - [{data_l}]")
+        logger.info(f"{lucros_desc} lucros decrescendo - Dados: [{data_l}] - Vlr ord: [{lucros}]")
         return False
 
     # verifica se o lucro dos ultimos 12m é abaixo do percentile dos ultimos 2 anos fechados
