@@ -37,7 +37,6 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
     # verifica se os lucros vem caindo
     data_l = sorted(lucros.items(), key=lambda item: item[0], reverse=False)[-3:]
     lucros = [v[1] for v in data_l]
-    lucros.sort(reverse=True)
 
     ultimo_lucro, ctrl = None, 0
     lucros_desc, ctrl = 0, 0
@@ -47,7 +46,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
         # verifica se o lucro vem caindo
         if ultimo_lucro:
             # ex: se 2018 for menor que 2017 (gordura de x%)
-            if l < (ultimo_lucro * 0.8):
+            if l < (ultimo_lucro * 0.7):
                 lucros_desc += 1
                 ultimo_lucro = l
         else:
