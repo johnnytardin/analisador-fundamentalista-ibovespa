@@ -38,6 +38,9 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
     data_l = sorted(lucros.items(), key=lambda item: item[0], reverse=False)[-3:]
     lucros = [v[1] for v in data_l]
 
+    # adiciona o vlr dos ultimos 12m
+    lucros.append(ultimos_12m)
+
     ultimo_lucro, ctrl = None, 0
     lucros_desc, ctrl = 0, 0
     for l in lucros:
