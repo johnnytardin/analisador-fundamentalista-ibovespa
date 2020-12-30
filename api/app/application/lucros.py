@@ -46,8 +46,9 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
         # verifica se o lucro vem caindo
         if ultimo_lucro:
             # ex: se 2018 for menor que 2017 (gordura de x%)
-            if l < (ultimo_lucro * 0.7):
+            if l < (ultimo_lucro * 0.85):
                 lucros_desc += 1
+                ultimo_lucro = l
         else:
             ultimo_lucro = l
 
