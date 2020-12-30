@@ -62,8 +62,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
 
     # verifica se o lucro dos ultimos 12m esta muito abaixo do ultimo ano
     try:
-        print(data_l)
-        lucro_ultimo_ano = data_l[-1:][0][1]
+        lucro_ultimo_ano = data_l[-1][0][1]
         if ultimos_12m < (lucro_ultimo_ano * 0.6):
             logger.info(
                 f"Descartando pois lucros de 12m com {ultimos_12m} e último ano {lucro_ultimo_ano} - {data_l}"
