@@ -27,56 +27,47 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
     data_p = sorted(lucros.items(), key=lambda item: item[0], reverse=True)[:2]
 
     # verificar os ultimos anos se vem tendo prejuizo
-    count = 0
-    counter = 0
     for v in data_p:
         vlr = v[1]
-
-        if vlr < 0 and counter > 0:
-            # para o periodo do covid
-            count += 1
-        counter += 1
-
-    if count > 0:
-        logger.info(f"{count} anos com prejuízo")
-        return False
+        if vlr < 0:
+            logger.info("Prejuízo nos últimos 2 anos")
+            return False
 
     # os ultimos 3 anos a partir do primeiro
     # verifica se os lucros vem caindo
     lucros_desc, ctrl = 0, 0
-    if count == 0:
-        data_l = sorted(lucros.items(), key=lambda item: item[0], reverse=False)[-3:]
+    data_l = sorted(lucros.items(), key=lambda item: item[0], reverse=False)[-3:].sort(reverse=True)
 
-        ultimo_lucro, ctrl = None, 0
-        for v in data_l:
-            vlr = v[1]
-            ctrl += 1
+    ultimo_lucro, ctrl = None, 0
+    for v in data_l:
+        vlr = v[1]
+        ctrl += 1
 
-            # verifica se o lucro vem caindo
-            if ultimo_lucro:
-                # ex: se 2018 for menor que 2017 (gordura de x%)
-                if vlr < (ultimo_lucro * 0.7):
-                    lucros_desc += 1
-                    ultimo_lucro = vlr
-            else:
+        # verifica se o lucro vem caindo
+        if ultimo_lucro:
+            # ex: se 2018 for menor que 2017 (gordura de x%)
+            if vlr < (ultimo_lucro * 0.8):
+                lucros_desc += 1
                 ultimo_lucro = vlr
+        else:
+            ultimo_lucro = vlr
 
-        # se tem muitos lucros descrescentes
-        if lucros_desc == (ctrl - 1):
-            logger.info(f"{lucros_desc} lucros decrescendo")
+    # se tem muitos lucros descrescentes na lista desc
+    if lucros_desc == (ctrl - 1):
+        logger.info(f"{lucros_desc} lucros decrescendo")
+        return False
+
+    # verifica se o lucro dos ultimos 12m é abaixo do percentile dos ultimos 2 anos fechados
+    try:
+        ptl = percentile(data_l[-2:], 40)
+
+        if ultimos_12m < ptl:
+            logger.info(
+                f"Descartando pois lucros de 12m com {ultimos_12m} e p40 {ptl}"
+            )
             return False
-
-        # verifica se o lucro dos ultimos 12m é abaixo do percentile dos ultimos 2 anos fechados
-        try:
-            ptl = percentile(data_l[-2:], 40)
-
-            if ultimos_12m < ptl:
-                logger.info(
-                    f"Descartando pois lucros de 12m com {ultimos_12m} e p40 {ptl}"
-                )
-                return False
-        except Exception:
-            logger.exception("Exception")
+    except Exception:
+        logger.exception("Exception")
 
     return True
 
