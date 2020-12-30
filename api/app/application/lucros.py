@@ -37,6 +37,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
     # verifica se os lucros vem caindo
     data_l = sorted(lucros.items(), key=lambda item: item[0], reverse=False)[-3:]
     lucros = [v[1] for v in data_l]
+    lucros.sort(reverse=True)
 
     ultimo_lucro, ctrl = None, 0
     lucros_desc, ctrl = 0, 0
@@ -54,20 +55,21 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
 
     # se tem muitos lucros descrescentes na lista desc
     if lucros_desc == (ctrl - 1):
-        logger.info(f"{lucros_desc} lucros decrescendo - Dados: [{data_l}] - Vlr ord: [{lucros}]")
+        logger.info(f"{lucros_desc} lucros decrescendo - [{data_l}]")
         return False
 
     # verifica se o lucro dos ultimos 12m é abaixo do percentile dos ultimos 2 anos fechados
     try:
-        ptl = percentile(data_l[-2:], 40)
+        ptl = percentile(data_l[-2:], 60)
 
         if ultimos_12m < ptl:
             logger.info(
-                f"Descartando pois lucros de 12m com {ultimos_12m} e p40 {ptl}"
+                f"Descartando pois lucros de 12m com {ultimos_12m} e p60 {ptl}"
             )
             return False
     except Exception:
         logger.exception("Exception")
+        return False
 
     return True
 
