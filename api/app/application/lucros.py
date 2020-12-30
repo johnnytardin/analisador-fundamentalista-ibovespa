@@ -30,7 +30,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
     for v in data_p:
         vlr = v[1]
         if vlr < 0:
-            logger.info("Prejuízo nos últimos 2 anos - [{data_p}]")
+            logger.info(f"Prejuízo nos últimos 2 anos - {data_p}")
             return False
 
     # os ultimos 3 anos a partir do primeiro
@@ -54,16 +54,16 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
 
     # se tem muitos lucros descrescentes na lista desc
     if lucros_desc == (ctrl - 1):
-        logger.info(f"{lucros_desc} lucros decrescendo - [{data_l}]")
+        logger.info(f"{lucros_desc} lucros decrescendo - {data_l}")
         return False
 
     # verifica se o lucro dos ultimos 12m é abaixo do percentile dos ultimos 2 anos fechados
     try:
-        ptl = percentile(data_l[-2:], 60)
+        ptl = percentile(data_l[-2:], 50)
 
         if ultimos_12m < ptl:
             logger.info(
-                f"Descartando pois lucros de 12m com {ultimos_12m} e p60 {ptl} - [{data_l}]"
+                f"Descartando pois lucros de 12m com {ultimos_12m} e p50 {ptl} - {data_l}"
             )
             return False
     except Exception:
