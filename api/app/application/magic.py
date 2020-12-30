@@ -107,9 +107,11 @@ def rank(estrategia, payload):
     rank_sorted = sort_magic_formula(estrategia, payload)
 
     rank_validated = []
+    empresas_rankink = set()
     for code, score in rank_sorted.iteritems():
         logger.info(f"Analisando os lucros de {code}")
         if lucros.valida_empresa(code):
+            empresas_rankink.add(code[0:4])
             # adiciona indicadores
             ind = financial.financial_get_indicators(code)
             technical = db.consulta_detalhes("technical", code)[0]
@@ -135,6 +137,9 @@ def rank(estrategia, payload):
                     "{0} ({1})".format(int(technical["RSI(14)"][0]), technical["RSI(14)"][1]),
                 ]
             )
+
+        if len(empresas_rankink) == 20:
+            break
 
     return rank_validated
 
