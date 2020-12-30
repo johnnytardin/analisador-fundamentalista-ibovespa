@@ -132,14 +132,16 @@ def rank(estrategia, payload):
                     ind["stockPrice"],
                     ind["valorIntriseco"],
                     ind["dividendos"],
-                    "{0} ({1})".format(int(technical["RSI(14)"][0]), technical["RSI(14)"][1]),
+                    "{0} ({1})".format(
+                        int(technical["RSI(14)"][0]), technical["RSI(14)"][1]
+                    ),
                 ]
             )
 
         if len(empresas_rankink) == 20:
             break
 
-    logger.info("Gerado o rankink com {} empresas".format(len(empresas_rankink)))
+    logger.info("Gerado o ranking com {} empresas".format(len(empresas_rankink)))
 
     return rank_validated
 

@@ -94,9 +94,6 @@ def lucro_resultado_geral(data, media):
     if p < 0:
         logger.info(f"Lucro p60 abaixo de zero {p}")
         return False
-    elif media < 0:
-        logger.info(f"Média lucros geral abaixo de zero {media}")
-        return False
     return True
 
 
