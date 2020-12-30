@@ -37,7 +37,7 @@ def filter_per_sector(df, sector):
     return df
 
 
-def filter_by_indicators(valor, performance, liquidez_media_minima=10000):
+def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
     data = db.consulta_detalhes("financial")
 
     df = pd.DataFrame(data)
