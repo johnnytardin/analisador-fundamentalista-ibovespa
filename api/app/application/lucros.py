@@ -56,7 +56,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
             ultimo_lucro = l
 
     # se tem muitos lucros descrescentes na lista desc
-    if lucros_desc == (ctrl - 1):
+    if lucros_desc == (ctrl - 2):
         logger.info(f"{lucros_desc} lucros decrescendo - {data_l} - {lucros}")
         return False
 
