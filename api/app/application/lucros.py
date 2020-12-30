@@ -49,24 +49,23 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
         # verifica se o lucro vem caindo
         if ultimo_lucro:
             # ex: se 2018 for menor que 2017 (gordura de x%)
-            if l < (ultimo_lucro * 0.99):
+            if l < (ultimo_lucro * 0.85):
                 lucros_desc += 1
                 ultimo_lucro = l
         else:
             ultimo_lucro = l
 
     # se tem muitos lucros descrescentes na lista desc
-    if lucros_desc == (ctrl - 2):
+    if lucros_desc == (ctrl - 1):
         logger.info(f"{lucros_desc} lucros decrescendo - {data_l} - {lucros}")
         return False
 
-    # verifica se o lucro dos ultimos 12m é abaixo do percentile dos ultimos 2 anos fechados
+    # verifica se o lucro dos ultimos 12m esta muito abaixo do ultimo ano
     try:
-        ptl = percentile(data_l[-2:], 50)
-
-        if ultimos_12m < ptl:
+        lucro_ultimo_ano = data_l[-1:]
+        if ultimos_12m < (lucro_ultimo_ano * 0.6):
             logger.info(
-                f"Descartando pois lucros de 12m com {ultimos_12m} e p50 {ptl} - {data_l}"
+                f"Descartando pois lucros de 12m com {ultimos_12m} e último ano {lucro_ultimo_ano} - {data_l}"
             )
             return False
     except Exception:
