@@ -26,8 +26,6 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
     # os 2 ultimos anos descartando o ultimo
     data_p = sorted(lucros.items(), key=lambda item: item[0], reverse=True)[:2]
 
-    status = True
-
     # verificar os ultimos anos se vem tendo prejuizo
     count = 0
     counter = 0
@@ -41,7 +39,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
 
     if count > 0:
         logger.info(f"{count} anos com prejuízo")
-        status = False
+        return False
 
     # os ultimos 3 anos a partir do primeiro
     # verifica se os lucros vem caindo
@@ -57,7 +55,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
             # verifica se o lucro vem caindo
             if ultimo_lucro:
                 # ex: se 2018 for menor que 2017 (gordura de x%)
-                if vlr < (ultimo_lucro * 0.6):
+                if vlr < (ultimo_lucro * 0.7):
                     lucros_desc += 1
                     ultimo_lucro = vlr
             else:
@@ -65,22 +63,22 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
 
         # se tem muitos lucros descrescentes
         if lucros_desc == (ctrl - 1):
-            status = False
             logger.info(f"{lucros_desc} lucros decrescendo")
+            return False
 
         # verifica se o lucro dos ultimos 12m é abaixo do percentile dos ultimos 2 anos fechados
         try:
             ptl = percentile(data_l[-2:], 40)
 
             if ultimos_12m < ptl:
-                status = False
                 logger.info(
                     f"Descartando pois lucros de 12m com {ultimos_12m} e p40 {ptl}"
                 )
+                return False
         except Exception:
             logger.exception("Exception")
 
-    return status
+    return True
 
 
 def lucro_resultado_geral(data, media):
