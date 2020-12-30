@@ -46,7 +46,7 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=10000):
     df = df[
         (df.liquidezMediaDiaria > liquidez_media_minima)
         & (df.precoSobreLucro > 0)
-        & (df.margemLiquida >= 3)
+        & (df.margemLiquida >= 5)
         & (df.freeFloat >= 25)
         #& (df.tagAlong >= 80)
         & ((df.divSobreEbit <= 8) | (pd.isnull(df.divSobreEbit)))
