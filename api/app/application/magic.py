@@ -51,7 +51,9 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=10000):
         & (df.tagAlong >= 80)
         & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
         & ((df.pegr <= 8) | (pd.isnull(df.pegr)))
-        #& ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
+        #& (getattr(df, valor) >= 0)
+        & (getattr(df, performance) >= 0)
+        #& ((df.CagrLucrosCincoAnos >= -20) | (df.CagrReceitasCincoAnos >= -20))
     ]
 
     return df
@@ -130,9 +132,7 @@ def rank(estrategia, payload):
                     ind["stockPrice"],
                     ind["valorIntriseco"],
                     ind["dividendos"],
-                    "{0} ({1})".format(
-                        int(technical["RSI(14)"][0]), technical["RSI(14)"][1]
-                    ),
+                    "{0} ({1})".format(int(technical["RSI(14)"][0]), technical["RSI(14)"][1]),
                 ]
             )
 
