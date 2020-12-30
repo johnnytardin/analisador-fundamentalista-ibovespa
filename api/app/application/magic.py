@@ -62,8 +62,6 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=10000):
 def stocks_filter(estrategia, payload, valor, performance):
     df = filter_by_indicators(valor, performance)
 
-    print(payload)
-
     on_sale = payload.get("scopedVars").get("on_sale").get("text")
     if on_sale.lower() == "yes":
         df = filter_on_sale(df)
@@ -140,6 +138,8 @@ def rank(estrategia, payload):
 
         if len(empresas_rankink) == 20:
             break
+
+    logger.info("Gerado o rankink com {} empresas".format(len(empresas_rankink)))
 
     return rank_validated
 
