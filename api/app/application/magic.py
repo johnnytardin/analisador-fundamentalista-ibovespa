@@ -38,10 +38,6 @@ def filter_per_sector(df, sector):
 
 
 def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
-    '''
-    1 - Eliminar todas as firmas cujos índices Passivos/ Ativos sejam maiores que 0,60 (i.e., firmas cujo passivo seja superior a 60% do total de ativos).
-    '''
-
     data = db.consulta_detalhes("financial")
 
     df = pd.DataFrame(data)
@@ -53,7 +49,6 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
         & (df.margemLiquida >= 4)
         & (df.freeFloat >= 15)
         & (df.tagAlong >= 80)
-        & (df.PassivosSobreAtivos >= 0.6)
         & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
         & ((df.pegr <= 8) | (pd.isnull(df.pegr)))
         & (getattr(df, performance) >= 0)
