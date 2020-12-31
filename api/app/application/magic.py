@@ -73,6 +73,9 @@ def stocks_filter(estrategia, payload, valor, performance):
         # Essas métricas não funcionam para instituições financeiras
         df = df[(df.setor != "Financeiro e Outros")]
 
+    # setores que Johnny não gosta
+    df = df[(df.setor != "Construção Civil")]
+
     return df
 
 
