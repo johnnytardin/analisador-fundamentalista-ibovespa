@@ -139,7 +139,8 @@ def rank(estrategia, payload):
         if len(empresas_rankink) == 20:
             break
 
-    logger.info("Gerado o ranking com {} empresas".format(len(empresas_rankink)))
+    logger.info("Gerado o ranking com {} empresas de um total de {} tickers".format(len(empresas_rankink,
+                                                                                    len(rank_sorted))))
 
     return rank_validated
 
