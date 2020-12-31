@@ -2,7 +2,7 @@ select
     data
 from financial
 where coleta_id = (SELECT coleta_id FROM financial ORDER BY timestamp DESC LIMIT 1)
-and stock code not like 'SAPR%'
-and stock code not like 'CPLE%'
-and stock code not like 'ELET%'
-and stock code not like 'CSMG%'
+and stock_code not like 'SAPR%'
+and stock_code not like 'CPLE%'
+and stock_code not like 'ELET%'
+and stock_code not like 'CSMG%'
