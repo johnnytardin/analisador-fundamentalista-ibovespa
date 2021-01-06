@@ -47,12 +47,12 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
         (df.liquidezMediaDiaria > liquidez_media_minima)
         & (df.precoSobreLucro > 0)
         & (df.margemLiquida >= 4)
-        & (df.freeFloat >= 15)
-        & (df.tagAlong >= 80)
+        #& (df.freeFloat >= 15)
+        #& (df.tagAlong >= 80)
         & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
         & ((df.pegr <= 8) | (pd.isnull(df.pegr)))
         & (getattr(df, performance) >= 0)
-        & ((df.CagrLucrosCincoAnos >= 0) | (df.CagrReceitasCincoAnos >= 0))
+        & ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
     ]
 
     return df
