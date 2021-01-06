@@ -74,7 +74,7 @@ def stocks_filter(estrategia, payload, valor, performance):
         df = df[(df.setor != "Financeiro e Outros")]
 
     # setores que Johnny não gosta
-    df = df[(df.setor != "Construção Civil")]
+    df = df[(df.subsetor != "Construção Civil")]
 
     return df
 
