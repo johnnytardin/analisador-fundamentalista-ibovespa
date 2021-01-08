@@ -52,7 +52,7 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
         & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
         & ((df.pegr <= 8) | (pd.isnull(df.pegr)))
         & (getattr(df, performance) >= 0)
-        & ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
+        #& ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
     ]
 
     return df
