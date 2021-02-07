@@ -42,11 +42,11 @@ def x_paths():
             "P/ATIVO",
         ),
         (
-            """/html/body/main/div[2]/div/div[6]/div[2]/div/div[1]/div/div[3]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div[2]/div/div[1]/div/div[5]/div/div/strong""",
             "EV/EBITDA",
         ),
         (
-            """/html/body/main/div[2]/div/div[6]/div[2]/div/div[1]/div/div[5]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div[2]/div/div[1]/div/div[6]/div/div/strong""",
             "EV/EBIT",
         ),
         (
