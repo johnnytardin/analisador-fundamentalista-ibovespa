@@ -14,7 +14,7 @@ Werkzeug==0.16.1
 eventlet==0.25.0
 numpy
 pandas==0.25.3
-investpy==1.0
+investpy
 psycopg2-binary
 pendulum
 python-decouple

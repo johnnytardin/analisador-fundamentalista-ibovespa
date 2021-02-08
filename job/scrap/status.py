@@ -94,11 +94,11 @@ def x_paths():
             "ROIC",
         ),
         (
-            """/html/body/main/div[2]/div/div[6]/div[2]/div/div[1]/div/div[10]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div[2]/div/div[1]/div/div[11]/div/div/strong"""
             "LPA",
         ),
         (
-            """/html/body/main/div[2]/div/div[6]/div[2]/div/div[1]/div/div[8]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[6]/div[2]/div/div[1]/div/div[9]/div/div/strong""",
             "VPA",
         ),
         (
