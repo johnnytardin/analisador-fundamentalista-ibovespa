@@ -94,7 +94,7 @@ def x_paths():
             "ROIC",
         ),
         (
-            """/html/body/main/div[2]/div/div[6]/div[2]/div/div[1]/div/div[11]/div/div/strong"""
+            """/html/body/main/div[2]/div/div[6]/div[2]/div/div[1]/div/div[11]/div/div/strong""",
             "LPA",
         ),
         (
@@ -150,7 +150,7 @@ def x_paths():
             "DIVIDEND YIELD",
         ),
         (
-            """/html/body/main/div[4]/div/div[2]/div[7]/div/div/strong""",
+            """/html/body/main/div[5]/div/div[2]/div[7]/div/div/strong""",
             "VALOR DE MERCADO",
         ),
         (
@@ -166,19 +166,19 @@ def x_paths():
             "LIQUIDEZ MÉDIA DIÁRIA",
         ),
         (
-            """/html/body/main/div[4]/div/div[3]/div/div[1]/div/div/div/a/strong""",
+            """/html/body/main/div[5]/div/div[3]/div/div[1]/div/div/div/a/strong""",
             "SETOR DE ATUAÇÂO",
         ),
         (
-            """/html/body/main/div[4]/div/div[3]/div/div[2]/div/div/div/a/strong""",
+            """/html/body/main/div[5]/div/div[3]/div/div[2]/div/div/div/a/strong""",
             "SUBSETOR DE ATUAÇÂO",
         ),
         (
-            """/html/body/main/div[4]/div/div[3]/div/div[3]/div/div/div/a/strong""",
+            """/html/body/main/div[5]/div/div[3]/div/div[3]/div/div/div/a/strong""",
             "SEGMENTO DE ATUAÇÂO",
         ),
         (
-            """/html/body/main/div[4]/div/div[2]/div[11]/div/div/strong""",
+            """/html/body/main/div[5]/div/div[2]/div[11]/div/div/strong""",
             "FREE FLOAT",
         ),
         (
@@ -186,7 +186,7 @@ def x_paths():
             "TAG ALONG",
         ),
         (
-            """/html/body/main/div[4]/div/div[2]/div[10]/div/div/strong""",
+            """/html/body/main/div[5]/div/div[2]/div[10]/div/div/strong""",
             "SEGMENTO DE LISTAGEM",
         ),
     ]
