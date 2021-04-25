@@ -114,7 +114,12 @@ def rank(estrategia, payload):
             empresas_rankink.add(code[0:4])
             # adiciona indicadores
             ind = financial.financial_get_indicators(code)
+
             technical = db.consulta_detalhes("technical", code)[0]
+            try:
+                ind_1, ind_2 = int(technical["RSI(14)"][0]), technical["RSI(14)"][1]
+            except Exception:
+                ind_1, ind_2 = "", ""
 
             rank_validated.append(
                 [
@@ -134,9 +139,7 @@ def rank(estrategia, payload):
                     ind["stockPrice"],
                     ind["valorIntriseco"],
                     ind["dividendos"],
-                    "{0} ({1})".format(
-                        int(technical["RSI(14)"][0]), technical["RSI(14)"][1]
-                    ),
+                    f"{ind_1} ({ind_2})",
                 ]
             )
 

@@ -235,7 +235,7 @@ def anos_anteriores():
 
 def dre(driver, stock):
     df = pd.read_html(driver.page_source, decimal=",", thousands=".")
-    dre_dt = df[2].to_dict()
+    dre_dt = df[3].to_dict()
 
     anos_considerar = anos_anteriores()
     d = []
