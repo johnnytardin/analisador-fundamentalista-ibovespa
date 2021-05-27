@@ -118,10 +118,11 @@ def get_lucro_details(code):
         if row["tipo"] in ["Lucro Líquido - (R$) format_quote", "Lucro Líquido - (R$)"]:
             periodo = row["periodo"]
             lucro = row["valor"]
-            if periodo == "Últ. 12M":
-                ultimos_12m = lucro
-            else:
-                lc[int(periodo)] = float(lucro)
+            if lucro:
+                if periodo == "Últ. 12M":
+                    ultimos_12m = lucro
+                else:
+                    lc[int(periodo)] = float(lucro)
 
     if not ultimos_12m and lc:
         # caso nao exista 12m usa o ultimo ano
