@@ -143,7 +143,7 @@ def rank(estrategia, payload):
                 ]
             )
 
-        if len(empresas_rankink) == 20:
+        if len(empresas_rankink) == 30:
             break
 
     logger.info(
