@@ -107,6 +107,8 @@ def sort_magic_formula(estrategia, payload):
 def rank(estrategia, payload):
     rank_sorted = sort_magic_formula(estrategia, payload)
 
+    logger.info(payload)
+
     rank_validated = []
     empresas_ranking = set()
     lucros_status = False

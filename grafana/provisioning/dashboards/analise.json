@@ -323,7 +323,7 @@
       "type": "row"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
@@ -332,218 +332,217 @@
         "y": 3
       },
       "id": 27,
-      "panels": [
-        {
-          "datasource": "Magic-ROIC",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "align": "center",
-                "filterable": false
+      "panels": [],
+      "title": "Magic Formula EV/EBIT / ROIC",
+      "type": "row"
+    },
+    {
+      "datasource": "Magic-ROIC",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "filterable": false
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
               },
-              "decimals": 2,
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
+              {
+                "color": "red",
+                "value": 80
               }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SCORE"
             },
-            "overrides": [
+            "properties": [
               {
-                "matcher": {
-                  "id": "byName",
-                  "options": "SCORE"
-                },
-                "properties": [
-                  {
-                    "id": "decimals"
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "P/L"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 122
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "PEGR"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 59
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "SC."
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 80
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "CODE"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 128
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "ROE"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 92
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "EV/EBIT"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 90
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "ROIC"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 100
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "MARG"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 98
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "DL/EBIT"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 95
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "CAGR LL"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 91
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "P/VPA"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 102
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "INTR."
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 115
-                  }
-                ]
+                "id": "decimals"
               }
             ]
           },
-          "gridPos": {
-            "h": 12,
-            "w": 24,
-            "x": 0,
-            "y": 4
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "P/L"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 122
+              }
+            ]
           },
-          "id": 10,
-          "options": {
-            "showHeader": true,
-            "sortBy": []
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PEGR"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 59
+              }
+            ]
           },
-          "pluginVersion": "7.3.2",
-          "targets": [
-            {
-              "data": "",
-              "hide": false,
-              "refId": "A",
-              "target": "${Stocks}",
-              "type": "table"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Magic Formula (EV/EBIT / ROIC)",
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SC."
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CODE"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ROE"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 92
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "EV/EBIT"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ROIC"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "MARG"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 98
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "DL/EBIT"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 95
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CAGR LL"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 91
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "P/VPA"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 102
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "INTR."
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 115
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      },
+      "id": 10,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "7.3.2",
+      "targets": [
+        {
+          "data": "",
+          "hide": false,
+          "refId": "A",
+          "target": "${Stocks}",
           "type": "table"
         }
       ],
-      "title": "Magic Formula EV/EBIT / ROIC",
-      "type": "row"
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Magic Formula (EV/EBIT / ROIC)",
+      "type": "table"
     },
     {
       "collapsed": true,
@@ -552,7 +551,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 4
+        "y": 16
       },
       "id": 16,
       "panels": [
@@ -933,7 +932,7 @@
         "auto_count": 30,
         "auto_min": "10s",
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "10",
           "value": "10"
         },
@@ -1009,9 +1008,39 @@
           }
         ],
         "query": "10,20,30,40,50,60,70,80,90,100,120,140,160",
+        "queryValue": "",
         "refresh": 2,
         "skipUrlSync": false,
         "type": "interval"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "True",
+          "value": "True"
+        },
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Valida Lucros",
+        "multi": false,
+        "name": "valida_lucros",
+        "options": [
+          {
+            "selected": true,
+            "text": "True",
+            "value": "True"
+          },
+          {
+            "selected": false,
+            "text": "False",
+            "value": "False"
+          }
+        ],
+        "query": "True,False",
+        "skipUrlSync": false,
+        "type": "custom"
       }
     ]
   },
@@ -1035,5 +1064,5 @@
   "timezone": "",
   "title": "Análise de Ativos",
   "uid": "d6T7Q5ZMk",
-  "version": 2
+  "version": 4
 }
