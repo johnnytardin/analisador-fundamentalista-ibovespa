@@ -1,4 +1,5 @@
 import logging
+from distutils.util import strtobool
 
 from app.application import db
 from app.application import lucros
@@ -108,11 +109,20 @@ def rank(estrategia, payload):
 
     rank_validated = []
     empresas_ranking = set()
+    lucros_status = False
     num_empresas = payload.get("scopedVars").get("num_empresas").get("text") or 30
+    valida_lucros = bool(strtobool(payload.get("scopedVars").get("valida_lucros").get("text"))) or True
+
     for code, score in rank_sorted.iteritems():
         logger.info(f"Analisando os lucros de {code}")
-        if lucros.valida_empresa(code):
+        lucros_status = True
+        if valida_lucros:        
+            if lucros.valida_empresa(code):
+                lucros_status = True
+
+        if lucros_status:
             empresas_ranking.add(code[0:4])
+
             # adiciona indicadores
             ind = financial.financial_get_indicators(code)
 
