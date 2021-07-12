@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1607186381638,
+  "iteration": 1626124536542,
   "links": [],
   "panels": [
     {
@@ -927,6 +927,91 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "auto": false,
+        "auto_count": 30,
+        "auto_min": "10s",
+        "current": {
+          "selected": false,
+          "text": "10",
+          "value": "10"
+        },
+        "error": null,
+        "hide": 0,
+        "label": "Qtt Empresas",
+        "name": "num_empresas",
+        "options": [
+          {
+            "selected": true,
+            "text": "10",
+            "value": "10"
+          },
+          {
+            "selected": false,
+            "text": "20",
+            "value": "20"
+          },
+          {
+            "selected": false,
+            "text": "30",
+            "value": "30"
+          },
+          {
+            "selected": false,
+            "text": "40",
+            "value": "40"
+          },
+          {
+            "selected": false,
+            "text": "50",
+            "value": "50"
+          },
+          {
+            "selected": false,
+            "text": "60",
+            "value": "60"
+          },
+          {
+            "selected": false,
+            "text": "70",
+            "value": "70"
+          },
+          {
+            "selected": false,
+            "text": "80",
+            "value": "80"
+          },
+          {
+            "selected": false,
+            "text": "90",
+            "value": "90"
+          },
+          {
+            "selected": false,
+            "text": "100",
+            "value": "100"
+          },
+          {
+            "selected": false,
+            "text": "120",
+            "value": "120"
+          },
+          {
+            "selected": false,
+            "text": "140",
+            "value": "140"
+          },
+          {
+            "selected": false,
+            "text": "160",
+            "value": "160"
+          }
+        ],
+        "query": "10,20,30,40,50,60,70,80,90,100,120,140,160",
+        "refresh": 2,
+        "skipUrlSync": false,
+        "type": "interval"
       }
     ]
   },
@@ -950,5 +1035,5 @@
   "timezone": "",
   "title": "Análise de Ativos",
   "uid": "d6T7Q5ZMk",
-  "version": 6
+  "version": 2
 }

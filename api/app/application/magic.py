@@ -107,11 +107,12 @@ def rank(estrategia, payload):
     rank_sorted = sort_magic_formula(estrategia, payload)
 
     rank_validated = []
-    empresas_rankink = set()
+    empresas_ranking = set()
+    num_empresas = payload.get("scopedVars").get("num_empresas").get("text") or 30
     for code, score in rank_sorted.iteritems():
         logger.info(f"Analisando os lucros de {code}")
         if lucros.valida_empresa(code):
-            empresas_rankink.add(code[0:4])
+            empresas_ranking.add(code[0:4])
             # adiciona indicadores
             ind = financial.financial_get_indicators(code)
 
@@ -143,12 +144,12 @@ def rank(estrategia, payload):
                 ]
             )
 
-        if len(empresas_rankink) == 30:
+        if len(empresas_ranking) == int(num_empresas):
             break
 
     logger.info(
         "Gerado o ranking com {} empresas de um total de {} tickers".format(
-            len(empresas_rankink), len(rank_sorted)
+            len(empresas_ranking), len(rank_sorted)
         )
     )
 
