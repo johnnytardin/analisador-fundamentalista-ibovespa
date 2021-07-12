@@ -113,7 +113,7 @@ def rank(estrategia, payload):
     empresas_ranking = set()
     lucros_status = False
     num_empresas = payload.get("scopedVars").get("num_empresas").get("text") or 30
-    valida_lucros = bool(strtobool(payload.get("scopedVars").get("valida_lucros").get("text"))) or True
+    valida_lucros = bool(strtobool(payload.get("scopedVars").get("valida_lucros").get("text")))
 
     for code, score in rank_sorted.iteritems():
         logger.info(f"Analisando os lucros de {code}")

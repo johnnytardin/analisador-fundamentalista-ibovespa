@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1626124536542,
+  "iteration": 1626126472350,
   "links": [],
   "panels": [
     {
@@ -928,17 +928,17 @@
         "useTags": false
       },
       {
-        "auto": false,
-        "auto_count": 30,
-        "auto_min": "10s",
+        "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "10",
           "value": "10"
         },
         "error": null,
         "hide": 0,
-        "label": "Qtt Empresas",
+        "includeAll": false,
+        "label": "Num. Empresas",
+        "multi": false,
         "name": "num_empresas",
         "options": [
           {
@@ -990,28 +990,11 @@
             "selected": false,
             "text": "100",
             "value": "100"
-          },
-          {
-            "selected": false,
-            "text": "120",
-            "value": "120"
-          },
-          {
-            "selected": false,
-            "text": "140",
-            "value": "140"
-          },
-          {
-            "selected": false,
-            "text": "160",
-            "value": "160"
           }
         ],
-        "query": "10,20,30,40,50,60,70,80,90,100,120,140,160",
-        "queryValue": "",
-        "refresh": 2,
+        "query": "10,20,30,40,50,60,70,80,90,100",
         "skipUrlSync": false,
-        "type": "interval"
+        "type": "custom"
       },
       {
         "allValue": null,
@@ -1039,6 +1022,7 @@
           }
         ],
         "query": "True,False",
+        "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
       }
@@ -1064,5 +1048,5 @@
   "timezone": "",
   "title": "Análise de Ativos",
   "uid": "d6T7Q5ZMk",
-  "version": 4
+  "version": 11
 }
