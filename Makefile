@@ -1,6 +1,41 @@
 PROJECT_NAME:=analisador
 container:=${container}
 
+clean: clean-eggs clean-build
+	@find . -iname '*.pyc' -delete
+	@find . -iname '*.pyo' -delete
+	@find . -iname '*~' -delete
+	@find . -iname '*.swp' -delete
+	@find . -iname '__pycache__' -delete
+
+clean-eggs:
+	@find . -name '*.egg' -print0|xargs -0 rm -rf --
+	@rm -rf .eggs/
+
+clean-build:
+	@rm -fr build/
+	@rm -fr dist/
+	@rm -fr *.egg-info
+
+enable-dev:
+	@cp dev.env .env
+
+enable-local:
+	@cp local.env .env
+
+test:
+	poetry run pytest -sx
+
+check-dead-fixtures:
+	poetry run pytest --dead-fixtures
+
+lint:
+	poetry install && poetry run -a -v
+
+pyformat:
+	poetry run isort . && poetry run black .
+
+
 build: ; @\
 	clear; \
 	echo "[Building Environment...]"; \

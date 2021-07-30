@@ -1,12 +1,9 @@
 import logging
 
+import pendulum
+from app.application import historical, stocks
 from flask import request
 from flask_restplus import Namespace, Resource
-import pendulum
-
-from app.application import historical
-from app.application import stocks
-
 
 api = Namespace("stocks", description="Stocks Codes")
 logger = logging.getLogger(__name__)

@@ -1,11 +1,16 @@
-from datetime import datetime
 import logging
-
-from selenium import webdriver
+from datetime import datetime
 
 # from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
+pd.set_option("display.max_rows", 500)
+pd.set_option("display.max_columns", 500)
+pd.set_option("display.width", 1000)
 
 DADOS = {}
 
@@ -14,7 +19,9 @@ def element(driver, x_path):
     try:
         indicadores = driver.find_elements_by_xpath(x_path)[0]
     except Exception as err:
-        logging.exception(f"Falha coletando {x_path}. [{err}] - Title: [{driver.title}]")
+        logging.exception(
+            f"Falha coletando {x_path}. [{err}] - Title: [{driver.title}]"
+        )
         raise
     return indicadores.text
 
@@ -261,13 +268,26 @@ def get_specific_data(stock):
         options = webdriver.ChromeOptions()
         options.add_argument("headless")
         options.add_argument(
-            "user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36"
+            "user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"
         )
         driver = webdriver.Chrome("/usr/bin/chromedriver", chrome_options=options)
+        driver.set_script_timeout(60)
         driver.get(url)
+        # scroll pois a pagina carrega dinamicamente
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+        WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    "/html/body/main/div[7]/div/div/div[2]/div[1]/div/table/tbody/tr[1]/td[2]/span",
+                )
+            )
+        )
 
         dre(driver, stock)
         fundamentus(driver)
+
     except Exception as err:
         logging.exception(
             "Falha coletando os dados na stock para {}. Causa: {}".format(stock, err),

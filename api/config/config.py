@@ -1,8 +1,8 @@
-import os
 import json
-import yaml
-
+import os
 from types import SimpleNamespace
+
+import yaml
 
 
 class Config:

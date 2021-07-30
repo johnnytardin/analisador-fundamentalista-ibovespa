@@ -1,12 +1,9 @@
 import logging
+import warnings
 from distutils.util import strtobool
 
-from app.application import db
-from app.application import lucros
-from app.application import financial
-
 import pandas as pd
-import warnings
+from app.application import db, financial, lucros
 
 warnings.filterwarnings("ignore")
 
@@ -53,7 +50,7 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
         & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
         & ((df.pegr <= 8) | (pd.isnull(df.pegr)))
         & (getattr(df, performance) >= 0)
-        #& ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
+        # & ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
     ]
 
     return df
@@ -112,12 +109,18 @@ def rank(estrategia, payload):
     rank_validated = []
     empresas_ranking = set()
     lucros_status = False
-    num_empresas = payload.get("scopedVars").get("num_empresas").get("text") if payload.get("scopedVars").get("num_empresas").get("text") else 30
-    valida_lucros = bool(strtobool(payload.get("scopedVars").get("valida_lucros").get("text")))
+    num_empresas = (
+        payload.get("scopedVars").get("num_empresas").get("text")
+        if payload.get("scopedVars").get("num_empresas").get("text")
+        else 30
+    )
+    valida_lucros = bool(
+        strtobool(payload.get("scopedVars").get("valida_lucros").get("text"))
+    )
     ranking = 0
     for code, score in rank_sorted.iteritems():
-        if valida_lucros:  
-            logger.info(f"Analisando os lucros de {code}")     
+        if valida_lucros:
+            logger.info(f"Analisando os lucros de {code}")
             if lucros.valida_empresa(code):
                 lucros_status = True
         else:

@@ -1,9 +1,8 @@
-import os
 import json
+import os
 
 import psycopg2
 from decouple import config
-
 
 POSTGRES_HOST = config("POSTGRES_HOST")
 POSTGRES_USER = config("POSTGRES_USER")
@@ -38,6 +37,7 @@ def insert_data(table, code, coleta_id, timestamp, data):
     cursor = conn.cursor()
 
     q = queries("insert").format(table)
+
     cursor.execute(q, (code, coleta_id, timestamp, json.dumps(data)))
     conn.commit()
 

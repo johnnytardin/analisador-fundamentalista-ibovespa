@@ -2,7 +2,6 @@ import logging
 
 from app.application import db
 
-
 logger = logging.getLogger(__name__)
 
 

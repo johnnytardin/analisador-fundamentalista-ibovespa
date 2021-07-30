@@ -3,7 +3,6 @@ import os
 import psycopg2
 from decouple import config
 
-
 POSTGRES_HOST = config("POSTGRES_HOST", "")
 POSTGRES_USER = config("POSTGRES_USER", "")
 POSTGRES_PASSWORD = config("POSTGRES_PASSWORD", "")

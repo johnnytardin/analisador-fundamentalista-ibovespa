@@ -1,9 +1,7 @@
 import logging
 
-from flask_restplus import Namespace, Resource
-
 from app.application import sectors
-
+from flask_restplus import Namespace, Resource
 
 api = Namespace("sectors", description="Sectors")
 logger = logging.getLogger(__name__)

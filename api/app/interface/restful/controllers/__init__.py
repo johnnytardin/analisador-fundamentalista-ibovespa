@@ -2,9 +2,9 @@ from flask import Blueprint
 from flask_restplus import Api
 
 from .magic import *
-from .technical import *
-from .stocks import *
 from .sectors import *
+from .stocks import *
+from .technical import *
 
 
 def create_blueprint(description=str(), version=str(), prefix=str(), apis={}):

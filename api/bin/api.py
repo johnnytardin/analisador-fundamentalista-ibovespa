@@ -1,16 +1,13 @@
-import os
 import logging
-
-from flask import Flask, url_for
-from flask_restplus import Api
-import json_logging
+import os
 
 import fixpath  # noqa
-
-from config.config import config
+import json_logging
 from app.interface.restful.controllers import blueprints
+from config.config import config
 from decouple import config as dconfig
-
+from flask import Flask, url_for
+from flask_restplus import Api
 
 app = Flask(__name__)
 api = Api(app)

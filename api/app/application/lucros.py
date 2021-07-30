@@ -1,9 +1,8 @@
 import logging
+import warnings
 
 from app.application import db
-
 from numpy import percentile
-import warnings
 
 warnings.filterwarnings("ignore")
 

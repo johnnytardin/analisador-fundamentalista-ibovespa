@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 import datetime
+import logging
 from uuid import uuid4
 
+import db
 import graham
 import status
 import stocks
-import db
 import technical
 
 
@@ -153,7 +154,9 @@ def main():
             db.insert_data("dre", stock, coleta_id, timestamp, dre)
             db.insert_data("technical", stock, coleta_id, timestamp, technical_values)
         except Exception as err:
-            print("Falha com os dados do papel {}. Causa: {}".format(stock, err))
+            logging.exception(
+                "Falha com os dados do papel {}. Causa: {}".format(stock, err)
+            )
 
 
 if __name__ == "__main__":

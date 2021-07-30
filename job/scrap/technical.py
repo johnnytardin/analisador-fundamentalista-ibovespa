@@ -1,8 +1,7 @@
-import time
 import logging
+import time
 
 import investpy as inv
-
 
 logger = logging.getLogger(__name__)
 
