@@ -4,6 +4,7 @@ from distutils.util import strtobool
 
 import pandas as pd
 from app.application import db, financial, lucros
+from app.application.utils import safe_div
 
 warnings.filterwarnings("ignore")
 
@@ -138,11 +139,6 @@ def rank(estrategia, payload):
             except Exception:
                 ind_1, ind_2 = "", ""
 
-            try:
-                p_vpa = ind["stockPrice"] / ind["ValorPatrimonialPorAcao"]
-            except ZeroDivisionError:
-                p_vpa = 0 
-
             rank_validated.append(
                 [
                     ranking,
@@ -157,7 +153,7 @@ def rank(estrategia, payload):
                     ind["margemLiquida"],
                     ind["divSobreEbit"],
                     ind["CagrLucrosCincoAnos"],
-                    p_vpa,
+                    safe_div(ind["stockPrice"], ind["ValorPatrimonialPorAcao"]),
                     ind["stockPrice"],
                     ind["valorIntriseco"],
                     ind["dividendos"],

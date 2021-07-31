@@ -2,20 +2,13 @@ import logging
 import warnings
 
 from app.application import db
+from app.application.utils import safe_div
 from numpy import percentile
 
 warnings.filterwarnings("ignore")
 
 
 logger = logging.getLogger(__name__)
-
-
-def safe_div(n, d):
-    try:
-        r = n / d
-    except ZeroDivisionError:
-        return 0
-    return r
 
 
 def valida_ultimos_lucros(lucros, ultimos_12m):
@@ -48,7 +41,7 @@ def valida_ultimos_lucros(lucros, ultimos_12m):
         # verifica se o lucro vem caindo
         if ultimo_lucro:
             # ex: se 2018 for menor que 2017 (gordura de x%)
-            if l < (ultimo_lucro * 0.85):
+            if l < (ultimo_lucro * 0.80):
                 lucros_desc += 1
                 ultimo_lucro = l
         else:
