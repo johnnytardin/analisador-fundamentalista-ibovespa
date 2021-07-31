@@ -138,6 +138,11 @@ def rank(estrategia, payload):
             except Exception:
                 ind_1, ind_2 = "", ""
 
+            try:
+                p_vpa = ind["stockPrice"] / ind["ValorPatrimonialPorAcao"]
+            except ZeroDivisionError:
+                p_vpa = 0 
+
             rank_validated.append(
                 [
                     ranking,
@@ -152,7 +157,7 @@ def rank(estrategia, payload):
                     ind["margemLiquida"],
                     ind["divSobreEbit"],
                     ind["CagrLucrosCincoAnos"],
-                    ind["stockPrice"] / ind["ValorPatrimonialPorAcao"],
+                    p_vpa,
                     ind["stockPrice"],
                     ind["valorIntriseco"],
                     ind["dividendos"],
