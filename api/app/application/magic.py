@@ -44,6 +44,7 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
 
     df = df[
         (df.liquidezMediaDiaria > liquidez_media_minima)
+        & (df.emRecuperacaoJudicial == False)
         & (df.precoSobreLucro > 0)
         & (df.margemLiquida >= 4)
         & ((df.freeFloat >= 15) | (pd.isnull(df.freeFloat)))
@@ -54,6 +55,8 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
         & ((df.ROE >= 15) | (pd.isnull(df.ROE)))
         # & ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
     ]
+
+    print(df)
 
     return df
 
