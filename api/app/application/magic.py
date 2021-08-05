@@ -42,6 +42,8 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
     df = pd.DataFrame(data)
     df.set_index("code")
 
+    print(df.emRecuperacaoJudicial == True)
+
     df = df[
         (df.liquidezMediaDiaria > liquidez_media_minima)
         & (df.emRecuperacaoJudicial == False)
@@ -55,8 +57,6 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
         & ((df.ROE >= 15) | (pd.isnull(df.ROE)))
         # & ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
     ]
-
-    print(df)
 
     return df
 
