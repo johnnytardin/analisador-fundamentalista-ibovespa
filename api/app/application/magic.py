@@ -42,15 +42,13 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
     df = pd.DataFrame(data)
     df.set_index("code")
 
-    print(df.emRecuperacaoJudicial == True)
-
     df = df[
         (df.liquidezMediaDiaria > liquidez_media_minima)
         & (df.emRecuperacaoJudicial == False)
         & (df.precoSobreLucro > 0)
         & (df.margemLiquida >= 4)
         & ((df.freeFloat >= 15) | (pd.isnull(df.freeFloat)))
-        # & ((df.tagAlong >= 80) | (pd.isnull(df.freeFloat)))
+        & ((df.tagAlong >= 50) | (pd.isnull(df.freeFloat)))
         & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
         & ((df.pegr <= 8) | (pd.isnull(df.pegr)))
         & (getattr(df, performance) >= 0)
