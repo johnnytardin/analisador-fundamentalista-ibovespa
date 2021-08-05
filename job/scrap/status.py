@@ -16,14 +16,10 @@ DADOS = {}
 
 
 def element(driver, x_path):
-    try:
-        indicadores = driver.find_elements_by_xpath(x_path)[0]
-    except Exception as err:
-        logging.exception(
-            f"Falha coletando {x_path}. [{err}] - Title: [{driver.title}]"
-        )
-        raise
-    return indicadores.text
+    indicadores = driver.find_elements_by_xpath(x_path)
+    if indicadores:
+        return indicadores[0].text
+    return ""
 
 
 def x_paths():
@@ -195,6 +191,10 @@ def x_paths():
         (
             """/html/body/main/div[5]/div/div[2]/div[10]/div/div/strong""",
             "SEGMENTO DE LISTAGEM",
+        ),
+        (
+            """/html/body/main/div[5]/div/div[1]/div[2]/div[1]/strong""",
+            "RECUPERACAO JUDICIAL",
         ),
     ]
 

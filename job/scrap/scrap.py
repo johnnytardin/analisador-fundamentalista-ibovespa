@@ -102,6 +102,10 @@ def details(code, coleta_id):
     financial["tagAlong"] = normaliza_valor(status_data["TAG ALONG"])
     financial["segmentoListagem"] = status_data["SEGMENTO DE LISTAGEM"]
 
+    financial["emRecuperacaoJudicial"] = False
+    if status_data["RECUPERACAO JUDICIAL"]:
+        financial["emRecuperacaoJudicial"] = True
+
     # intriseco
     financial["valorIntriseco"] = graham.valor_intriseco(
         financial["lucroPorAcao"], financial["ValorPatrimonialPorAcao"]
