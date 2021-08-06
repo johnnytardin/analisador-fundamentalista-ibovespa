@@ -33,6 +33,10 @@ def x_paths():
             "P/L",
         ),
         (
+            """/html/body/main/div[2]/div/div[6]/div[2]/div/div[1]/div/div[3]/div/div/strong""",
+            "PEG RATIO",
+        ),
+        (
             """/html/body/main/div[2]/div/div[6]/div[2]/div/div[1]/div/div[6]/div/div/strong""",
             "P/EBITDA",
         ),

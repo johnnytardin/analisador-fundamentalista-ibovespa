@@ -47,6 +47,7 @@ def details(code, coleta_id):
     financial["code"] = code
     financial["precoSobreVP"] = pvp
     financial["precoSobreLucro"] = pl
+    financial["pegr"] = normaliza_valor(status_data["PEG RATIO"])
     financial["precoSobreEBITDA"] = normaliza_valor(status_data["P/EBITDA"])
     financial["precoSobreEBIT"] = normaliza_valor(status_data["P/EBIT"])
     financial["precoSobreAtivo"] = normaliza_valor(status_data["P/ATIVO"])
@@ -110,13 +111,6 @@ def details(code, coleta_id):
     financial["valorIntriseco"] = graham.valor_intriseco(
         financial["lucroPorAcao"], financial["ValorPatrimonialPorAcao"]
     )
-
-    # PEG Ratio
-    try:
-        pegr = financial["precoSobreLucro"] / financial["CagrLucrosCincoAnos"]
-    except (ZeroDivisionError, TypeError):
-        pegr = None
-    financial["pegr"] = pegr
 
     # percentual de desconto
     try:
