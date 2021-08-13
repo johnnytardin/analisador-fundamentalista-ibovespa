@@ -9,7 +9,7 @@ Flask
 Flask-API
 flask_cors
 flask_restplus
-gunicorn
+gunicorn[gevent]
 Werkzeug
 eventlet
 numpy

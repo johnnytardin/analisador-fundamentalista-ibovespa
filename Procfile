@@ -1,1 +1,1 @@
-web: python api/bin/api.py
+web: python api/bin/wsgi.py
