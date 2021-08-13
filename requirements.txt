@@ -188,7 +188,8 @@ idna==3.2; python_version >= "3.5" and python_full_version < "3.0.0" or python_f
 iniconfig==1.1.1; python_version >= "3.6" \
     --hash=sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3 \
     --hash=sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32
-investpy>=1.0.7
+investpy==1.0.7; python_version >= "3" \
+    --hash=sha256:560d15922d9dcf2861f941656c1d065255f78e991e5367a4b0058eabced24c86
 ipdb==0.13.9; python_version >= "2.7" \
     --hash=sha256:951bd9a64731c444fd907a5ce268543020086a697f6be08f7cc2c9a752a278c5
 ipython-genutils==0.2.0; python_version >= "3.7" \
