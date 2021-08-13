@@ -7,7 +7,7 @@ from app.interface.restful.controllers import blueprints
 from config.config import config
 from decouple import config as dconfig
 from flask import Flask, url_for
-from flask_restplus import Api
+from flask_restx import Api
 
 app = Flask(__name__)
 api = Api(app)

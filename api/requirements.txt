@@ -8,7 +8,7 @@ PyYAML
 Flask
 Flask-API
 flask_cors
-flask_restplus
+flask-restx
 gunicorn[gevent]
 Werkzeug
 eventlet

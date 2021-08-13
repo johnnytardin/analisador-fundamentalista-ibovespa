@@ -1,6 +1,5 @@
 from flask import Blueprint
-from flask_restplus import Api
-
+from flask_restx import Api
 from .magic import *
 from .sectors import *
 from .stocks import *
@@ -26,7 +25,7 @@ def create_blueprint(description=str(), version=str(), prefix=str(), apis={}):
 blueprints = [
     create_blueprint(
         "Stocks API",
-        "1.0",
+        "1",
         "/v1",
         {v1_magic, v1_technical, v1_stocks, v1_sectors},
     ),

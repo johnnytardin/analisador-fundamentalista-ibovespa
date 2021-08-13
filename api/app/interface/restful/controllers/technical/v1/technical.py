@@ -2,7 +2,7 @@ import logging
 
 from app.application import technical
 from flask import request
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 
 api = Namespace("technical", description="Technical Informations")
 logger = logging.getLogger(__name__)

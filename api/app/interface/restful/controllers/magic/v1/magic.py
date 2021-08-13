@@ -2,7 +2,7 @@ import logging
 
 from app.application import magic_formula
 from flask import request
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 
 api = Namespace("magic", description="Magic Formula")
 
