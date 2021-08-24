@@ -1,7 +1,8 @@
+from api import app
+
 from config.config import config
 from decouple import config as dconfig
 
-from api import app
 
 if __name__ == "__main__":
     app.run(
