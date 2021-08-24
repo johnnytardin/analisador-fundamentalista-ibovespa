@@ -36,7 +36,7 @@ def filter_per_sector(df, sector):
     return df
 
 
-def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
+def filter_by_indicators(liquidez_media_minima=100000):
     data = db.consulta_detalhes("financial")
 
     df = pd.DataFrame(data)
@@ -60,7 +60,7 @@ def filter_by_indicators(valor, performance, liquidez_media_minima=100000):
 
 
 def stocks_filter(estrategia, payload, valor, performance):
-    df = filter_by_indicators(valor, performance)
+    df = filter_by_indicators()
 
     on_sale = payload.get("scopedVars").get("on_sale").get("text")
     if on_sale.lower() == "yes":
@@ -121,7 +121,8 @@ def rank(estrategia, payload):
         strtobool(payload.get("scopedVars").get("valida_lucros").get("text"))
     )
     ranking = 0
-    for code, score in rank_sorted.iteritems():
+    for code, _ in rank_sorted.iteritems():
+        lucros_status = False
         if valida_lucros:
             logger.info(f"Analisando os lucros de {code}")
             if lucros.valida_empresa(code):

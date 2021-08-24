@@ -1,5 +1,6 @@
 from flask import Blueprint
 from flask_restx import Api
+
 from .magic import *
 from .sectors import *
 from .stocks import *
