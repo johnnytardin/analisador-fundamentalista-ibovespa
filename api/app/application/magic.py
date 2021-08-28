@@ -48,7 +48,7 @@ def filter_by_indicators(liquidez_media_minima=100000):
         & (df.precoSobreLucro > 0)
         & (df.margemLiquida >= 7)
         & ((df.freeFloat >= 15) | (pd.isnull(df.freeFloat)))
-        & ((df.tagAlong >= 50) | (pd.isnull(df.freeFloat)))
+        # & ((df.tagAlong >= 50) | (pd.isnull(df.freeFloat)))
         & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
         & ((df.pegr <= 8) | (pd.isnull(df.pegr)))
         & ((df.ROE >= 5) | (pd.isnull(df.ROE)))
