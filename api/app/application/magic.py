@@ -15,6 +15,7 @@ pd.set_option("display.max_rows", 500)
 pd.set_option("display.max_columns", 500)
 pd.set_option("display.width", 1000)
 
+
 def get_estrategia(estrategia):
     mp = {
         "ev_ebit_roic": (
@@ -42,6 +43,8 @@ def filter_per_sector(df, sector):
 def filter_by_indicators(liquidez_media_minima=100000):
     data = db.consulta_detalhes("financial")
 
+    print(data)
+
     df = pd.DataFrame(data)
     df.set_index("code")
 
@@ -58,8 +61,6 @@ def filter_by_indicators(liquidez_media_minima=100000):
         & ((df.ROIC >= 5) | (pd.isnull(df.ROIC)))
         # & ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
     ]
-
-
 
     tmp = df[df.code == "TRPL4"]
     print(tmp)
