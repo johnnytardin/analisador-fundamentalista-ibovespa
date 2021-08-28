@@ -56,7 +56,7 @@ def filter_by_indicators(liquidez_media_minima=100000):
         # & ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
     ]
 
-    print(df)
+    print[df.code == "TRPL4"]
 
     return df
 
