@@ -58,7 +58,8 @@ def filter_by_indicators(liquidez_media_minima=100000):
 
 
 
-    print([df.code == "TRPL4"])
+    tmp = df[df.code == "TRPL4"]
+    print(tmp)
 
     return df
 
