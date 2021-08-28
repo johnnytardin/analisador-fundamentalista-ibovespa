@@ -8,12 +8,11 @@ from app.application.utils import safe_div
 
 warnings.filterwarnings("ignore")
 
-
-logger = logging.getLogger(__name__)
-
 pd.set_option("display.max_rows", 500)
 pd.set_option("display.max_columns", 500)
 pd.set_option("display.width", 1000)
+
+logger = logging.getLogger(__name__)
 
 
 def get_estrategia(estrategia):
@@ -54,16 +53,13 @@ def filter_by_indicators(liquidez_media_minima=100000):
         & (df.precoSobreLucro > 0)
         & (df.margemLiquida >= 7)
         & ((df.freeFloat >= 15) | (pd.isnull(df.freeFloat)))
-        # & ((df.tagAlong >= 50) | (pd.isnull(df.freeFloat)))
+        & ((df.tagAlong >= 50) | (pd.isnull(df.tagAlong)))
         & ((df.divSobreEbit <= 5) | (pd.isnull(df.divSobreEbit)))
         & ((df.pegr <= 8) | (pd.isnull(df.pegr)))
         & ((df.ROE >= 5) | (pd.isnull(df.ROE)))
         & ((df.ROIC >= 5) | (pd.isnull(df.ROIC)))
         # & ((df.CagrLucrosCincoAnos >= -10) | (df.CagrReceitasCincoAnos >= -10))
     ]
-
-    tmp = df[df.code == "TRPL4"]
-    print(tmp)
 
     return df
 
