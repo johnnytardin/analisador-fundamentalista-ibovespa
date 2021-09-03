@@ -42,8 +42,6 @@ def filter_per_sector(df, sector):
 def filter_by_indicators(liquidez_media_minima=100000):
     data = db.consulta_detalhes("financial")
 
-    print(data)
-
     df = pd.DataFrame(data)
     df.set_index("code")
 

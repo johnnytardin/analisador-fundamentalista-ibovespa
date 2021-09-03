@@ -8,6 +8,12 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -16,12 +22,16 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1626126472372,
+  "iteration": 1630689888954,
   "links": [],
   "panels": [
     {
       "collapsed": true,
       "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -33,12 +43,6 @@
         {
           "datasource": null,
           "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
           "gridPos": {
             "h": 7,
             "w": 11,
@@ -50,7 +54,7 @@
             "content": "## Dados de Equity Risk Premium para Brasil\n[Acesso ao site FGV](https://ceqef.fgv.br/bancos-de-dados)\n\n*ERP - Expectativa de retorno no mercado de ações menos taxa de juros de dez anos.*\n\n## Juros Futuros Tesouro\n[Acesso ao site do Tesouro](https://www.tesourodireto.com.br/titulos/historico-de-precos-e-taxas.htm)\n\n",
             "mode": "markdown"
           },
-          "pluginVersion": "7.3.2",
+          "pluginVersion": "8.1.0",
           "targets": [
             {
               "queryType": "randomWalk",
@@ -70,6 +74,10 @@
     {
       "collapsed": true,
       "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -86,21 +94,7 @@
           "datasource": "Stocks-Historical",
           "fieldConfig": {
             "defaults": {
-              "custom": {},
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              }
+              "links": []
             },
             "overrides": []
           },
@@ -110,7 +104,7 @@
             "h": 11,
             "w": 13,
             "x": 0,
-            "y": 1
+            "y": 2
           },
           "hiddenSeries": false,
           "id": 23,
@@ -129,10 +123,10 @@
           "linewidth": 3,
           "nullPointMode": "null",
           "options": {
-            "dataLinks": []
+            "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "7.0.3",
+          "pluginVersion": "8.1.0",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -197,6 +191,10 @@
     {
       "collapsed": true,
       "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -225,21 +223,13 @@
                 ]
               }
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "SIGNAL"
-                },
-                "properties": []
-              }
-            ]
+            "overrides": []
           },
           "gridPos": {
             "h": 14,
             "w": 9,
             "x": 2,
-            "y": 2
+            "y": 3
           },
           "id": 20,
           "interval": null,
@@ -248,7 +238,7 @@
           "options": {
             "showHeader": true
           },
-          "pluginVersion": "7.0.4",
+          "pluginVersion": "8.1.0",
           "targets": [
             {
               "data": "",
@@ -270,7 +260,8 @@
           "fieldConfig": {
             "defaults": {
               "custom": {
-                "align": "center"
+                "align": "center",
+                "displayMode": "auto"
               },
               "mappings": [],
               "thresholds": {
@@ -293,7 +284,7 @@
             "h": 9,
             "w": 11,
             "x": 12,
-            "y": 2
+            "y": 3
           },
           "id": 21,
           "interval": null,
@@ -302,7 +293,7 @@
           "options": {
             "showHeader": true
           },
-          "pluginVersion": "7.0.4",
+          "pluginVersion": "8.1.0",
           "targets": [
             {
               "data": "",
@@ -325,6 +316,10 @@
     {
       "collapsed": true,
       "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -339,6 +334,7 @@
             "defaults": {
               "custom": {
                 "align": "center",
+                "displayMode": "auto",
                 "filterable": true
               },
               "decimals": 2,
@@ -526,13 +522,14 @@
             "showHeader": true,
             "sortBy": []
           },
-          "pluginVersion": "7.3.2",
+          "pluginVersion": "8.1.0",
           "targets": [
             {
               "data": "",
               "hide": false,
+              "payload": "",
               "refId": "A",
-              "target": "",
+              "target": "Consumo Cíclico",
               "type": "table"
             }
           ],
@@ -548,6 +545,10 @@
     {
       "collapsed": true,
       "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -562,6 +563,7 @@
             "defaults": {
               "custom": {
                 "align": "center",
+                "displayMode": "auto",
                 "filterable": true
               },
               "decimals": 2,
@@ -749,13 +751,14 @@
             "showHeader": true,
             "sortBy": []
           },
-          "pluginVersion": "7.3.2",
+          "pluginVersion": "8.1.0",
           "targets": [
             {
               "data": "",
               "hide": false,
+              "payload": "",
               "refId": "A",
-              "target": "",
+              "target": "Consumo Cíclico",
               "type": "table"
             }
           ],
@@ -770,7 +773,7 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 26,
+  "schemaVersion": 30,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -784,6 +787,7 @@
         },
         "datasource": "Stocks",
         "definition": "",
+        "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
@@ -797,7 +801,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -809,6 +812,7 @@
           "text": "daily",
           "value": "daily"
         },
+        "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
@@ -865,10 +869,11 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "No",
           "value": "No"
         },
+        "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
@@ -895,12 +900,13 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "All",
           "value": "$__all"
         },
         "datasource": "Sectors",
         "definition": "*",
+        "description": null,
         "error": null,
         "hide": 0,
         "includeAll": true,
@@ -914,16 +920,6 @@
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
-        "tags": [
-          {
-            "selected": false,
-            "text": "Utilidade Pública"
-          },
-          {
-            "selected": false,
-            "text": "Comércio"
-          }
-        ],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -935,6 +931,7 @@
           "text": "10",
           "value": "10"
         },
+        "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
@@ -1005,6 +1002,7 @@
           "text": "True",
           "value": "True"
         },
+        "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
@@ -1050,5 +1048,5 @@
   "timezone": "",
   "title": "Análise de Ativos",
   "uid": "d6T7Q5ZMk",
-  "version": 13
+  "version": 2
 }
