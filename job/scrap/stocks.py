@@ -1,20 +1,15 @@
-import investpy as inv
+import os
 
-
-def get_stocks_tickers(fiis=False, as_list=True):
-    stocks = inv.get_stocks(country="brazil")
+def get_stocks_tickers(fiis=False):
+    dir_path = os.path.dirname(os.path.abspath(__file__))
 
     if fiis:
-        stocks = stocks[
-            (stocks["isin"].str[-3:-1] == "00") | (stocks["isin"].str[-3:-1] == "01")
-        ]
+        filename = f'{dir_path}/resources/fiis.txt'
     else:
-        stocks = stocks[
-            (stocks["isin"].str[-3:-1] != "00") & (stocks["isin"].str[-3:-1] != "01")
-        ]
+        filename = f'{dir_path}/resources/stocks.txt'
 
-    if as_list:
-        stocks = stocks["symbol"].to_list()
-        stocks.sort()
+    with open(filename) as file:
+        lines = file.readlines()
+        tickers = [line.rstrip() for line in lines]
 
-    return stocks
+    return tickers
