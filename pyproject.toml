@@ -6,7 +6,6 @@ authors = ["Johnny Tardin <johnny.tardin@olist.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-black = "^21.7b0"
 isort = "^5.9.3"
 gunicorn = {extras = ["gevent"], version = "^20.1.0"}
 json-logging = "^1.3.0"
@@ -28,6 +27,7 @@ psycopg2-binary = "^2.9.1"
 pendulum = "^2.1.2"
 python-decouple = "^3.4"
 flask-restx = "^0.5.0"
+black = "^21.12b0"
 
 [tool.poetry.dev-dependencies]
 

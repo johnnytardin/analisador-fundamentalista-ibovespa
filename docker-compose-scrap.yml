@@ -1,9 +1,15 @@
 version: '2.2'
+
+networks:
+  scrap:
+
 services:
   scrap:
     build:
       dockerfile: Dockerfile
       context: ./job
+    networks:
+      - scrap
     tty: true
     env_file:
       - ./job/.env

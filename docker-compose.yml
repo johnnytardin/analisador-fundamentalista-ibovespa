@@ -1,7 +1,13 @@
-version: '2.2'
+version: '3.9'
+
+networks:
+  grafana:
+
 services:
   grafana:
-    image: grafana/grafana:8.1.0
+    image: grafana/grafana:8.3.3
+    networks:
+      - grafana
     ports:
       - 3000:3000
     user: "104"    
