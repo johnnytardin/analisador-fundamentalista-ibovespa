@@ -48,7 +48,7 @@ start: ; @\
 	clear; \
 	echo "[Starting Environment...]"; \
 	echo ""; \
-	docker-compose  -p ${PROJECT_NAME} up -d ${container}
+	docker-compose -p ${PROJECT_NAME} up -d ${container}
 
 scrap: ; @\
 	clear; \

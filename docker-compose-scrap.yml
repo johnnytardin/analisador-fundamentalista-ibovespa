@@ -1,7 +1,7 @@
-version: '2.2'
+version: '3.9'
 
 networks:
-  scrap:
+  analisador:
 
 services:
   scrap:
@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
       context: ./job
     networks:
-      - scrap
+      - analisador
     tty: true
     env_file:
       - ./job/.env
