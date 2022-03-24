@@ -29,7 +29,7 @@ def normaliza_valor(data, replace=None):
     return n
 
 
-def details(code, coleta_id):
+def get_stocks_details(code, coleta_id):
     financial = {}
 
     # Get more information
@@ -42,7 +42,7 @@ def details(code, coleta_id):
     pvp = normaliza_valor(status_data["P/VP"])
     pl = normaliza_valor(status_data["P/L"])
     dy = normaliza_valor(status_data["DIVIDEND YIELD"], 0)
-    divPat = normaliza_valor(status_data["DÍVIDA LÍQUIDA / PATRIMÔNIO"])
+    divPat = normaliza_valor(status_data["DÍVIDA LÍQUIDA / PATRIMÔNIO LIQ"])
 
     financial["code"] = code
     financial["precoSobreVP"] = pvp
@@ -74,7 +74,7 @@ def details(code, coleta_id):
     )
     financial["divSobreEbit"] = normaliza_valor(status_data["DÍVIDA LÍQUIDA / EBIT"])
     financial["PatrimonioSobreAtivos"] = normaliza_valor(
-        status_data["PATRIMÔNIO / ATIVOS"]
+        status_data["PL / ATIVOS"]
     )
     financial["PassivosSobreAtivos"] = normaliza_valor(status_data["PASSIVOS / ATIVOS"])
     financial["liquidezCorrente"] = liqCorr
@@ -145,7 +145,7 @@ def main():
 
     for stock in st:
         try:
-            financial, dre = details(stock, coleta_id)
+            financial, dre = get_stocks_details(stock, coleta_id)
             technical_values = technical.get_technical_indicators(stock)
 
             db.insert_data("financial", stock, coleta_id, timestamp, financial)

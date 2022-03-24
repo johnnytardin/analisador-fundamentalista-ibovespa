@@ -25,10 +25,7 @@ def element(driver, x_path):
 
 def x_paths():
     return [
-        (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[4]/div/div/strong""",
-            "P/VP",
-        ),
+        # INDICADORES DE VALUATION
         (
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[2]/div/div/strong""",
             "P/L",
@@ -36,6 +33,18 @@ def x_paths():
         (
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[3]/div/div/strong""",
             "PEG RATIO",
+        ),
+        (
+            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[4]/div/div/strong""",
+            "P/VP",
+        ),
+        (
+            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[5]/div/div/strong""",
+            "EV/EBITDA",
+        ),
+        (
+            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[6]/div/div/strong""",
+            "EV/EBIT",
         ),
         (
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[7]/div/div/strong""",
@@ -46,16 +55,16 @@ def x_paths():
             "P/EBIT",
         ),
         (
+            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[9]/div/div/strong""",
+            "VPA",
+        ),
+        (
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[10]/div/div/strong""",
             "P/ATIVO",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[5]/div/div/strong""",
-            "EV/EBITDA",
-        ),
-        (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[6]/div/div/strong""",
-            "EV/EBIT",
+            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[11]/div/div/strong""",
+            "LPA",
         ),
         (
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[12]/div/div/strong""",
@@ -69,6 +78,7 @@ def x_paths():
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[14]/div/div/strong""",
             "P/ATIVO CIRC LIQ",
         ),
+        # INDICADORES DE EFICIÊNCIA
         (
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[3]/div/div[1]/div/div/strong""",
             "MARGEM BRUTA",
@@ -85,10 +95,7 @@ def x_paths():
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[3]/div/div[4]/div/div/strong""",
             "MARGEM LÍQUIDA",
         ),
-        (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[4]/div/div[4]/div/div/strong""",
-            "GIRO ATIVOS",
-        ),
+        # INDICADORES DE RENTABILIDADE
         (
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[4]/div/div[1]/div/div/strong""",
             "ROE",
@@ -102,16 +109,22 @@ def x_paths():
             "ROIC",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[11]/div/div/strong""",
-            "LPA",
+            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[4]/div/div[4]/div/div/strong""",
+            "GIRO ATIVOS",
+        ),
+        # INDICADORES DE CRESCIMENTO
+        (
+            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[5]/div/div[1]/div/div/strong""",
+            "CAGR RECEITAS 5 ANOS",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[9]/div/div/strong""",
-            "VPA",
+            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[5]/div/div[2]/div/div/strong""",
+            "CAGR LUCROS 5 ANOS",
         ),
+        # INDICADORES DE ENDIVIDAMENTO
         (
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[2]/div/div[1]/div/div/strong""",
-            "DÍVIDA LÍQUIDA / PATRIMÔNIO",
+            "DÍVIDA LÍQUIDA / PATRIMÔNIO LIQ",
         ),
         (
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[2]/div/div[2]/div/div/strong""",
@@ -123,7 +136,7 @@ def x_paths():
         ),
         (
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[2]/div/div[4]/div/div/strong""",
-            "PATRIMÔNIO / ATIVOS",
+            "PL / ATIVOS",
         ),
         (
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[2]/div/div[5]/div/div/strong""",
@@ -133,14 +146,7 @@ def x_paths():
             """/html/body/main/div[2]/div/div[7]/div[2]/div/div[2]/div/div[6]/div/div/strong""",
             "LIQUIDEZ CORRENTE",
         ),
-        (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[5]/div/div[1]/div/div/strong""",
-            "CAGR RECEITAS 5 ANOS",
-        ),
-        (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[5]/div/div[2]/div/div/strong""",
-            "CAGR LUCROS 5 ANOS",
-        ),
+        # PREÇO
         (
             """/html/body/main/div[2]/div/div[1]/div/div[1]/div/div[1]/strong""",
             "VALOR ATUAL",
@@ -158,10 +164,6 @@ def x_paths():
             "DIVIDEND YIELD",
         ),
         (
-            """/html/body/main/div[5]/div[1]/div/div[2]/div[7]/div/div/strong""",
-            "VALOR DE MERCADO",
-        ),
-        (
             """/html/body/main/div[2]/div/div[1]/div/div[5]/div/div[1]/strong""",
             "VALORIZAÇÃO (12M)",
         ),
@@ -173,6 +175,7 @@ def x_paths():
             """/html/body/main/div[2]/div/div[5]/div/div/div[3]/div/div/div/strong""",
             "LIQUIDEZ MÉDIA DIÁRIA",
         ),
+        # SETOR DE ATUAÇÃO
         (
             """/html/body/main/div[5]/div[1]/div/div[3]/div/div[1]/div/div/div/a/strong""",
             "SETOR DE ATUAÇÂO",
@@ -185,12 +188,17 @@ def x_paths():
             """/html/body/main/div[5]/div[1]/div/div[3]/div/div[3]/div/div/div/a/strong""",
             "SEGMENTO DE ATUAÇÂO",
         ),
+        # DETALHES DA EMPRESA
+        (
+            """/html/body/main/div[5]/div[1]/div/div[2]/div[7]/div/div/strong""",
+            "VALOR DE MERCADO",
+        ),
         (
             """/html/body/main/div[5]/div[1]/div/div[2]/div[11]/div/div/strong""",
             "FREE FLOAT",
         ),
         (
-            """/html/body/main/div[2]/div/div[5]/div/div/div[2]/div/div/div/strong""",
+            """/html/body/main/div[5]/div[1]/div/div[2]/div[11]/div/div/strong""",
             "TAG ALONG",
         ),
         (
