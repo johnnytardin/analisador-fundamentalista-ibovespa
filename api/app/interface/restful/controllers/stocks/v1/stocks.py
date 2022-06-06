@@ -44,9 +44,9 @@ class HistoricalQueryController(Resource):
 
 
 api.add_resource(Health, "/", methods=["GET"])
-api.add_resource(TechnicalQueryController, "/query", methods=["POST"])
-api.add_resource(TechnicalSearchController, "/search", methods=["POST"])
+api.add_resource(TechnicalQueryController, "/query", methods=["GET", "POST"])
+api.add_resource(TechnicalSearchController, "/variable", methods=["GET", "POST"])
 
 api.add_resource(Health, "/historical/", methods=["GET"])
-api.add_resource(HistoricalQueryController, "/historical/query", methods=["POST"])
-api.add_resource(TechnicalSearchController, "/historical/search", methods=["POST"])
+api.add_resource(HistoricalQueryController, "/historical/query", methods=["GET", "POST"])
+api.add_resource(TechnicalSearchController, "/historical/search", methods=["GET", "POST"])

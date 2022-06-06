@@ -24,5 +24,5 @@ class SectorsSearchController(Resource):
 
 
 api.add_resource(Health, "/", methods=["GET"])
-api.add_resource(SectorsQueryController, "/query", methods=["POST"])
-api.add_resource(SectorsSearchController, "/search", methods=["POST"])
+api.add_resource(SectorsQueryController, "/query", methods=["GET", "POST"])
+api.add_resource(SectorsSearchController, "/variable", methods=["GET", "POST"])
