@@ -1,4 +1,5 @@
 import logging
+from re import S
 
 from app.application import sectors
 from flask_restx import Namespace, Resource
@@ -19,11 +20,11 @@ class SectorsQueryController(Resource):
 
 class SectorsSearchController(Resource):
     def post(self):
-        sectors = []
+        s = []
         for sector in sectors.get_sectors_names():
-            sectors.append({"sector": sector})
+            s.append({"sector": sector})
 
-        return sectors, 200
+        return s, 200
 
 
 api.add_resource(Health, "/", methods=["GET"])
