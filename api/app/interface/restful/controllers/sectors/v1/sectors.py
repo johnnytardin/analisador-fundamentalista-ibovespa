@@ -19,8 +19,11 @@ class SectorsQueryController(Resource):
 
 class SectorsSearchController(Resource):
     def post(self):
-        summary = sectors.get_sectors_names()
-        return summary, 200
+        sectors = []
+        for sector in sectors.get_sectors_names():
+            sectors.append({"sector": sector})
+
+        return sectors, 200
 
 
 api.add_resource(Health, "/", methods=["GET"])
