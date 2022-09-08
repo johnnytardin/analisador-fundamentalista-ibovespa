@@ -17,9 +17,14 @@ DADOS = {}
 
 
 def element(driver, x_path):
-    indicadores = driver.find_elements_by_xpath(x_path)
+    try:
+        indicadores = driver.find_element(By.XPATH, x_path)
+    except Exception as e:
+        print(f"Falha coletando o xpath {x_path}")
+        return ""
+
     if indicadores:
-        return indicadores[0].text
+        return indicadores.text
     return ""
 
 

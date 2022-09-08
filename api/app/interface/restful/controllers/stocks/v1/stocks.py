@@ -21,8 +21,11 @@ class TechnicalQueryController(Resource):
 
 class TechnicalSearchController(Resource):
     def post(self):
-        summary = stocks.get_stocks_tickers()
-        return summary, 200
+        s = []
+        for stock in stocks.get_stocks_tickers():
+            s.append({"ticker": stock})
+
+        return s, 200
 
 
 class HistoricalQueryController(Resource):
