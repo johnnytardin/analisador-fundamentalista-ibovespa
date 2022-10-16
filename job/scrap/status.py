@@ -203,7 +203,7 @@ def x_paths():
             "FREE FLOAT",
         ),
         (
-            """/html/body/main/div[5]/div[1]/div/div[2]/div[11]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[5]/div/div/div[2]/div/div/div/strong""",
             "TAG ALONG",
         ),
         (
