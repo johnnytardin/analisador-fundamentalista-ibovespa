@@ -214,6 +214,11 @@ def x_paths():
             """/html/body/main/div[5]/div[1]/div/div[1]/div[2]/div[1]/strong""",
             "RECUPERACAO JUDICIAL",
         ),
+        # ALUGUEL
+        (
+            """/html/body/main/div[2]/div/div[8]/div/div[2]/div[1]/div/div[1]/strong""",
+            "TAXA ALUGUEL TOMADOR",
+        ),
     ]
 
 

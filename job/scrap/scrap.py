@@ -107,6 +107,8 @@ def get_stocks_details(code, coleta_id):
     if status_data["RECUPERACAO JUDICIAL"]:
         financial["emRecuperacaoJudicial"] = True
 
+    financial["TaxaAluguelTomador"] = status_data["TAXA ALUGUEL TOMADOR"]
+
     # intriseco
     financial["valorIntriseco"] = graham.valor_intriseco(
         financial["lucroPorAcao"], financial["ValorPatrimonialPorAcao"]

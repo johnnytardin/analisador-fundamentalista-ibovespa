@@ -164,6 +164,7 @@ def rank(estrategia, payload):
                     ind["valorIntriseco"],
                     ind["dividendos"],
                     f"{ind_1} ({ind_2})",
+                    ind["TaxaAluguelTomador"],
                 ]
             )
             ranking += 1
@@ -199,4 +200,5 @@ def columns():
         {"text": "INTR.", "type": "number"},
         {"text": "DY", "type": "number"},
         {"text": "RSI", "type": "number"},
+        {"text": "Tx Aluguel", "type": "number"},
     ]
