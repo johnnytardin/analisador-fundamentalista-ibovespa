@@ -60,7 +60,7 @@ stop: ; @\
 	clear; \
 	echo "[Stopping Environment...]"; \
 	echo "";\
-	docker-compose  -p ${PROJECT_NAME} down
+	docker-compose -f docker-compose.yml -f docker-compose.scrap.yml -f docker-compose.api.yml -p ${PROJECT_NAME} down
 
 status: ; @\
 	clear; \
