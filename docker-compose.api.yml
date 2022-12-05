@@ -1,0 +1,38 @@
+version: '3.9'
+
+networks:
+  analisador:
+
+services:
+  api:
+    image: api
+    networks:
+      - analisador
+    build:
+      dockerfile: Dockerfile
+      context: ./api
+    command: make api
+    ports:
+      - 8080:8080
+    tty: true
+    stdin_open: true
+    env_file:
+      - .env
+    volumes:
+      - ./api:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  grafana:
+    image: grafana/grafana:9.2.0
+    networks:
+      - analisador
+    ports:
+      - 3000:3000
+    user: "104"    
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    restart: unless-stopped
+    env_file:
+      - ./grafana/.env

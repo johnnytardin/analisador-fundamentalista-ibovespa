@@ -48,13 +48,13 @@ start: ; @\
 	clear; \
 	echo "[Starting Environment...]"; \
 	echo ""; \
-	docker-compose -p ${PROJECT_NAME} up -d ${container}
+	docker-compose -f docker-compose.yml -f docker-compose.api.yml -p ${PROJECT_NAME} up -d ${container}
 
 scrap: ; @\
 	clear; \
 	echo "[Starting Environment and scraping...]"; \
 	echo ""; \
-	docker-compose -f docker-compose-scrap.yml -p ${PROJECT_NAME} up -d ${container} --build
+	docker-compose -f docker-compose.yml -f docker-compose.scrap.yml -p ${PROJECT_NAME} up -d ${container} --build
 
 stop: ; @\
 	clear; \

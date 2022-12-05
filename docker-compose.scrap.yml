@@ -12,7 +12,7 @@ services:
       - analisador
     tty: true
     env_file:
-      - ./job/.env
+      - .env
     volumes:
       - ./job/:/app/
     command: python3 /app/scrap/scrap.py
