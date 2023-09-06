@@ -124,7 +124,7 @@ def rank(estrategia, payload):
         strtobool(payload.get("scopedVars").get("valida_lucros").get("text"))
     )
     ranking = 0
-    for code, _ in rank_sorted.iteritems():
+    for code, _ in rank_sorted.items():
         lucros_status = False
         if valida_lucros:
             logger.info(f"Analisando os lucros de {code}")

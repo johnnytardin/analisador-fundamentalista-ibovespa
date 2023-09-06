@@ -7,6 +7,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.service import Service
+
 
 pd.set_option("display.max_rows", 500)
 pd.set_option("display.max_columns", 500)
@@ -32,123 +34,123 @@ def x_paths():
     return [
         # INDICADORES DE VALUATION
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[2]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[2]/div/div/strong""",
             "P/L",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[3]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[3]/div/div/strong""",
             "PEG RATIO",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[4]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[4]/div/div/strong""",
             "P/VP",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[5]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[5]/div/div/strong""",
             "EV/EBITDA",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[6]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[6]/div/div/strong""",
             "EV/EBIT",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[7]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[7]/div/div/strong""",
             "P/EBITDA",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[8]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[8]/div/div/strong""",
             "P/EBIT",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[9]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[9]/div/div/strong""",
             "VPA",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[10]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[10]/div/div/strong""",
             "P/ATIVO",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[11]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[11]/div/div/strong""",
             "LPA",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[12]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[12]/div/div/strong""",
             "PSR",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[13]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[13]/div/div/strong""",
             "P/CAP.GIRO",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[1]/div/div[14]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[1]/div/div[14]/div/div/strong""",
             "P/ATIVO CIRC LIQ",
         ),
         # INDICADORES DE EFICIÊNCIA
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[3]/div/div[1]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[3]/div/div[1]/div/div/strong""",
             "MARGEM BRUTA",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[3]/div/div[2]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[3]/div/div[2]/div/div/strong""",
             "MARGEM EBITDA",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[3]/div/div[3]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[3]/div/div[3]/div/div/strong""",
             "MARGEM EBIT",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[3]/div/div[4]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[3]/div/div[4]/div/div/strong""",
             "MARGEM LÍQUIDA",
         ),
         # INDICADORES DE RENTABILIDADE
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[4]/div/div[1]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[4]/div/div[1]/div/div/strong""",
             "ROE",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[4]/div/div[2]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[4]/div/div[2]/div/div/strong""",
             "ROA",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[4]/div/div[3]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[4]/div/div[3]/div/div/strong""",
             "ROIC",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[4]/div/div[4]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[4]/div/div[4]/div/div/strong""",
             "GIRO ATIVOS",
         ),
         # INDICADORES DE CRESCIMENTO
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[5]/div/div[1]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[5]/div/div[1]/div/div/strong""",
             "CAGR RECEITAS 5 ANOS",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[5]/div/div[2]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[5]/div/div[2]/div/div/strong""",
             "CAGR LUCROS 5 ANOS",
         ),
         # INDICADORES DE ENDIVIDAMENTO
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[2]/div/div[1]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[2]/div/div[1]/div/div/strong""",
             "DÍVIDA LÍQUIDA / PATRIMÔNIO LIQ",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[2]/div/div[2]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[2]/div/div[2]/div/div/strong""",
             "DÍVIDA LÍQUIDA / EBITDA",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[2]/div/div[3]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[2]/div/div[3]/div/div/strong""",
             "DÍVIDA LÍQUIDA / EBIT",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[2]/div/div[4]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[2]/div/div[4]/div/div/strong""",
             "PL / ATIVOS",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[2]/div/div[5]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[2]/div/div[5]/div/div/strong""",
             "PASSIVOS / ATIVOS",
         ),
         (
-            """/html/body/main/div[2]/div/div[7]/div[2]/div/div[2]/div/div[6]/div/div/strong""",
+            """/html/body/main/div[2]/div/div[8]/div[2]/div/div[2]/div/div[6]/div/div/strong""",
             "LIQUIDEZ CORRENTE",
         ),
         # PREÇO
@@ -289,11 +291,12 @@ def get_specific_data(stock):
     try:
         url = "https://statusinvest.com.br/acoes/{}".format(stock.lower())
         options = webdriver.ChromeOptions()
-        options.add_argument("headless")
+        options.add_argument('--headless')
         options.add_argument(
             "user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"
         )
-        driver = webdriver.Chrome("/usr/bin/chromedriver", chrome_options=options)
+        service = Service("/usr/bin/chromedriver")
+        driver = webdriver.Chrome(service=service, options=options)
         driver.set_script_timeout(60)
         driver.get(url)
         # scroll pois a pagina carrega dinamicamente

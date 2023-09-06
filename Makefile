@@ -49,6 +49,8 @@ start: ; @\
 	echo "[Starting Environment...]"; \
 	echo ""; \
 	docker-compose -f docker-compose.yml -f docker-compose.api.yml -p ${PROJECT_NAME} up -d ${container}
+	echo ""; \
+	echo "Please visit: http://localhost:3000/d/d6T7Q5ZMk/analise-de-ativos?orgId=1";
 
 scrap: ; @\
 	clear; \
