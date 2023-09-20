@@ -8,6 +8,7 @@ import graham
 import status
 import stocks
 import technical
+import recommendation
 
 
 def normaliza_valor(data, replace=None):
@@ -135,6 +136,10 @@ def get_stocks_details(code, coleta_id):
     # outros dados
     dre = status_data["dre"]
 
+    # recomendacao da xp
+    for k, v in recommendation.get_recommendation(code).items():
+        financial[k] = v
+
     return (financial, dre)
 
 
@@ -147,6 +152,7 @@ def main():
     for stock in st:
         try:
             financial, dre = get_stocks_details(stock, coleta_id)
+
             technical_values = technical.get_technical_indicators(stock)
 
             db.insert_data("financial", stock, coleta_id, timestamp, financial)

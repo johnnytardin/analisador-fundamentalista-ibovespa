@@ -218,7 +218,7 @@ def x_paths():
         ),
         # ALUGUEL
         (
-            """/html/body/main/div[2]/div/div[8]/div/div[2]/div[1]/div/div[1]/strong""",
+            """/html/body/main/div[2]/div/div[9]/div/div[2]/div[1]/div/div[1]/strong""",
             "TAXA ALUGUEL TOMADOR",
         ),
     ]

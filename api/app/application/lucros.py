@@ -103,18 +103,19 @@ def valida_empresa(code):
 
 def get_lucro_details(code):
     details = db.consulta_detalhes("dre", code)
-
     lc = {}
+
     ultimos_12m = None
-    for row in details[0]:
-        if row["tipo"] in ["Lucro Líquido - (R$) format_quote", "Lucro Líquido - (R$)", "Lucro L\u00edquido - (R$) format_quote show_chart"]:
-            periodo = row["periodo"]
-            lucro = row["valor"]
-            if lucro:
-                if periodo == "Últ. 12M":
-                    ultimos_12m = lucro
-                else:
-                    lc[int(periodo)] = float(lucro)
+    if details:
+        for row in details[0]:
+            if row["tipo"] in ["Lucro Líquido - (R$) format_quote", "Lucro Líquido - (R$)", "Lucro L\u00edquido - (R$) format_quote show_chart"]:
+                periodo = row["periodo"]
+                lucro = row["valor"]
+                if lucro:
+                    if periodo == "Últ. 12M":
+                        ultimos_12m = lucro
+                    else:
+                        lc[int(periodo)] = float(lucro)
 
     if not ultimos_12m and lc:
         # caso nao exista 12m usa o ultimo ano

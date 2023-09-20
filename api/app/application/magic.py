@@ -149,6 +149,7 @@ def rank(estrategia, payload):
                 [
                     ranking,
                     code,
+                    ind["recomendacao"],
                     ind["segmentoListagem"],
                     ind["subsetor"],
                     ind["precoSobreLucro"],
@@ -185,6 +186,7 @@ def columns():
     return [
         {"text": "SC.", "type": "number"},
         {"text": "CODE", "type": "string"},
+        {"text": "RECOMENDACAO", "type": "string"},
         {"text": "SEGMENTO", "type": "string"},
         {"text": "SECTOR", "type": "string"},
         {"text": "P/L", "type": "number"},
